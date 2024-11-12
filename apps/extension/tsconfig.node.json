@@ -4,7 +4,8 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
     "lib": ["ES2023"],
     "allowImportingTsExtensions": true,
-    "moduleDetection": "force"
+    "moduleDetection": "force",
+    "types": ["@repo/types"]
   },
   "include": ["vite.config.ts"]
 }

@@ -10,16 +10,16 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
   const Authorization = `Bearer ${token.value}`;
   const body = _body ? JSON.stringify(_body) : undefined;
   const headers: HeadersInit = {
-    "Content-Type": "application/json",
     ...options?.headers,
     ...(token && { Authorization }),
   };
 
   try {
     const res = await fetch(`${baseUrl}${url}`, {
+      ...options,
       method,
       body,
-      headers: { ...headers, Authorization },
+      headers,
     });
     if (!res.ok) {
       throw new Error(`Respone is not ok`);

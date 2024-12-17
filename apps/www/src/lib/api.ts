@@ -21,13 +21,13 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
       body,
       headers,
     });
-    if (!res.ok) {
-      throw new Error(`Respone is not ok`);
-    }
 
+    if (!res.ok) {
+      return { status: res.status, statusText: res.statusText, text: await res.text() };
+    }
     return res.json();
   } catch (error) {
-    console.error(`Error fetching ${url}: ${error}`);
+    return error as Error;
   }
 };
 

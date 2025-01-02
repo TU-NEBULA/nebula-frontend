@@ -7,7 +7,7 @@
     "allowImportingTsExtensions": true,
     "moduleDetection": "force",
     "jsx": "react-jsx",
-    "types": ["@repo/types", "@repo/ui"],
+    "types": ["@repo/types", "@repo/ui", "chrome-types"],
     "baseUrl": "src",
     "paths": {
       "@/*": ["*"]

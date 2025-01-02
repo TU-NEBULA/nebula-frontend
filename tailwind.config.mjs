@@ -7,6 +7,7 @@ export default {
         grey1: "#F5F5F5",
         grey2: "#F9FAFB",
         white: "#FFFFFF",
+        kakao: "#FEE500",
       },
     },
   },

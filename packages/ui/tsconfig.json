@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "declaration": true,
+    "noEmit": false,
+    "emitDeclarationOnly": true,
+    "module": "ESNext",
+    "target": "ES6",
+    "strict": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "tsBuildInfoFile": "./dist/tsconfig.tsbuildinfo"
+  },
+  "include": ["src"]
+}

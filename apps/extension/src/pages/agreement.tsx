@@ -1,5 +1,7 @@
 import { useState } from "react";
 
+import { Flex } from "@repo/ui";
+
 const Agreement = () => {
   const [checked, setChecked] = useState(false);
 
@@ -10,7 +12,7 @@ const Agreement = () => {
   const onClickGetBookmarks = () => {};
 
   return (
-    <main className="flex flex-col justify-center h-full gap-44">
+    <Flex as="main" direction="col" justify="center" className="h-full gap-44">
       <section className="space-y-7">
         <div className="space-y-4">
           <h1 className="text-2xl">
@@ -30,20 +32,23 @@ const Agreement = () => {
             동의하신 경우에만 서비스 이용이 가능합니다. 수집된 정보로 사용자 개개인의 북마크 기록을
             분석하고, 비슷한 관심사를 가진 다른 사용자들의 정보를 분석하여 유용한 정보를 제공합니다.
           </p>
-          <div className="text-xs flex items-center gap-1">
+          <Flex align="center" className="text-xs flex gap-1">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />
             <label htmlFor="agreement">(필수) 북마크 정보 수집 및 이용에 동의합니다.</label>
-          </div>
+          </Flex>
         </div>
       </section>
-      <button
-        className={`flex items-center justify-center rounded-sm py-2 font-medium w-full text-white transition-colors ${checked ? "bg-black active:bg-opacity-90" : "bg-grey3"}`}
+      <Flex
+        as="button"
+        align="center"
+        justify="center"
+        className={`rounded-sm py-2 font-medium w-full text-white transition-colors ${checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80" : "bg-grey3"}`}
         disabled={!checked}
         onClick={onClickGetBookmarks}
       >
         불러오기
-      </button>
-    </main>
+      </Flex>
+    </Flex>
   );
 };
 

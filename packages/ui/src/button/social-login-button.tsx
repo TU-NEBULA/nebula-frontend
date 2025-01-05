@@ -21,7 +21,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 
   return (
     <button
-      className={`flex items-center justify-center gap-1 rounded-xl py-2 font-medium border ${socials[social].style}`}
+      className={`flex items-center justify-center gap-1 rounded-sm py-2 font-medium border ${socials[social].style}`}
       {...props}
     >
       {logo}

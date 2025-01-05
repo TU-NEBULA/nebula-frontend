@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { Flex } from "@repo/ui";
+import { Flex, RectangleButton } from "@repo/ui";
 
 const Agreement = () => {
   const [checked, setChecked] = useState(false);
@@ -38,16 +38,11 @@ const Agreement = () => {
           </Flex>
         </div>
       </section>
-      <Flex
-        as="button"
-        align="center"
-        justify="center"
-        className={`rounded-sm py-2 font-medium w-full text-white transition-colors ${checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80" : "bg-grey3"}`}
-        disabled={!checked}
-        onClick={onClickGetBookmarks}
+      <RectangleButton
+        className={`text-white transition-colors ${checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80" : "bg-grey3"}`}
       >
         불러오기
-      </Flex>
+      </RectangleButton>
     </Flex>
   );
 };

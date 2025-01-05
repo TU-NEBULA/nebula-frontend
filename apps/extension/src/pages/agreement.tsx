@@ -1,6 +1,7 @@
 import { useState } from "react";
 
-import { Flex, RectangleButton } from "@repo/ui";
+import { getBookMarks } from "@/utils/chrome";
+import { RectangleButton } from "@repo/ui";
 
 const Agreement = () => {
   const [checked, setChecked] = useState(false);
@@ -9,10 +10,12 @@ const Agreement = () => {
     setChecked(e.target.checked);
   };
 
-  const onClickGetBookmarks = () => {};
+  const onClickGetBookmarks = () => {
+    getBookMarks();
+  };
 
   return (
-    <Flex as="main" direction="col" justify="center" className="h-full gap-44">
+    <main className="h-full gap-44 flex flex-col justify-center">
       <section className="space-y-7">
         <div className="space-y-4">
           <h1 className="text-2xl">
@@ -32,18 +35,19 @@ const Agreement = () => {
             동의하신 경우에만 서비스 이용이 가능합니다. 수집된 정보로 사용자 개개인의 북마크 기록을
             분석하고, 비슷한 관심사를 가진 다른 사용자들의 정보를 분석하여 유용한 정보를 제공합니다.
           </p>
-          <Flex align="center" className="text-xs flex gap-1">
+          <div className="text-xs flex items-center gap-1">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />
             <label htmlFor="agreement">(필수) 북마크 정보 수집 및 이용에 동의합니다.</label>
-          </Flex>
+          </div>
         </div>
       </section>
       <RectangleButton
         className={`text-white transition-colors ${checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80" : "bg-grey3"}`}
+        onClick={onClickGetBookmarks}
       >
         불러오기
       </RectangleButton>
-    </Flex>
+    </main>
   );
 };
 

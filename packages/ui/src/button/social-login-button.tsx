@@ -1,5 +1,4 @@
 import RectangleButton from "./rectangle-button";
-import Flex from "../flex";
 
 interface SocialLoginButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   social: "kakao" | "google";
@@ -23,11 +22,12 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   };
 
   return (
-    <RectangleButton className={`border ${socials[social].style}`} {...restProps}>
-      <Flex justify="center" align="center" className="gap-1">
-        {logo}
-        {socials[social].name}로 계속하기
-      </Flex>
+    <RectangleButton
+      className={`flex justify-center items-center gap-1 border ${socials[social].style}`}
+      {...restProps}
+    >
+      {logo}
+      {socials[social].name}로 계속하기
     </RectangleButton>
   );
 };

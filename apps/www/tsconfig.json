@@ -21,7 +21,7 @@
     "module": "NodeNext",
     "moduleResolution": "nodenext",
     "isolatedModules": true,
-    "types": ["@repo/types"]
+    "types": ["@repo/types", "@repo/ui"]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "tailwind.config.mts"],
   "exclude": ["node_modules"]

@@ -42,10 +42,10 @@ const Agreement = () => {
         </div>
       </section>
       <RectangleButton
-        className={cn([
+        className={cn(
           "text-white transition-colors cursor-default",
-          checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80 cursor-pointer" : "bg-grey3",
-        ])}
+          checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80 cursor-pointer" : "bg-grey3"
+        )}
         onClick={onClickGetBookmarks}
       >
         불러오기

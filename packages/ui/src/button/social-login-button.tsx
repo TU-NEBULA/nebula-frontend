@@ -1,4 +1,5 @@
 import RectangleButton from "./rectangle-button";
+import { cn } from "../utils/cn";
 
 interface SocialLoginButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   social: "kakao" | "google";
@@ -23,7 +24,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 
   return (
     <RectangleButton
-      className={`flex justify-center items-center gap-1 border ${socials[social].style}`}
+      className={cn(["flex justify-center items-center gap-1 border", socials[social].style])}
       {...restProps}
     >
       {logo}

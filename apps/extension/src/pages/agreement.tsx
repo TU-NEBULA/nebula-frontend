@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import { getBookMarks } from "@/utils/chrome";
-import { RectangleButton } from "@repo/ui";
+import { cn, RectangleButton } from "@repo/ui";
 
 const Agreement = () => {
   const [checked, setChecked] = useState(false);
@@ -42,7 +42,10 @@ const Agreement = () => {
         </div>
       </section>
       <RectangleButton
-        className={`text-white transition-colors ${checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80" : "bg-grey3"}`}
+        className={cn([
+          "text-white transition-colors cursor-default",
+          checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80 cursor-pointer" : "bg-grey3",
+        ])}
         onClick={onClickGetBookmarks}
       >
         불러오기

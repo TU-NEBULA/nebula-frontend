@@ -1,3 +1,6 @@
+import RectangleButton from "./rectangle-button";
+import { cn } from "../utils/cn";
+
 interface SocialLoginButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   social: "kakao" | "google";
   logo: React.ReactNode;
@@ -6,7 +9,7 @@ interface SocialLoginButtonProps extends React.ButtonHTMLAttributes<HTMLButtonEl
 const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   social = "kakao",
   logo,
-  ...props
+  ...restProps
 }) => {
   const socials = {
     kakao: {
@@ -20,13 +23,16 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   };
 
   return (
-    <button
-      className={`flex items-center justify-center gap-1 rounded-sm py-2 font-medium border ${socials[social].style}`}
-      {...props}
+    <RectangleButton
+      className={cn(
+        "text-body flex justify-center items-center gap-1 border",
+        socials[social].style
+      )}
+      {...restProps}
     >
       {logo}
       {socials[social].name}로 계속하기
-    </button>
+    </RectangleButton>
   );
 };
 

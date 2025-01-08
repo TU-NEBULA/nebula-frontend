@@ -29,11 +29,11 @@ const Bookmark = () => {
       <section className="space-y-4">
         <div className="space-y-2">
           <h2 className="text-subtitle">URL</h2>
-          <p className="text-body">{currentTab.url}</p>
+          <p className="text-label">{currentTab.url}</p>
         </div>
         <div className="space-y-2">
           <h2 className="text-subtitle">Title</h2>
-          <p className="text-body">{currentTab.title}</p>
+          <p className="text-label">{currentTab.title}</p>
         </div>
       </section>
       <RectangleButton

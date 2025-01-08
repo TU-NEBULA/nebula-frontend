@@ -23,10 +23,10 @@ const Agreement = () => {
             <br />
             것에 동의하시겠습니까?
           </h1>
-          <h2 className="text-body">네뷸라 실행을 위해선 북마크 동의를 해야합니다.</h2>
+          <h2 className="text-label">네뷸라 실행을 위해선 북마크 동의를 해야합니다.</h2>
         </div>
         <div className="space-y-2">
-          <p className="text-label">
+          <p className="text-body">
             북마크정보 수집 및 이용 동의 <span className="text-essential">*</span>
           </p>
           <p className="text-description font-medium rounded-sm border border-grey2 p-2">

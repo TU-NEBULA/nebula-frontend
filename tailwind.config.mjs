@@ -15,9 +15,9 @@ export default {
       fontSize: {
         title: ["1.5rem", { fontWeight: "700" }],
         subtitle: ["1.25rem", { fontWeight: "600" }],
-        body: ["1rem", { fontWeight: "500" }],
-        label: ["0.875rem", { fontWeight: "500" }],
-        description: ["0.75rem", { fontWeight: "400" }],
+        label: ["1rem", { fontWeight: "500" }],
+        body: ["0.875rem", { fontWeight: "400" }],
+        description: ["0.75rem", { fontWeight: "300" }],
       },
     },
   },

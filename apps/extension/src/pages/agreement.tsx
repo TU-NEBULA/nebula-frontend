@@ -35,7 +35,7 @@ const Agreement = () => {
             동의하신 경우에만 서비스 이용이 가능합니다. 수집된 정보로 사용자 개개인의 북마크 기록을
             분석하고, 비슷한 관심사를 가진 다른 사용자들의 정보를 분석하여 유용한 정보를 제공합니다.
           </p>
-          <div className="text-description flex items-center gap-1">
+          <div className="text-description flex items-center gap-1 font-normal">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />
             <label htmlFor="agreement">(필수) 북마크 정보 수집 및 이용에 동의합니다.</label>
           </div>

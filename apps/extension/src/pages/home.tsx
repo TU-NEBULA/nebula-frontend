@@ -24,7 +24,7 @@ const Home = () => {
         </div>
         <div className="text-description gap-3 flex items-center justify-center text-grey3">
           <button>이용약관</button>
-          <div className="h-3 w-px bg-black" />
+          <div className="h-3 w-px bg-grey3" />
           <button>개인정보처리방침</button>
         </div>
       </section>

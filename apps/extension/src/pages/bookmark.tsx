@@ -26,7 +26,7 @@ const Bookmark = () => {
 
   return (
     <main className="h-full gap-10 flex flex-col justify-center">
-      <h1 className="text-title text-center">현재 창 정보</h1>
+      <h1 className="text-title text-center">현재 페이지 정보</h1>
       <section className="space-y-4">
         <div className="space-y-2">
           <h2 className="text-subtitle">URL</h2>

@@ -49,3 +49,11 @@ export const getHtmlText = async () => {
     });
   });
 };
+
+export const updateCurrentTab = (
+  setState: ({ url, title }: { url: string; title: string }) => void
+) => {
+  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+    setState({ url: tabs[0].url!, title: tabs[0].title! });
+  });
+};

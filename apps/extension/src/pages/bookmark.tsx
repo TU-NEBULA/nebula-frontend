@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getHtmlText } from "@/utils/chrome";
+import { getHtmlText, updateCurrentTab } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
 
 const Bookmark = () => {
@@ -12,15 +12,14 @@ const Bookmark = () => {
   };
 
   useEffect(() => {
-    chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
-      console.log("현재 창", tabs[0].url, tabs[0].title);
-      setCurrentTab({ url: tabs[0].url!, title: tabs[0].title! });
+    updateCurrentTab(setCurrentTab);
+    chrome.tabs.onActivated.addListener(() => {
+      updateCurrentTab(setCurrentTab);
     });
-    chrome.tabs.onActivated.addListener(function (activeInfo) {
-      chrome.tabs.get(activeInfo.tabId, function (tab) {
-        console.log("활성화된 탭", tab.url);
-        setCurrentTab({ url: tab.url!, title: tab.title! });
-      });
+    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+      if (changeInfo.status === "complete") {
+        updateCurrentTab(setCurrentTab);
+      }
     });
   }, []);
 

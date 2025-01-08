@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { getHtmlText } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
 
 const Bookmark = () => {
@@ -7,6 +8,7 @@ const Bookmark = () => {
 
   const onClickAdd = () => {
     // 백엔드에 현재 탭 정보를 전송하는 로직
+    const html = getHtmlText();
   };
 
   useEffect(() => {

@@ -31,15 +31,21 @@ export const getBookMarks = () => {
   });
 };
 
-export const getHtmlText = () => {
-  chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-    chrome.pageCapture.saveAsMHTML({ tabId: tabs[0].id as number }, async (data) => {
-      const quotedPrintableData = await data!.text();
-      const decodedData = decodeQuotedPrintable(quotedPrintableData);
-      const textDecoder = new TextDecoder("utf-8");
-      const htmlContent = textDecoder.decode(decodedData);
+export const getHtmlText = async () => {
+  return new Promise<string>((resolve, reject) => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      chrome.pageCapture.saveAsMHTML({ tabId: tabs[0].id as number }, async (data) => {
+        try {
+          const quotedPrintableData = await data!.text();
+          const decodedData = decodeQuotedPrintable(quotedPrintableData);
+          const textDecoder = new TextDecoder("utf-8");
+          const htmlContent = textDecoder.decode(decodedData);
 
-      return htmlContent;
+          resolve(htmlContent);
+        } catch (error) {
+          reject(error);
+        }
+      });
     });
   });
 };

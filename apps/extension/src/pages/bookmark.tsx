@@ -6,9 +6,9 @@ import { RectangleButton } from "@repo/ui";
 const Bookmark = () => {
   const [currentTab, setCurrentTab] = useState({ url: "사이트 url", title: "사이트 title" });
 
-  const onClickAdd = () => {
+  const onClickAdd = async () => {
     // 백엔드에 현재 탭 정보를 전송하는 로직
-    const html = getHtmlText();
+    const html = await getHtmlText();
   };
 
   useEffect(() => {

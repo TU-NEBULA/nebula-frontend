@@ -23,10 +23,10 @@ const Agreement = () => {
             <br />
             것에 동의하시겠습니까?
           </h1>
-          <h2 className="text-body">네뷸라 실행을 위해선 북마크 동의를 해야합니다.</h2>
+          <h2 className="text-label">네뷸라 실행을 위해선 북마크 동의를 해야합니다.</h2>
         </div>
         <div className="space-y-2">
-          <p className="text-label">
+          <p className="text-body">
             북마크정보 수집 및 이용 동의 <span className="text-essential">*</span>
           </p>
           <p className="text-description font-medium rounded-sm border border-grey2 p-2">
@@ -35,7 +35,7 @@ const Agreement = () => {
             동의하신 경우에만 서비스 이용이 가능합니다. 수집된 정보로 사용자 개개인의 북마크 기록을
             분석하고, 비슷한 관심사를 가진 다른 사용자들의 정보를 분석하여 유용한 정보를 제공합니다.
           </p>
-          <div className="text-description flex items-center gap-1">
+          <div className="text-description flex items-center gap-1 font-normal">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />
             <label htmlFor="agreement">(필수) 북마크 정보 수집 및 이용에 동의합니다.</label>
           </div>

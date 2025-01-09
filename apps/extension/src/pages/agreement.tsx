@@ -27,7 +27,7 @@ const Agreement = () => {
         </div>
         <div className="space-y-2">
           <p className="text-body">
-            북마크정보 수집 및 이용 동의 <span className="text-essential">*</span>
+            북마크정보 수집 및 이용 동의 <span className="text-highlight">*</span>
           </p>
           <p className="text-description font-medium rounded-sm border border-grey2 p-2">
             네뷸라 서비스는 사용자가 저장한 크롬 북마크 정보를 분석하고 시각화하여 더 나은 북마크

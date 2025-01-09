@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import { api } from "@/service/api";
 import { getHtmlText, updateCurrentTab } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
 
@@ -9,6 +10,11 @@ const Bookmark = () => {
   const onClickAdd = async () => {
     // 백엔드에 현재 탭 정보를 전송하는 로직
     const html = await getHtmlText();
+    const htmlContent = html.split("------MultipartBoundary--")[1];
+    const res = await api.post("/api/extract_data", {
+      url: currentTab.url,
+      html_content: htmlContent,
+    });
   };
 
   useEffect(() => {

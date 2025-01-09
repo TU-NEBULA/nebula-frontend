@@ -7,10 +7,7 @@ export default {
   theme: {
     extend: {
       ...baseConfig.theme.extend,
-      colors: {
-        ...baseConfig.theme.extend.colors,
-        essential: "#CB716E",
-      },
+      hightlight: "#CC3300",
     },
   },
 };

@@ -69,6 +69,12 @@ const Card = ({
     }
   };
 
+  const onEnterKeyword = async (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      await onCreateCategory();
+    }
+  };
+
   return (
     <>
       <section className="flex items-center gap-3">
@@ -144,6 +150,7 @@ const Card = ({
                 className="border border-grey5 w-full p-1 text-body"
                 value={modal.category}
                 onChange={onChangeText}
+                onKeyDown={onEnterKeyword}
               />
               <div className="flex w-full gap-3">
                 <RectangleButton className="flex-1 border border-grey5" onClick={onCloseModal}>
@@ -151,11 +158,7 @@ const Card = ({
                 </RectangleButton>
                 <RectangleButton
                   disabled={addDisabled}
-                  className={cn(
-                    "flex-1 bg-black text-white transition-colors",
-                    addDisabled &&
-                      "bg-grey2 cursor-default hover:bg-opacity-100 active:bg-opacity-100"
-                  )}
+                  className="flex-1 bg-black text-white transition-colors"
                   onClick={onCreateCategory}
                 >
                   추가

@@ -10,7 +10,10 @@ import { RectangleButton } from "@repo/ui";
 import { useNavigate } from "react-router-dom";
 
 const Bookmark = () => {
-  const [currentTab, setCurrentTab] = useState({ url: "사이트 url", title: "사이트 title" });
+  const [currentTab, setCurrentTab] = useState({
+    url: "사이트 url",
+    title: "사이트 title",
+  });
   const navigate = useNavigate();
 
   const { fetchData } = useFetch<SummarizeBookmarkProps, SummarizeBookmarkDTO>();
@@ -43,7 +46,7 @@ const Bookmark = () => {
 
   return (
     <Loading title="페이지를 요약하고 있어요!">
-      <main className="h-full gap-10 flex flex-col justify-center">
+      <main className="h-full gap-10 flex flex-col justify-center overflow-x-hidden">
         <h1 className="text-title text-center">현재 페이지 정보</h1>
         <section className="space-y-4">
           <div className="space-y-2">

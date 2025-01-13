@@ -3,7 +3,7 @@ import { useState } from "react";
 import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
 import { BookmarkState } from "@/types/bookmark";
-import { Card, Keyword, RectangleButton, Textarea } from "@repo/ui";
+import { Card, cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
 
 import { Link, Navigate, useLocation } from "react-router-dom";
 
@@ -27,6 +27,8 @@ const CreateBookmark = () => {
   if (!state) {
     return <Navigate to="/bad-request" replace />;
   }
+
+  const saveDisabled = bookmark.category.length === 0;
 
   const onSelectCategory = (category: string) => {
     setBookmark((prev) => ({ ...prev, category }));
@@ -126,7 +128,12 @@ const CreateBookmark = () => {
       </section>
       <section className="flex gap-3">
         <RectangleButton className="border border-grey5 text-grey5 flex-1">취소</RectangleButton>
-        <RectangleButton className="border bg-black text-white flex-1">저장</RectangleButton>
+        <RectangleButton
+          disabled={saveDisabled}
+          className={cn("border text-white flex-1", !saveDisabled && "bg-black")}
+        >
+          저장
+        </RectangleButton>
       </section>
     </main>
   );

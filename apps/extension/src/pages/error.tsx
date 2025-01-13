@@ -2,7 +2,12 @@ import { RectangleButton } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
 
-function BadRequest() {
+interface ErrorPageProps {
+  title: string;
+  subtitle: string;
+}
+
+function ErrorPage({ title, subtitle }: ErrorPageProps) {
   const navigate = useNavigate();
 
   const onClick = () => {
@@ -11,7 +16,10 @@ function BadRequest() {
 
   return (
     <main className="h-full flex flex-col justify-center items-center gap-10">
-      <h1 className="text-title text-center">잘못된 요청입니다.</h1>
+      <div className="space-y-2 text-center">
+        <h1 className="text-title">{title}</h1>
+        <h2 className="text-subtitle text-grey2">{subtitle}</h2>
+      </div>
       <RectangleButton onClick={onClick} className="w-full text-white bg-black">
         홈으로 돌아가기
       </RectangleButton>
@@ -19,4 +27,4 @@ function BadRequest() {
   );
 }
 
-export default BadRequest;
+export default ErrorPage;

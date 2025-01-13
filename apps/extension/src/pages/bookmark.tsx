@@ -24,7 +24,7 @@ const Bookmark = () => {
       "post"
     );
     if (res.status === 200) {
-      return navigate("/create-bookmark", { state: { data: res.data } });
+      return navigate("/create-bookmark", { state: { ...res.data, title: currentTab.title } });
     }
     // status 코드에 따른 에러 처리
   };
@@ -56,9 +56,7 @@ const Bookmark = () => {
           </div>
         </section>
         <RectangleButton
-          className={
-            "w-full text-white transition-colors bg-black hover:bg-opacity-90 active:bg-opacity-80"
-          }
+          className={"w-full text-white transition-colors bg-black"}
           onClick={onClickAdd}
         >
           북마크에 추가하기

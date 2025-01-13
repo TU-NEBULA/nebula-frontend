@@ -43,8 +43,10 @@ const Agreement = () => {
       </section>
       <RectangleButton
         className={cn(
-          "text-white transition-colors cursor-default",
-          checked ? "bg-black hover:bg-opacity-90 active:bg-opacity-80 cursor-pointer" : "bg-grey2"
+          "text-white transition-colors",
+          !checked
+            ? "bg-grey2 cursor-default hover:bg-opacity-100 active:bg-opacity-100"
+            : "bg-black"
         )}
         onClick={onClickGetBookmarks}
       >

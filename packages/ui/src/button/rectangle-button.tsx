@@ -1,4 +1,4 @@
-import { cn } from "../utils/cn";
+import { cn } from "../../utils/cn";
 
 const RectangleButton = ({
   children,
@@ -6,7 +6,13 @@ const RectangleButton = ({
   ...restProps
 }: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
   return (
-    <button className={cn("rounded-sm py-2 font-medium", className)} {...restProps}>
+    <button
+      className={cn(
+        "rounded-sm py-2 font-medium hover:bg-opacity-90 active:bg-opacity-80",
+        className
+      )}
+      {...restProps}
+    >
       {children}
     </button>
   );

@@ -1,6 +1,5 @@
+import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { RectangleButton } from "@repo/ui";
-
-import { useNavigate } from "react-router-dom";
 
 interface ErrorPageProps {
   title: string;
@@ -8,10 +7,10 @@ interface ErrorPageProps {
 }
 
 function ErrorPage({ title, subtitle }: ErrorPageProps) {
-  const navigate = useNavigate();
+  const navigate = useReplaceNavigate();
 
   const onClick = () => {
-    navigate("/", { replace: true });
+    navigate("/");
   };
 
   return (

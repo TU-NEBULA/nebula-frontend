@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Loading from "@/components/loading";
+import { METHOD, RESPONSE } from "@/constants/api";
 import { useFetch } from "@/hooks/use-fetch";
 import { SummarizeBookmarkDTO } from "@/models/bookmark";
 import { SummarizeBookmarkProps } from "@/types/bookmark";
@@ -24,12 +25,12 @@ const Bookmark = () => {
     const res = await fetchData(
       "/api/extract_data",
       { url: currentTab.url, html_content: htmlContent },
-      "post"
+      METHOD.POST
     );
-    if (res.status === 200) {
-      return navigate("/create-bookmark", { state: { ...res.data, title: currentTab.title } });
+    if (res.code === RESPONSE.SUCCESS) {
+      return navigate("/create-bookmark", { state: { ...res.result, title: currentTab.title } });
     }
-    // status 코드에 따른 에러 처리
+    // code 코드에 따른 에러 처리
   };
 
   useEffect(() => {

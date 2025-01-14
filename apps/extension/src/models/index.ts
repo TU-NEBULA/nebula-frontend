@@ -1,4 +1,6 @@
 export interface BaseResponseDTO<T> {
-  data: T;
-  status: number;
+  isSuccess: boolean;
+  code: string;
+  message: string;
+  result?: T;
 }

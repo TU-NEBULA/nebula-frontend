@@ -9,7 +9,7 @@ import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { BookmarkState } from "@/types/bookmark";
 import { Card, cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
 
-import { Link, useLocation } from "react-router-dom";
+import { Link, Navigate, useLocation } from "react-router-dom";
 
 interface Bookmark {
   category: string;
@@ -36,7 +36,7 @@ const CreateBookmark = () => {
   const { fetchData } = useFetch();
 
   if (!state) {
-    return navigate("/bad-request");
+    return <Navigate to="/bad-request" replace />;
   }
 
   const saveDisabled = bookmark.category.length === 0;

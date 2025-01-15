@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { memo, useCallback, useState } from "react";
 import Image from "next/image";
 
 import doubleArrowLeft from "@/assets/icons/double-arrow-left.svg";
@@ -9,7 +9,7 @@ import logo from "@/assets/icons/logo.svg";
 import logout from "@/assets/icons/logout.svg";
 import search from "@/assets/icons/search.svg";
 
-import Dropdown from "../dropdown";
+import Dropdown from "./dropdown";
 
 const categories = [
   {
@@ -49,31 +49,37 @@ const LeftSidebar = () => {
     profileOpen: false,
   });
 
-  const onToggleSidebar = () => {
+  const onToggleSidebar = useCallback(() => {
     setSidebar((prev) => ({
       open: !prev.open,
       categoryOpen: false,
       keywordOpen: false,
       profileOpen: !prev.open && prev.profileOpen,
     }));
-  };
+  }, []);
 
-  const onToggleDropdown = (type: string) => {
-    if (sidebar.open) {
-      return setSidebar((prev) => ({
+  const onToggleDropdown = useCallback((type: string) => {
+    setSidebar((prev) => {
+      if (!prev.open) {
+        return {
+          ...prev,
+          open: true,
+          [`${type}Open`]: true,
+        };
+      }
+      return {
         ...prev,
         [`${type}Open`]: !prev[`${type}Open`],
-      }));
-    }
-    return onToggleSidebar();
-  };
+      };
+    });
+  }, []);
 
-  const onToggleProfile = () => {
+  const onToggleProfile = useCallback(() => {
     setSidebar((prev) => ({
       ...prev,
       profileOpen: !prev.profileOpen,
     }));
-  };
+  }, []);
 
   const onClickItem = (id: number) => {
     // do something
@@ -135,4 +141,4 @@ const LeftSidebar = () => {
   );
 };
 
-export default LeftSidebar;
+export default memo(LeftSidebar);

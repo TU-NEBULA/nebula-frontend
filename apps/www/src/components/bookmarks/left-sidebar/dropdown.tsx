@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import Image from "next/image";
 
 import arrowRight from "@/assets/icons/arrow-right.svg";
@@ -14,7 +15,7 @@ interface DropdownProps {
   onClickItem: (id: number) => void;
 }
 
-const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownProps) => {
+const Dropdown = memo(({ open, title, icon, items, onClick, onClickItem }: DropdownProps) => {
   return (
     <section className="flex flex-col overflow-hidden">
       <button
@@ -49,6 +50,13 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
       )}
     </section>
   );
-};
+});
 
-export default Dropdown;
+export default memo(Dropdown, (prev, next) => {
+  return (
+    prev.open === next.open &&
+    prev.title === next.title &&
+    prev.icon === next.icon &&
+    prev.items === next.items
+  );
+});

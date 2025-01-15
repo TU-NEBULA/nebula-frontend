@@ -17,7 +17,10 @@ export default {
         subtitle: ["1.25rem", { fontWeight: "600" }],
         label: ["1rem", { fontWeight: "500" }],
         body: ["0.875rem", { fontWeight: "400" }],
-        description: ["0.75rem", { fontWeight: "300" }],
+        description: ["0.75rem", { fontWeight: "400" }],
+      },
+      screens: {
+        sm: "380px",
       },
     },
   },

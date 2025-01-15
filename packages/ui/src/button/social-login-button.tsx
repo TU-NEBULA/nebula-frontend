@@ -1,5 +1,5 @@
 import RectangleButton from "./rectangle-button";
-import { cn } from "../utils/cn";
+import { cn } from "../../utils/cn";
 
 interface SocialLoginButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   social: "kakao" | "google";

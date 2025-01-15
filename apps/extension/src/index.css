@@ -31,8 +31,25 @@ body {
 
 body {
   margin: 0 auto;
-  max-width: 360px;
+  max-width: 500px;
+  min-width: 360px;
   min-height: 100vh;
   padding: 12px;
   color: #111111;
+}
+
+.hide-scrollbar {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+input,
+textarea {
+  &::placeholder {
+    color: #a9a9a9;
+  }
+  outline: none;
 }

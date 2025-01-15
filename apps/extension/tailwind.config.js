@@ -3,14 +3,11 @@ import baseConfig from "../../tailwind.config.mjs";
 /** @type {import('tailwindcss').Config} */
 export default {
   ...baseConfig,
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "../../packages/ui/**/*.{ts,tsx}"],
+  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}", "../../packages/ui/**/*.tsx"],
   theme: {
     extend: {
       ...baseConfig.theme.extend,
-      colors: {
-        ...baseConfig.theme.extend.colors,
-        essential: "#CB716E",
-      },
+      hightlight: "#CC3300",
     },
   },
 };

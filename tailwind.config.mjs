@@ -19,6 +19,9 @@ export default {
         body: ["0.875rem", { fontWeight: "400" }],
         description: ["0.75rem", { fontWeight: "400" }],
       },
+      screens: {
+        sm: "380px",
+      },
     },
   },
 };

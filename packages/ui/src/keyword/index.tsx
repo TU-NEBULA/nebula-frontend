@@ -16,7 +16,7 @@ const Keyword = ({ keywords, onDeleteKeyword, ...restProps }: KeywordProps) => {
               <RectangleButton
                 key={keyword}
                 onClick={() => onDeleteKeyword(keyword)}
-                className="border border-grey5 py-1 px-3 truncate max-w-24"
+                className="border border-grey5 py-1 px-3 truncate max-w-20 sm:max-w-24"
               >
                 {keyword}
               </RectangleButton>

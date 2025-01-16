@@ -7,7 +7,8 @@
     "dev:extension": "turbo dev --filter=extension --filter=@repo/types --filter=@repo/ui",
     "dev:www": "turbo dev --filter=www --filter=@repo/types --filter=@repo/ui",
     "lint": "turbo lint -- --fix \"**/*.{ts,tsx,md}\"",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",
@@ -17,6 +18,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "globals": "^15.11.0",
+    "husky": "^9.1.7",
     "postcss": "^8",
     "prettier": "^3.2.5",
     "tailwindcss": "^3.4.1",

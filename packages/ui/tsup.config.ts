@@ -10,4 +10,7 @@ export default defineConfig({
   target: "es6",
   minify: false,
   watch: process.env.WATCH === "true",
+  banner: {
+    js: '"use client"',
+  },
 });

@@ -11,6 +11,7 @@ export default {
         grey5: "#696969",
         white: "#FFFFFF",
         kakao: "#FEE500",
+        hightlight: "#CC3300",
       },
       fontSize: {
         title: ["1.5rem", { fontWeight: "700" }],

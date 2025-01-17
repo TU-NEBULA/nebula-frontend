@@ -61,7 +61,7 @@ const CreateBookmark = () => {
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const { value } = e.target as HTMLInputElement;
-      if (value && bookmark.keywords.length < 3) {
+      if (value && bookmark.keywords.length < 3 && !e.nativeEvent.isComposing) {
         setBookmark((prev) => ({
           ...prev,
           keyword: "",
@@ -96,13 +96,15 @@ const CreateBookmark = () => {
         </header>
         <Card
           Thumbnail={
-            <img
-              src={bookmark.thubmnail}
-              alt={`${bookmark.url} thumbnail`}
-              width={96}
-              height={96}
-              className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
-            />
+            bookmark.thubmnail ? (
+              <img
+                src={bookmark.thubmnail}
+                alt={`${bookmark.url} thumbnail`}
+                width={96}
+                height={96}
+                className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
+              />
+            ) : null
           }
           Link={
             <Link target="_blank" to={bookmark.url} className="text-body text-grey3 truncate">

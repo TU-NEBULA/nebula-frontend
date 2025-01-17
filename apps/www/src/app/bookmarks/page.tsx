@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
+import GraphDetail from "@/components/bookmarks/graph/graph-detail";
 import { Spinner } from "@repo/ui";
 
 const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
@@ -14,7 +16,22 @@ const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
 });
 
 const Bookmarks = () => {
-  return <Graph />;
+  const [open, setOpen] = useState(false);
+
+  const onOpen = () => {
+    setOpen(true);
+  };
+
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <>
+      <Graph onOpen={onOpen} />
+      <GraphDetail open={open} onClose={onClose} />
+    </>
+  );
 };
 
 export default Bookmarks;

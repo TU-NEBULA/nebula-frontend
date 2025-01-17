@@ -7,3 +7,19 @@
   padding: 0;
   background-color: #111;
 }
+
+.hide-scrollbar {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+input,
+textarea {
+  &::placeholder {
+    color: #a9a9a9;
+  }
+  outline: none;
+}

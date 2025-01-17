@@ -4,6 +4,7 @@ export { default as Spinner } from "./spinner";
 export { default as Card } from "./card";
 export { default as Textarea } from "./textarea";
 export { default as Keyword } from "./keyword";
+export { default as Modal } from "./modal";
 
 export { cn } from "../utils/cn";
 

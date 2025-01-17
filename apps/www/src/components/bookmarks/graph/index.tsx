@@ -6,6 +6,10 @@ import { Coords, LinkObject, NodeObject } from "@/types/graph";
 
 // className scene-tooltip으로 호버 시 스타일링하기
 
+interface GraphProps {
+  onOpen: () => void;
+}
+
 const nodes = [
   { id: 1, name: "red" },
   { id: 2, name: "green" },
@@ -21,7 +25,7 @@ const links = [
 
 const fixedPosition = (position: number) => (position > 0 ? 250 : -250);
 
-const Graph = () => {
+const Graph = ({ onOpen }: GraphProps) => {
   const graphRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,6 +46,7 @@ const Graph = () => {
           .nodeColor(() => "#a3a3a3")
           .nodeOpacity(1)
           .onNodeClick((node: NodeObject) => {
+            onOpen();
             const { x, y, z } = graph.cameraPosition();
             const gaps = [node.x - x, node.y - y, node.z - z];
             const maxIndex = gaps.findIndex(
@@ -76,7 +81,7 @@ const Graph = () => {
     };
   }, []);
 
-  return <div ref={graphRef} className="w-full h-full" />;
+  return <main ref={graphRef} className="w-full h-full" />;
 };
 
 export default Graph;

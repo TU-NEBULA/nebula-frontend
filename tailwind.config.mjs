@@ -22,6 +22,18 @@ export default {
       screens: {
         sm: "380px",
       },
+      minWidth: {
+        sidebar: "360px",
+      },
+      maxWidth: {
+        sidebar: "500px",
+      },
+      minHeight: {
+        keyword: "46px",
+      },
+      maxHeight: {
+        dropdown: "133px",
+      },
     },
   },
 };

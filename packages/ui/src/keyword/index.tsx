@@ -10,7 +10,7 @@ const Keyword = ({ keywords, onDeleteKeyword, ...restProps }: KeywordProps) => {
     <div className="space-y-2">
       <div className="space-y-1">
         <h2 className="text-body">키워드</h2>
-        <div className="border border-grey5 p-2 rounded-md flex justify-between gap-2 items-center text-description min-h-[46px]">
+        <div className="border border-grey5 p-2 rounded-md flex justify-between gap-2 items-center text-description min-h-keyword">
           <div className="flex gap-3">
             {keywords.map((keyword) => (
               <RectangleButton

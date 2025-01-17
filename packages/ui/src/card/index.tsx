@@ -112,7 +112,7 @@ const Card = ({
               </svg>
             </button>
             {isDropdownOpen && (
-              <div className="flex flex-col bg-white z-10 absolute border border-grey5 w-32 mt-2 overflow-scroll text-center max-h-[133px] hide-scrollbar">
+              <div className="flex flex-col bg-white z-10 absolute border border-grey5 w-32 mt-2 overflow-scroll text-center max-h-dropdown hide-scrollbar">
                 <button onClick={onOpenModal} className="py-1 w-full">
                   +
                 </button>
@@ -137,7 +137,7 @@ const Card = ({
         <div className="flex justify-center items-center fixed left-0 top-0 bg-black bg-opacity-50 w-full h-full z-10">
           <div
             ref={modalRef}
-            className="bg-white px-12 py-4 rounded-lg flex flex-col gap-5 items-center w-full min-w-80 max-w-[500px] mx-3"
+            className="bg-white px-12 py-4 rounded-lg flex flex-col gap-5 items-center w-full min-w-80 max-w-sidebar mx-3"
           >
             <div className="text-center space-y-2">
               <h2 className="text-title">카테고리 추가</h2>

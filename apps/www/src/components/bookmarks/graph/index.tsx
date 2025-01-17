@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
+import { useBookmarkStore } from "@/lib/zustand/bookmark";
 import { Coords, LinkObject, NodeObject } from "@/types/graph";
 
 // className scene-tooltip으로 호버 시 스타일링하기
@@ -27,6 +28,8 @@ const fixedPosition = (position: number) => (position > 0 ? 250 : -250);
 
 const Graph = ({ onOpen }: GraphProps) => {
   const graphRef = useRef<HTMLDivElement>(null);
+  // 선택된 필터로 link handling하기
+  const { selectedFilter, setSelectedFilter } = useBookmarkStore();
 
   useEffect(() => {
     const loadGraph = async () => {

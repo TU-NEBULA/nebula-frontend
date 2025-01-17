@@ -8,6 +8,8 @@ import folder from "@/assets/icons/folder.svg";
 import logo from "@/assets/icons/logo.svg";
 import logout from "@/assets/icons/logout.svg";
 import search from "@/assets/icons/search.svg";
+import { LINK_TYPE } from "@/constants/bookmark";
+import { useBookmarkStore } from "@/lib/zustand/bookmark";
 
 import Dropdown from "./dropdown";
 
@@ -41,7 +43,10 @@ const keywords = [
   },
 ];
 
+const filters = [LINK_TYPE.CATEGORY, LINK_TYPE.KEYWORD];
+
 const Sidebar = () => {
+  const { selectedFilter, setSelectedFilter } = useBookmarkStore();
   const [sidebar, setSidebar] = useState({
     open: false,
     categoryOpen: false,
@@ -85,9 +90,15 @@ const Sidebar = () => {
     // do something
   };
 
+  const onSelectFilter = (filter: LINK_TYPE) => {
+    setSelectedFilter(selectedFilter === filter ? "" : filter);
+  };
+
   const sidebarStyle = {
     width: sidebar.open ? "16rem" : "4.5rem",
   };
+
+  console.log(selectedFilter);
 
   return (
     <aside id="sidebar" className="flex fixed left-0 h-full z-10">
@@ -144,6 +155,21 @@ const Sidebar = () => {
           )}
         </div>
       </section>
+      <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+        <legend className="text-label">Filter</legend>
+        {filters.map((filter) => (
+          <label key={filter} className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="filter"
+              value={filter}
+              checked={selectedFilter === filter}
+              onChange={() => onSelectFilter(filter)}
+            />
+            <span className="text-body">{filter}</span>
+          </label>
+        ))}
+      </fieldset>
     </aside>
   );
 };

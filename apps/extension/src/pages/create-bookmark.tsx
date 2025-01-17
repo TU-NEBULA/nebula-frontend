@@ -6,20 +6,12 @@ import Loading from "@/components/loading";
 import { METHOD, RESPONSE } from "@/constants/api";
 import { useFetch } from "@/hooks/use-fetch";
 import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
-import { BookmarkState } from "@/types/bookmark";
+import { BookmarkProps } from "@repo/types";
 import { Card, cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
 
 import { Link, Navigate, useLocation } from "react-router-dom";
 
-interface Bookmark {
-  category: string;
-  categories: { id: number; name: string }[];
-  summary: string;
-  memo: string;
-  keyword: string;
-}
-
-const DEFAULT_BOOKMARK: Bookmark = {
+const DEFAULT_BOOKMARK = {
   category: "",
   categories: [],
   summary: "",
@@ -28,10 +20,10 @@ const DEFAULT_BOOKMARK: Bookmark = {
 };
 
 const CreateBookmark = () => {
-  const { state }: BookmarkState = useLocation();
+  const { state } = useLocation();
   const navigate = useReplaceNavigate();
 
-  const [bookmark, setBookmark] = useState(Object.assign(DEFAULT_BOOKMARK, state));
+  const [bookmark, setBookmark] = useState<BookmarkProps>(Object.assign(DEFAULT_BOOKMARK, state));
 
   const { fetchData } = useFetch();
 

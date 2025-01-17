@@ -1,1 +1,1 @@
-export type * from "./example";
+export type * from "./bookmark";

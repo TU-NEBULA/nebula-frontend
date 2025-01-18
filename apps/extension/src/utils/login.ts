@@ -1,4 +1,4 @@
-import { api } from "@/service/api";
+import { api } from "@/services/api";
 
 const apiKey = import.meta.env.VITE_KAKAO_REST_API_KEY;
 const redirectUri = encodeURIComponent(chrome.identity.getRedirectURL());

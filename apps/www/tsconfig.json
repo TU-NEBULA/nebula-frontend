@@ -18,8 +18,8 @@
     "skipLibCheck": true,
     "strict": false,
     "noEmit": true,
-    "module": "NodeNext",
-    "moduleResolution": "nodenext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "isolatedModules": true,
     "types": ["@repo/types", "@repo/ui"]
   },

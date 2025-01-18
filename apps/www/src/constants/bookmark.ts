@@ -1,0 +1,4 @@
+export enum LINK_TYPE {
+  CATEGORY = "CATEGORY",
+  KEYWORD = "KEYWORD",
+}

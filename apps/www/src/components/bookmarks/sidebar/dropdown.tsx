@@ -23,7 +23,14 @@ const Dropdown = memo(({ open, title, icon, items, onClick, onClickItem }: Dropd
         onClick={onClick}
       >
         <div className="flex items-center gap-2">
-          <Image src={icon} alt="카테고리 아이콘" width={24} height={24} className="w-6 h-6" />
+          <Image
+            src={icon}
+            alt="카테고리 아이콘"
+            width={24}
+            height={24}
+            className="w-6 h-6"
+            draggable={false}
+          />
           <p className="text-label">{title}</p>
         </div>
         <Image
@@ -32,6 +39,7 @@ const Dropdown = memo(({ open, title, icon, items, onClick, onClickItem }: Dropd
           width={24}
           height={24}
           className={cn("transition-transform", open && "rotate-90")}
+          draggable={false}
         />
       </button>
       {open && (

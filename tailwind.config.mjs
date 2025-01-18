@@ -11,6 +11,7 @@ export default {
         grey5: "#696969",
         white: "#FFFFFF",
         kakao: "#FEE500",
+        hightlight: "#CC3300",
       },
       fontSize: {
         title: ["1.5rem", { fontWeight: "700" }],
@@ -21,6 +22,18 @@ export default {
       },
       screens: {
         sm: "380px",
+      },
+      minWidth: {
+        sidebar: "360px",
+      },
+      maxWidth: {
+        sidebar: "500px",
+      },
+      minHeight: {
+        keyword: "46px",
+      },
+      maxHeight: {
+        dropdown: "133px",
       },
     },
   },

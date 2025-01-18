@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { cn } from "../../utils/cn";
 import RectangleButton from "../button/rectangle-button";
+import Modal from "../modal";
 
 interface CategoryProps {
   id: number;
@@ -39,7 +40,6 @@ const Card = ({
   const [dropdownRef] = useOutsideClick<HTMLDivElement>(
     () => !modal.open && setIsDropdownOpen(false)
   );
-  const [modalRef] = useOutsideClick<HTMLDivElement>(() => setModal({ open: false, category: "" }));
 
   const onToggle = () => {
     setIsDropdownOpen((prev) => !prev);
@@ -112,7 +112,7 @@ const Card = ({
               </svg>
             </button>
             {isDropdownOpen && (
-              <div className="flex flex-col bg-white z-10 absolute border border-grey5 w-32 mt-2 overflow-scroll text-center max-h-[133px] hide-scrollbar">
+              <div className="flex flex-col bg-white z-10 absolute border border-grey5 w-32 mt-2 overflow-scroll text-center max-h-dropdown hide-scrollbar">
                 <button onClick={onOpenModal} className="py-1 w-full">
                   +
                 </button>
@@ -134,39 +134,34 @@ const Card = ({
         </div>
       </section>
       {modal.open && (
-        <div className="flex justify-center items-center fixed left-0 top-0 bg-black bg-opacity-50 w-full h-full z-10">
-          <div
-            ref={modalRef}
-            className="bg-white px-12 py-4 rounded-lg flex flex-col gap-5 items-center w-full min-w-80 max-w-[500px] mx-3"
-          >
-            <div className="text-center space-y-2">
-              <h2 className="text-title">카테고리 추가</h2>
-              <h3 className="text-label text-grey2">만들고 싶은 카테고리를 작성해주세요.</h3>
-            </div>
-            <div className="flex flex-col gap-3 w-full">
-              <input
-                type="text"
-                placeholder="카테고리 이름을 입력해주세요."
-                className="border border-grey5 w-full p-1 text-body"
-                value={modal.category}
-                onChange={onChangeText}
-                onKeyDown={onEnterKeyword}
-              />
-              <div className="flex w-full gap-3">
-                <RectangleButton className="flex-1 border border-grey5" onClick={onCloseModal}>
-                  취소
-                </RectangleButton>
-                <RectangleButton
-                  disabled={addDisabled}
-                  className="flex-1 bg-black text-white transition-colors"
-                  onClick={onCreateCategory}
-                >
-                  추가
-                </RectangleButton>
-              </div>
+        <Modal
+          title="카테고리 추가"
+          subTitle="만들고 싶은 카테고리를 작성해주세요."
+          callback={onCloseModal}
+        >
+          <div className="flex flex-col gap-3 w-full">
+            <input
+              type="text"
+              placeholder="카테고리 이름을 입력해주세요."
+              className="border border-grey5 w-full p-1 text-body"
+              value={modal.category}
+              onChange={onChangeText}
+              onKeyDown={onEnterKeyword}
+            />
+            <div className="flex w-full gap-3">
+              <RectangleButton className="flex-1 border border-grey5" onClick={onCloseModal}>
+                취소
+              </RectangleButton>
+              <RectangleButton
+                disabled={addDisabled}
+                className="flex-1 bg-black text-white transition-colors"
+                onClick={onCreateCategory}
+              >
+                추가
+              </RectangleButton>
             </div>
           </div>
-        </div>
+        </Modal>
       )}
     </>
   );

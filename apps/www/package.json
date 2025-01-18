@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
-    "build": "cd ../.. && turbo run build --filter=@repo/ui && turbo run build --filter=apps/www",
+    "build": "cd ../.. && turbo run build --filter=@repo/ui && turbo run build --filter=www",
     "start": "next start",
     "lint": "pnpm eslint"
   },

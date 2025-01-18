@@ -2,7 +2,7 @@
   "name": "@repo/types",
   "scripts": {
     "dev": "tsc --watch",
-    "build": "tsc --watch"
+    "build": "tsc"
   },
   "exports": {
     "types": "./dist/index.d.ts"

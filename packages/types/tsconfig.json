@@ -5,7 +5,8 @@
     "declaration": true,
     "noEmit": false,
     "emitDeclarationOnly": true,
-    "module": "ESNext",
+    "module": "esnext",
+    "moduleResolution": "bundler",
     "target": "ES6",
     "strict": true
   },

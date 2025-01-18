@@ -13,8 +13,8 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@repo/ui": ["../../packages/ui/src"],
-      "@repo/types": ["../../packages/types/src"]
+      "@repo/ui": ["../../packages/ui/dist"],
+      "@repo/types": ["../../packages/types/dist"]
     },
     "target": "ES2017",
     "skipLibCheck": true,

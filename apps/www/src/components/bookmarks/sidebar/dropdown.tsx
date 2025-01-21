@@ -15,7 +15,7 @@ interface DropdownProps {
   onClickItem: (id: number) => void;
 }
 
-const Dropdown = memo(({ open, title, icon, items, onClick, onClickItem }: DropdownProps) => {
+const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownProps) => {
   return (
     <section className="flex flex-col overflow-hidden">
       <button
@@ -58,7 +58,7 @@ const Dropdown = memo(({ open, title, icon, items, onClick, onClickItem }: Dropd
       )}
     </section>
   );
-});
+};
 
 export default memo(Dropdown, (prev, next) => {
   return (

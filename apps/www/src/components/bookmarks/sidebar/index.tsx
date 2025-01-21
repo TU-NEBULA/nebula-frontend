@@ -1,6 +1,6 @@
 "use client";
 
-import { memo, useCallback, useState } from "react";
+import { useState } from "react";
 import Image from "next/image";
 
 import doubleArrowLeft from "@/assets/icons/double-arrow-left.svg";
@@ -54,16 +54,16 @@ const Sidebar = () => {
     profileOpen: false,
   });
 
-  const onToggleSidebar = useCallback(() => {
+  const onToggleSidebar = () => {
     setSidebar((prev) => ({
       open: !prev.open,
       categoryOpen: false,
       keywordOpen: false,
       profileOpen: !prev.open && prev.profileOpen,
     }));
-  }, []);
+  };
 
-  const onToggleDropdown = useCallback((type: string) => {
+  const onToggleDropdown = (type: string) => {
     setSidebar((prev) => {
       if (!prev.open) {
         return {
@@ -77,14 +77,14 @@ const Sidebar = () => {
         [`${type}Open`]: !prev[`${type}Open`],
       };
     });
-  }, []);
+  };
 
-  const onToggleProfile = useCallback(() => {
+  const onToggleProfile = () => {
     setSidebar((prev) => ({
       ...prev,
       profileOpen: !prev.profileOpen,
     }));
-  }, []);
+  };
 
   const onClickItem = (id: number) => {
     // do something
@@ -174,4 +174,4 @@ const Sidebar = () => {
   );
 };
 
-export default memo(Sidebar);
+export default Sidebar;

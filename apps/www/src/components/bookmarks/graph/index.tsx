@@ -8,7 +8,7 @@ import { Coords, LinkObject, NodeObject } from "@/types/graph";
 // className scene-tooltip으로 호버 시 스타일링하기
 
 interface GraphProps {
-  onOpen: () => void;
+  onOpen: (id: number) => void;
 }
 
 const nodes = [
@@ -49,7 +49,7 @@ const Graph = ({ onOpen }: GraphProps) => {
           .nodeColor(() => "#a3a3a3")
           .nodeOpacity(1)
           .onNodeClick((node: NodeObject) => {
-            onOpen();
+            onOpen(node.id);
             const { x, y, z } = graph.cameraPosition();
             const gaps = [node.x - x, node.y - y, node.z - z];
             const maxIndex = gaps.findIndex(

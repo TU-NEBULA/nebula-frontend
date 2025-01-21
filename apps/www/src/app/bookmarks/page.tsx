@@ -16,20 +16,29 @@ const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
 });
 
 const Bookmarks = () => {
-  const [open, setOpen] = useState(false);
+  const [detail, setDetail] = useState({
+    open: false,
+    id: -1,
+  });
 
-  const onOpen = () => {
-    setOpen(true);
+  const onOpen = (id: number) => {
+    setDetail({
+      open: true,
+      id,
+    });
   };
 
   const onClose = () => {
-    setOpen(false);
+    setDetail({
+      open: false,
+      id: -1,
+    });
   };
 
   return (
     <>
       <Graph onOpen={onOpen} />
-      <GraphDetail open={open} onClose={onClose} />
+      <GraphDetail open={detail.open} id={detail.id} onClose={onClose} />
     </>
   );
 };

@@ -11,11 +11,11 @@ interface CommonProps {
 }
 
 export interface LinkObject extends CommonProps {
-  source?: string | number;
-  target?: string | number;
+  source?: number;
+  target?: number;
 }
 export interface NodeObject extends Coords, CommonProps {
-  id?: string | number;
+  id?: number;
   vx?: number;
   vy?: number;
   vz?: number;

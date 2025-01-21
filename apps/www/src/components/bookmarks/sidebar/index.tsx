@@ -98,8 +98,6 @@ const Sidebar = () => {
     width: sidebar.open ? "16rem" : "4.5rem",
   };
 
-  console.log(selectedFilter);
-
   return (
     <aside id="sidebar" className="flex fixed left-0 h-full z-10">
       <section

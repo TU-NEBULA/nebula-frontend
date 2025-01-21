@@ -21,7 +21,9 @@ const Keyword = ({ keywords, onDeleteKeyword, ...restProps }: KeywordProps) => {
                 {keyword}
               </RectangleButton>
             ))}
-            {keywords.length !== 3 && <input className="outline-none max-w-24" {...restProps} />}
+            {keywords.length !== 3 && (
+              <input className="outline-none max-w-24 read-only:cursor-default" {...restProps} />
+            )}
           </div>
           <span>{keywords.length}/3</span>
         </div>

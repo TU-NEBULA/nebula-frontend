@@ -12,7 +12,7 @@ import { Card, cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
 import { Link, Navigate, useLocation } from "react-router-dom";
 
 const DEFAULT_BOOKMARK = {
-  category: "",
+  categoryId: -1,
   categories: [],
   summary: "",
   memo: "",
@@ -31,10 +31,10 @@ const CreateBookmark = () => {
     return <Navigate to="/bad-request" replace />;
   }
 
-  const saveDisabled = bookmark.category.length === 0;
+  const saveDisabled = bookmark.categoryId === -1;
 
-  const onSelectCategory = (category: string) => {
-    setBookmark((prev) => ({ ...prev, category }));
+  const onSelectCategory = (categoryId: number) => {
+    setBookmark((prev) => ({ ...prev, categoryId }));
   };
 
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -112,7 +112,7 @@ const CreateBookmark = () => {
             </Link>
           }
           title={bookmark.title}
-          category={bookmark.category}
+          categoryId={bookmark.categoryId}
           categories={bookmark.categories}
           onSelectCategory={onSelectCategory}
           onAddCategory={onAddCategory}

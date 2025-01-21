@@ -14,9 +14,9 @@ interface CardProps {
   Thumbnail: React.ReactNode;
   Link: React.ReactNode;
   title: string;
-  category: string;
+  categoryId: number;
   categories: CategoryProps[];
-  onSelectCategory: (category: string) => void;
+  onSelectCategory: (categoryId: number) => void;
   onAddCategory: (category: string) => Promise<void>;
 }
 
@@ -24,7 +24,7 @@ const Card = ({
   Thumbnail,
   Link,
   title,
-  category: currentCategory,
+  categoryId,
   categories,
   onSelectCategory,
   onAddCategory,
@@ -36,6 +36,7 @@ const Card = ({
   });
 
   const addDisabled = modal.category.length === 0;
+  const categoryName = categories.find((category) => category.id === categoryId)?.name;
 
   const [dropdownRef] = useOutsideClick<HTMLDivElement>(
     () => !modal.open && setIsDropdownOpen(false)
@@ -90,10 +91,10 @@ const Card = ({
               <p
                 className={cn(
                   "text-body text-grey3 flex-1 truncate text-start",
-                  currentCategory && "text-black"
+                  categoryId !== -1 && "text-black"
                 )}
               >
-                {currentCategory || "카테고리"}
+                {categoryName || "카테고리"}
               </p>
               <svg
                 width="16"
@@ -119,10 +120,10 @@ const Card = ({
                 {categories.map((category) => (
                   <button
                     key={category.id}
-                    onClick={() => onSelectCategory(category.name)}
+                    onClick={() => onSelectCategory(category.id)}
                     className={cn(
                       "py-1 w-full border-t border-grey5",
-                      category.name === currentCategory && "bg-grey1"
+                      category.id === categoryId && "bg-grey1"
                     )}
                   >
                     {category.name}
@@ -136,7 +137,7 @@ const Card = ({
       {modal.open && (
         <Modal
           title="카테고리 추가"
-          subTitle="만들고 싶은 카테고리를 작성해주세요."
+          subTitle="새로운 카테고리를 작성해주세요."
           callback={onCloseModal}
         >
           <div className="flex flex-col gap-3 w-full">

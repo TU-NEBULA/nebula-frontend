@@ -14,7 +14,7 @@ export default {
         gray7: "#AFB4BA",
         white: "#FFFFFF",
         kakao: "#FEE500",
-        hightlight: "#CC3300",
+        highlight: "#CC3300",
       },
       fontSize: {
         notification: ["1.5rem", { fontWeight: "600" }],
@@ -32,7 +32,7 @@ export default {
         sidebar: "500px",
       },
       minHeight: {
-        keyword: "46px",
+        keyword: "44px",
       },
       maxHeight: {
         dropdown: "133px",

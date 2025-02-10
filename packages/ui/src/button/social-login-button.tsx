@@ -25,7 +25,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   return (
     <RectangleButton
       className={cn(
-        "text-text flex justify-center items-center gap-1 border",
+        "text-body flex justify-center items-center gap-1 border",
         socials[social].style
       )}
       {...restProps}

@@ -18,7 +18,6 @@ const DEFAULT_BOOKMARK = {
   memo: "",
   keyword: "",
 };
-
 const CreateBookmark = () => {
   const { state } = useLocation();
   const navigate = useReplaceNavigate();
@@ -87,7 +86,7 @@ const CreateBookmark = () => {
         <header className="flex items-center justify-between">
           <div className="flex gap-1 items-center">
             <Logo />
-            <p className="body font-bold">Nebula</p>
+            <p className="text-description font-bold">Nebula</p>
           </div>
           <button className="flex gap-1 items-center">
             <AISummary />
@@ -100,14 +99,14 @@ const CreateBookmark = () => {
               <img
                 src={bookmark.thubmnail}
                 alt={`${bookmark.url} thumbnail`}
-                width={96}
-                height={96}
-                className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
+                width={64}
+                height={64}
+                className="aspect-square object-cover max-w-16 max-h-16 rounded-md"
               />
             ) : null
           }
           Link={
-            <Link target="_blank" to={bookmark.url} className="text-text text-gray3 truncate">
+            <Link target="_blank" to={bookmark.url} className="text-text text-gray6 truncate">
               {bookmark.url || "url"}
             </Link>
           }

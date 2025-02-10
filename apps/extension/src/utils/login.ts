@@ -1,8 +1,7 @@
 import { api } from "@/services/api";
 
 const apiKey = import.meta.env.VITE_KAKAO_REST_API_KEY;
-// const redirectUri = encodeURIComponent(chrome.identity.getRedirectURL());
-const redirectUri = "";
+const redirectUri = encodeURIComponent(chrome.identity.getRedirectURL());
 const kakaoLoginPage = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${apiKey}&redirect_uri=${redirectUri}&response_type=code`;
 
 export const onClickGoogleAuth = () => {

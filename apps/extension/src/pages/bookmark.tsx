@@ -47,16 +47,16 @@ const Bookmark = () => {
 
   return (
     <Loading title="페이지를 요약하고 있어요!">
-      <main className="h-full gap-10 flex flex-col justify-center overflow-x-hidden">
-        <h1 className="text-notification text-center">현재 페이지 정보</h1>
+      <main className="h-full gap-28 flex flex-col justify-center overflow-x-hidden">
+        <h1 className="text-notification">현재 페이지 정보</h1>
         <section className="space-y-4">
-          <div className="space-y-2">
-            <h2 className="text-title">URL</h2>
-            <p className="">{currentTab.url}</p>
+          <div className="space-y-2 text-body">
+            <h2>URL</h2>
+            <p className="text-gray7">{currentTab.url}</p>
           </div>
-          <div className="space-y-2">
-            <h2 className="text-title">Title</h2>
-            <p className="">{currentTab.title}</p>
+          <div className="space-y-2 text-body">
+            <h2>Title</h2>
+            <p className="text-gray7">{currentTab.title}</p>
           </div>
         </section>
         <RectangleButton

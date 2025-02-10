@@ -13,7 +13,7 @@ const Spinner = ({ theme = "light" }: SpinnerProps) => {
         }
       : {
           background: "conic-gradient(from 180deg at 50% 50%, #fff 0deg, #ffffff00 360deg)",
-          circle: "bg-black",
+          circle: "bg-black2",
         };
 
   return (

@@ -197,7 +197,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
             ) : null
           }
           Link={
-            <Link target="_blank" href={bookmark.url} className="text-body text-grey3 truncate">
+            <Link target="_blank" href={bookmark.url} className="text-text text-gray3 truncate">
               {bookmark.url || "url"}
             </Link>
           }
@@ -248,7 +248,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
           callback={onCloseDeleteModal}
         >
           <div className="flex w-full gap-3">
-            <RectangleButton className="flex-1 border border-grey5" onClick={onCloseDeleteModal}>
+            <RectangleButton className="flex-1 border border-gray5" onClick={onCloseDeleteModal}>
               취소
             </RectangleButton>
             <RectangleButton

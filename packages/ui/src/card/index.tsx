@@ -79,19 +79,19 @@ const Card = ({
   return (
     <>
       <section className="flex items-center gap-3">
-        {Thumbnail ? Thumbnail : <div className="min-w-24 aspect-square bg-grey5 rounded-md" />}
+        {Thumbnail ? Thumbnail : <div className="min-w-24 aspect-square bg-gray5 rounded-md" />}
         <div className="truncate flex flex-col h-full justify-between">
-          <p className="text-label">{title || "제목"}</p>
+          <p className="">{title || "제목"}</p>
           {Link}
           <div ref={dropdownRef}>
             <button
               onClick={onToggle}
-              className="flex justify-between items-center py-0.5 px-1 border border-grey5 rounded-sm w-32"
+              className="flex justify-between items-center py-0.5 px-1 border border-gray5 rounded-sm w-32"
             >
               <p
                 className={cn(
-                  "text-body text-grey3 flex-1 truncate text-start",
-                  categoryId !== -1 && "text-black"
+                  "text-text text-gray3 flex-1 truncate text-start",
+                  categoryId !== -1 && "text-black2"
                 )}
               >
                 {categoryName || "카테고리"}
@@ -113,7 +113,7 @@ const Card = ({
               </svg>
             </button>
             {isDropdownOpen && (
-              <div className="flex flex-col bg-white z-10 absolute border border-grey5 w-32 mt-2 overflow-scroll text-center max-h-dropdown hide-scrollbar">
+              <div className="flex flex-col bg-white z-10 absolute border border-gray5 w-32 mt-2 overflow-scroll text-center max-h-dropdown hide-scrollbar">
                 <button onClick={onOpenModal} className="py-1 w-full">
                   +
                 </button>
@@ -122,8 +122,8 @@ const Card = ({
                     key={category.id}
                     onClick={() => onSelectCategory(category.id)}
                     className={cn(
-                      "py-1 w-full border-t border-grey5",
-                      category.id === categoryId && "bg-grey1"
+                      "py-1 w-full border-t border-gray5",
+                      category.id === categoryId && "bg-gray1"
                     )}
                   >
                     {category.name}
@@ -144,18 +144,18 @@ const Card = ({
             <input
               type="text"
               placeholder="카테고리 이름을 입력해주세요."
-              className="border border-grey5 w-full p-1 text-body"
+              className="border border-gray5 w-full p-1 text-text"
               value={modal.category}
               onChange={onChangeText}
               onKeyDown={onEnterKeyword}
             />
             <div className="flex w-full gap-3">
-              <RectangleButton className="flex-1 border border-grey5" onClick={onCloseModal}>
+              <RectangleButton className="flex-1 border border-gray5" onClick={onCloseModal}>
                 취소
               </RectangleButton>
               <RectangleButton
                 disabled={addDisabled}
-                className="flex-1 bg-black text-white transition-colors"
+                className="flex-1 bg-black2 text-white transition-colors"
                 onClick={onCreateCategory}
               >
                 추가

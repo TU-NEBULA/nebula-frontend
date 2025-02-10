@@ -48,19 +48,19 @@ const Bookmark = () => {
   return (
     <Loading title="페이지를 요약하고 있어요!">
       <main className="h-full gap-10 flex flex-col justify-center overflow-x-hidden">
-        <h1 className="text-title text-center">현재 페이지 정보</h1>
+        <h1 className="text-notification text-center">현재 페이지 정보</h1>
         <section className="space-y-4">
           <div className="space-y-2">
-            <h2 className="text-subtitle">URL</h2>
-            <p className="text-label">{currentTab.url}</p>
+            <h2 className="text-title">URL</h2>
+            <p className="">{currentTab.url}</p>
           </div>
           <div className="space-y-2">
-            <h2 className="text-subtitle">Title</h2>
-            <p className="text-label">{currentTab.title}</p>
+            <h2 className="text-title">Title</h2>
+            <p className="">{currentTab.title}</p>
           </div>
         </section>
         <RectangleButton
-          className={"w-full text-white transition-colors bg-black"}
+          className={"w-full text-white transition-colors bg-black2"}
           onClick={onClickAdd}
         >
           북마크에 추가하기

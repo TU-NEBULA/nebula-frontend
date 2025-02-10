@@ -17,7 +17,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       name: "카카오",
     },
     google: {
-      style: "bg-white border-black",
+      style: "bg-white border-black2",
       name: "Google",
     },
   };
@@ -25,7 +25,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
   return (
     <RectangleButton
       className={cn(
-        "text-body flex justify-center items-center gap-1 border",
+        "text-text flex justify-center items-center gap-1 border",
         socials[social].style
       )}
       {...restProps}

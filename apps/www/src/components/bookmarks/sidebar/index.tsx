@@ -106,8 +106,8 @@ const Sidebar = () => {
       >
         <div className="flex flex-col gap-5">
           <div className="flex justify-between overflow-hidden">
-            <button onClick={onToggleSidebar} className="flex items-center gap-2 text-label">
-              <div className="bg-black rounded-lg w-8 h-8 flex justify-center items-center">
+            <button onClick={onToggleSidebar} className="flex items-center gap-2 ">
+              <div className="bg-black2 rounded-lg w-8 h-8 flex justify-center items-center">
                 <Image src={logo} alt="nebula 로고" width={24} height={12} draggable={false} />
               </div>
               <p>Nebula</p>
@@ -140,13 +140,13 @@ const Sidebar = () => {
           />
         </div>
         <div className="relative flex items-center gap-2">
-          <button onClick={onToggleProfile} className="min-w-8 min-h-8 bg-grey5 rounded-lg" />
+          <button onClick={onToggleProfile} className="min-w-8 min-h-8 bg-gray5 rounded-lg" />
           <button className="truncate text-description text-start">
             <p className="truncate font-medium">gwangsoo</p>
             <p className="truncate">frontend.lany@gmail.com</p>
           </button>
           {sidebar.profileOpen && (
-            <button className="bg-white text-body absolute py-2 px-6 rounded-lg -right-6 translate-x-full bottom-0 flex items-center gap-2 min-w-32">
+            <button className="bg-white text-text absolute py-2 px-6 rounded-lg -right-6 translate-x-full bottom-0 flex items-center gap-2 min-w-32">
               <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />
               <p>Logout</p>
             </button>
@@ -154,7 +154,7 @@ const Sidebar = () => {
         </div>
       </section>
       <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
-        <legend className="text-label">Filter</legend>
+        <legend className="">Filter</legend>
         {filters.map((filter) => (
           <label key={filter} className="flex items-center gap-2">
             <input
@@ -164,7 +164,7 @@ const Sidebar = () => {
               checked={selectedFilter === filter}
               onChange={() => onSelectFilter(filter)}
             />
-            <span className="text-body">{filter}</span>
+            <span className="text-text">{filter}</span>
           </label>
         ))}
       </fieldset>

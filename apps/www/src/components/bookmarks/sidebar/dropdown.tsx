@@ -31,7 +31,7 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
             className="w-6 h-6"
             draggable={false}
           />
-          <p className="text-label">{title}</p>
+          <p className="">{title}</p>
         </div>
         <Image
           src={arrowRight}
@@ -43,12 +43,12 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
         />
       </button>
       {open && (
-        <ul className="ml-8 my-2 border-l border-grey2 text-body">
+        <ul className="ml-8 my-2 border-l border-gray2 text-text">
           {items.map((item) => (
             <li key={item.id}>
               <button
                 onClick={() => onClickItem(item.id)}
-                className="py-2 px-3 w-full text-start transition-colors hover:bg-grey1 active:bg-opacity-80"
+                className="py-2 px-3 w-full text-start transition-colors hover:bg-gray1 active:bg-opacity-80"
               >
                 {item.name}
               </button>

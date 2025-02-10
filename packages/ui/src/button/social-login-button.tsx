@@ -17,7 +17,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       name: "카카오",
     },
     google: {
-      style: "bg-white border-black",
+      style: "bg-white border-black2",
       name: "Google",
     },
   };

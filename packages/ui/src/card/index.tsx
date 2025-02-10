@@ -2,8 +2,6 @@ import { useState } from "react";
 
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { cn } from "../../utils/cn";
-import RectangleButton from "../button/rectangle-button";
-import Modal from "../modal";
 
 interface CategoryProps {
   id: number;
@@ -30,48 +28,47 @@ const Card = ({
   onAddCategory,
 }: CardProps) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [modal, setModal] = useState({
-    open: false,
-    category: "",
+  const [edit, setEdit] = useState({
+    start: false,
+    content: "",
   });
 
-  const addDisabled = modal.category.length === 0;
   const categoryName = categories.find((category) => category.id === categoryId)?.name;
 
-  const [dropdownRef] = useOutsideClick<HTMLDivElement>(
-    () => !modal.open && setIsDropdownOpen(false)
-  );
+  const [dropdownRef] = useOutsideClick<HTMLDivElement>(() => isDropdownOpen && onCloseModal());
 
   const onToggle = () => {
     setIsDropdownOpen((prev) => !prev);
   };
 
-  const onOpenModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+  const onStartEdit = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    setModal({ open: true, category: "" });
+    setEdit({ start: true, content: "" });
   };
 
   const onCloseModal = () => {
-    setModal({ open: false, category: "" });
+    setEdit({ start: false, content: "" });
+    onToggle();
   };
 
   const onChangeText = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setModal({ ...modal, category: e.target.value });
+    setEdit({ ...edit, content: e.target.value });
   };
 
   const onCreateCategory = async () => {
     try {
       // API 호출
-      await onAddCategory(modal.category);
+      console.log(edit.content);
+      await onAddCategory(edit.content);
     } catch (error) {
       console.error(error);
     } finally {
-      setModal({ open: false, category: "" });
+      setEdit({ start: false, content: "" });
     }
   };
 
   const onEnterKeyword = async (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
       await onCreateCategory();
     }
   };
@@ -79,21 +76,13 @@ const Card = ({
   return (
     <>
       <section className="flex items-center gap-3">
-        {Thumbnail ? Thumbnail : <div className="min-w-24 aspect-square bg-grey5 rounded-md" />}
-        <div className="truncate flex flex-col h-full justify-between">
-          <p className="text-label">{title || "제목"}</p>
+        {Thumbnail ? Thumbnail : <div className="min-w-16 aspect-square bg-gray5 rounded-md" />}
+        <div className="text-title truncate flex flex-col h-full justify-center">
+          <p className="">{title || "제목"}</p>
           {Link}
           <div ref={dropdownRef}>
-            <button
-              onClick={onToggle}
-              className="flex justify-between items-center py-0.5 px-1 border border-grey5 rounded-sm w-32"
-            >
-              <p
-                className={cn(
-                  "text-body text-grey3 flex-1 truncate text-start",
-                  categoryId !== -1 && "text-black"
-                )}
-              >
+            <button onClick={onToggle} className="flex gap-2 items-center py-0.5 mt-2">
+              <p className="text-text text-black2 flex-1 truncate text-start">
                 {categoryName || "카테고리"}
               </p>
               <svg
@@ -101,7 +90,6 @@ const Card = ({
                 height="17"
                 viewBox="0 0 16 17"
                 fill="none"
-                xmlns="http://www.w3.org/2000/svg"
                 className={cn("transition-all", isDropdownOpen ? "rotate-180" : "rotate-0")}
               >
                 <path
@@ -113,17 +101,26 @@ const Card = ({
               </svg>
             </button>
             {isDropdownOpen && (
-              <div className="flex flex-col bg-white z-10 absolute border border-grey5 w-32 mt-2 overflow-scroll text-center max-h-dropdown hide-scrollbar">
-                <button onClick={onOpenModal} className="py-1 w-full">
-                  +
-                </button>
+              <div className="flex flex-col bg-white z-10 absolute w-32 mt-2 overflow-scroll text-text max-h-dropdown hide-scrollbar shadow-lg">
+                <input
+                  value={edit.content}
+                  onChange={onChangeText}
+                  placeholder="Add Here"
+                  onClick={onStartEdit}
+                  onKeyDown={onEnterKeyword}
+                  readOnly={!edit.start}
+                  className={cn(
+                    "p-3 w-full placeholder:text-black1 text-black1",
+                    !edit.start && "cursor-pointer"
+                  )}
+                />
                 {categories.map((category) => (
                   <button
                     key={category.id}
                     onClick={() => onSelectCategory(category.id)}
                     className={cn(
-                      "py-1 w-full border-t border-grey5",
-                      category.id === categoryId && "bg-grey1"
+                      "text-start p-3 w-full text-gray7 hover:bg-gray1",
+                      category.id === categoryId && "bg-gray1"
                     )}
                   >
                     {category.name}
@@ -134,36 +131,6 @@ const Card = ({
           </div>
         </div>
       </section>
-      {modal.open && (
-        <Modal
-          title="카테고리 추가"
-          subTitle="새로운 카테고리를 작성해주세요."
-          callback={onCloseModal}
-        >
-          <div className="flex flex-col gap-3 w-full">
-            <input
-              type="text"
-              placeholder="카테고리 이름을 입력해주세요."
-              className="border border-grey5 w-full p-1 text-body"
-              value={modal.category}
-              onChange={onChangeText}
-              onKeyDown={onEnterKeyword}
-            />
-            <div className="flex w-full gap-3">
-              <RectangleButton className="flex-1 border border-grey5" onClick={onCloseModal}>
-                취소
-              </RectangleButton>
-              <RectangleButton
-                disabled={addDisabled}
-                className="flex-1 bg-black text-white transition-colors"
-                onClick={onCreateCategory}
-              >
-                추가
-              </RectangleButton>
-            </div>
-          </div>
-        </Modal>
-      )}
     </>
   );
 };

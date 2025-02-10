@@ -197,7 +197,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
             ) : null
           }
           Link={
-            <Link target="_blank" href={bookmark.url} className="text-body text-grey3 truncate">
+            <Link target="_blank" href={bookmark.url} className="text-text text-gray3 truncate">
               {bookmark.url || "url"}
             </Link>
           }
@@ -235,7 +235,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
           />
         </section>
         <button
-          className="bg-hightlight w-max h-max p-2.5 rounded-full absolute bottom-3 right-3"
+          className="bg-highlight w-max h-max p-2.5 rounded-full absolute bottom-3 right-3"
           onClick={onOpenDeleteModal}
         >
           <Image src={trash} alt="북마크 삭제하기" width={20} height={20} draggable={false} />
@@ -248,11 +248,11 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
           callback={onCloseDeleteModal}
         >
           <div className="flex w-full gap-3">
-            <RectangleButton className="flex-1 border border-grey5" onClick={onCloseDeleteModal}>
+            <RectangleButton className="flex-1 border border-gray5" onClick={onCloseDeleteModal}>
               취소
             </RectangleButton>
             <RectangleButton
-              className="flex-1 bg-hightlight text-white transition-colors"
+              className="flex-1 bg-highlight text-white transition-colors"
               onClick={onDeleteBookmark}
             >
               삭제

@@ -18,18 +18,18 @@ const Agreement = () => {
     <main className="h-full gap-44 flex flex-col justify-center">
       <section className="space-y-7">
         <div className="space-y-4">
-          <h1 className="text-title">
+          <h1 className="text-notification">
             크롬 내에 있는 북마크를 가져오는
             <br />
             것에 동의하시겠습니까?
           </h1>
-          <h2 className="text-label">네뷸라 실행을 위해선 북마크 동의를 해야합니다.</h2>
+          <h2 className="text-description">네뷸라 실행을 위해선 북마크 동의를 해야합니다.</h2>
         </div>
         <div className="space-y-2">
           <p className="text-body">
             북마크정보 수집 및 이용 동의 <span className="text-highlight">*</span>
           </p>
-          <p className="text-description font-medium rounded-sm border border-grey2 p-2">
+          <p className="font-light rounded-sm border border-gray5 p-2">
             네뷸라 서비스는 사용자가 저장한 크롬 북마크 정보를 분석하고 시각화하여 더 나은 북마크
             기록과 환경을 제공합니다. 이를 위해 사용자의 북마크 정보를 수집하고 활용할 수 있으며,
             동의하신 경우에만 서비스 이용이 가능합니다. 수집된 정보로 사용자 개개인의 북마크 기록을
@@ -42,7 +42,7 @@ const Agreement = () => {
         </div>
       </section>
       <RectangleButton
-        className={cn("text-white transition-colors", checked && "bg-black")}
+        className={cn("text-white transition-colors", checked && "bg-black2")}
         onClick={onClickGetBookmarks}
         disabled={!checked}
       >

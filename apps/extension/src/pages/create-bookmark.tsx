@@ -18,7 +18,6 @@ const DEFAULT_BOOKMARK = {
   memo: "",
   keyword: "",
 };
-
 const CreateBookmark = () => {
   const { state } = useLocation();
   const navigate = useReplaceNavigate();
@@ -87,11 +86,11 @@ const CreateBookmark = () => {
         <header className="flex items-center justify-between">
           <div className="flex gap-1 items-center">
             <Logo />
-            <p className="body font-bold">Nebula</p>
+            <p className="text-description font-bold">Nebula</p>
           </div>
           <button className="flex gap-1 items-center">
             <AISummary />
-            <p className="text-body font-semibold">Nebula AI</p>
+            <p className="text-text font-semibold">Nebula AI</p>
           </button>
         </header>
         <Card
@@ -100,14 +99,14 @@ const CreateBookmark = () => {
               <img
                 src={bookmark.thubmnail}
                 alt={`${bookmark.url} thumbnail`}
-                width={96}
-                height={96}
-                className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
+                width={64}
+                height={64}
+                className="aspect-square object-cover max-w-16 max-h-16 rounded-md"
               />
             ) : null
           }
           Link={
-            <Link target="_blank" to={bookmark.url} className="text-body text-grey3 truncate">
+            <Link target="_blank" to={bookmark.url} className="text-text text-gray6 truncate">
               {bookmark.url || "url"}
             </Link>
           }
@@ -142,10 +141,10 @@ const CreateBookmark = () => {
           />
         </section>
         <section className="flex gap-3">
-          <RectangleButton className="border border-grey5 text-grey5 flex-1">취소</RectangleButton>
+          <RectangleButton className="border border-gray5 text-gray5 flex-1">취소</RectangleButton>
           <RectangleButton
             disabled={saveDisabled}
-            className={cn("border text-white flex-1", !saveDisabled && "bg-black")}
+            className={cn("border text-white flex-1", !saveDisabled && "bg-black2")}
             onClick={onClickSave}
           >
             저장

@@ -141,10 +141,7 @@ const Sidebar = () => {
         </div>
         <div className="relative flex items-center gap-2">
           <button onClick={onToggleProfile} className="min-w-8 min-h-8 bg-gray5 rounded-lg" />
-          <button className="truncate text-description text-start">
-            <p className="truncate font-medium">gwangsoo</p>
-            <p className="truncate">frontend.lany@gmail.com</p>
-          </button>
+          <p className="truncate">frontend.lany@gmail.com</p>
           {sidebar.profileOpen && (
             <button className="bg-white text-text absolute py-2 px-6 rounded-lg -right-6 translate-x-full bottom-0 flex items-center gap-2 min-w-32">
               <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />

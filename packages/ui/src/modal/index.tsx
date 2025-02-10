@@ -18,7 +18,7 @@ const Modal = ({ children, title, subTitle, callback }: ModalProps) => {
       >
         <div className="text-center space-y-2 whitespace-pre-line">
           <h2 className="text-notification">{title}</h2>
-          <h3 className=" text-gray2">{subTitle}</h3>
+          <h3 className=" text-gray6">{subTitle}</h3>
         </div>
         {children}
       </div>

@@ -235,7 +235,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
           />
         </section>
         <button
-          className="bg-hightlight w-max h-max p-2.5 rounded-full absolute bottom-3 right-3"
+          className="bg-highlight w-max h-max p-2.5 rounded-full absolute bottom-3 right-3"
           onClick={onOpenDeleteModal}
         >
           <Image src={trash} alt="북마크 삭제하기" width={20} height={20} draggable={false} />
@@ -252,7 +252,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
               취소
             </RectangleButton>
             <RectangleButton
-              className="flex-1 bg-hightlight text-white transition-colors"
+              className="flex-1 bg-highlight text-white transition-colors"
               onClick={onDeleteBookmark}
             >
               삭제

@@ -21,8 +21,10 @@ export default function LandingPage() {
         {/* TODO: 해당 부분 어떤 내용 보여줄지 재정의하기 */}
         <div className="p-12 border border-gray7 flex w-full rounded-lg gap-12">
           <div className="space-y-5">
-            <h2 className="text-landing-sub-title text-4xl whitespace-pre-line">
-              북마크를{"\n"}노드로 관리
+            <h2 className="text-landing-sub-title text-4xl leading-none">
+              북마크를
+              <br />
+              노드로 관리
             </h2>
             <p className="text-gray7">
               북마크별로 정보의 양에 따라 노드의 크기 및 선의 굵기가 바뀌며, 색상 또한 역할에 맞게

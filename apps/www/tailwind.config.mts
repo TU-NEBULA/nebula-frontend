@@ -16,6 +16,9 @@ export default {
         "landing-title": ["10rem", { fontWeight: "bold" }],
         "landing-sub-title": ["5rem", { fontWeight: "bold" }],
       },
+      minWidth: {
+        login: "21.5rem",
+      },
     },
   },
 } satisfies Config;

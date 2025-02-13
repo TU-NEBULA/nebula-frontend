@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 :root {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   background-color: #111;
+  max-width: 1440px;
 }
 
 .hide-scrollbar {

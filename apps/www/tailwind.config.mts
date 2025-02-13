@@ -11,6 +11,11 @@ export default {
   theme: {
     extend: {
       ...baseConfig.theme?.extend,
+      fontSize: {
+        ...baseConfig.theme?.extend.fontSize,
+        "landing-title": ["10rem", { fontWeight: "bold" }],
+        "landing-sub-title": ["5rem", { fontWeight: "bold" }],
+      },
     },
   },
 } satisfies Config;

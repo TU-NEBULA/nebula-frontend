@@ -1,6 +1,6 @@
-import GetStart from "@/components/home/get-start";
+import GetStart from "@/components/landing/get-start";
 
-export default function Home() {
+export default function LandingPage() {
   return (
     <main className="text-white px-10">
       <section className="flex md:flex-row flex-col items-center justify-between py-28 ">

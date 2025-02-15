@@ -1,12 +1,19 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+import { checkAuth } from "@/utils/cookies";
 
 const GetStart = () => {
-  const onRouteBookmark = () => {
-    // TODO: 로그인 여부에 따른 페이지 이동
-    // 로그인 상태라면 /bookmarks 페이지로 이동
-    // 비로그인 상태라면 /login 페이지로 이동
+  const router = useRouter();
+
+  const onRouteBookmark = async () => {
+    const isLogin = await checkAuth();
+
+    if (isLogin) return router.push("/bookmarks");
+
+    router.push("/login");
   };
 
   return (

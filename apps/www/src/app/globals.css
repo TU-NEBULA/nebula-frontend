@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 :root {
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
   background-color: #111;
+  max-width: 1440px;
 }
 
 .hide-scrollbar {
@@ -14,6 +15,15 @@
   }
   -ms-overflow-style: none;
   scrollbar-width: none;
+}
+
+#sample-graph .scene-container {
+  width: 0;
+  height: 0;
+
+  .scene-nav-info {
+    display: none;
+  }
 }
 
 input,

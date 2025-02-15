@@ -18,10 +18,10 @@ const Spinner = ({ theme = "light" }: SpinnerProps) => {
 
   return (
     <div
-      className="w-12 h-12 rounded-full animate-spin flex items-center justify-center"
+      className="w-56 h-56 rounded-full animate-spin flex items-center justify-center"
       style={{ background: style.background }}
     >
-      <div className={cn("w-8 h-8 rounded-full", style.circle)} />
+      <div className={cn("w-52 h-52 rounded-full", style.circle)} />
     </div>
   );
 };

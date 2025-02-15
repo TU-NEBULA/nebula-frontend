@@ -1,5 +1,3 @@
-import Google from "@/assets/google.svg?react";
-import Kakao from "@/assets/kakao.svg?react";
 import Logo from "@/assets/logo.svg?react";
 import { onClickGoogleAuth, onClickKakaoAuth } from "@/utils/login";
 import { SocialLoginButton } from "@repo/ui";
@@ -19,8 +17,8 @@ const Home = () => {
       </section>
       <section className="space-y-7">
         <div className="gap-2 flex flex-col">
-          <SocialLoginButton social="kakao" logo={<Kakao />} onClick={onClickKakaoAuth} />
-          <SocialLoginButton social="google" logo={<Google />} onClick={onClickGoogleAuth} />
+          <SocialLoginButton social="kakao" onClick={onClickKakaoAuth} />
+          <SocialLoginButton social="google" onClick={onClickGoogleAuth} />
         </div>
         <div className="text-description gap-3 flex items-center justify-center text-gray7">
           <button>이용약관</button>

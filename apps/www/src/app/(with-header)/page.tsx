@@ -1,4 +1,5 @@
 import GetStart from "@/components/landing/get-start";
+import SampleGraph from "@/components/landing/sample-graph";
 
 export default function LandingPage() {
   return (
@@ -17,23 +18,7 @@ export default function LandingPage() {
         </div>
         <GetStart />
       </section>
-      <section className="py-28">
-        {/* TODO: 해당 부분 어떤 내용 보여줄지 재정의하기 */}
-        <div className="p-12 border border-gray7 flex w-full rounded-lg gap-12">
-          <div className="space-y-5">
-            <h2 className="text-landing-sub-title text-4xl leading-none">
-              북마크를
-              <br />
-              노드로 관리
-            </h2>
-            <p className="text-gray7">
-              북마크별로 정보의 양에 따라 노드의 크기 및 선의 굵기가 바뀌며, 색상 또한 역할에 맞게
-              지정하여 보여줍니다.
-            </p>
-          </div>
-          <div className="bg-gray7 w-full aspect-video md:block hidden" />
-        </div>
-      </section>
+      <SampleGraph />
     </main>
   );
 }

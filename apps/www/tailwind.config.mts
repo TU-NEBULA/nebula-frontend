@@ -11,6 +11,9 @@ export default {
   theme: {
     extend: {
       ...baseConfig.theme?.extend,
+      height: {
+        graph: "442px",
+      },
       fontSize: {
         ...baseConfig.theme?.extend.fontSize,
         "landing-title": ["10rem", { fontWeight: "bold" }],

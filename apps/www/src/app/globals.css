@@ -17,6 +17,15 @@
   scrollbar-width: none;
 }
 
+#sample-graph .scene-container {
+  width: 0;
+  height: 0;
+
+  .scene-nav-info {
+    display: none;
+  }
+}
+
 input,
 textarea {
   &::placeholder {

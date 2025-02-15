@@ -21,3 +21,10 @@ export const removeAuth = async () => {
   cookieStorage.delete("accessToken");
   cookieStorage.delete("refreshToken");
 };
+
+export const checkAuth = async () => {
+  const cookieStorage = await cookies();
+  const accessToken = cookieStorage.get("accessToken");
+
+  return !!accessToken;
+};

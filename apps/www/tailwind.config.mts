@@ -22,6 +22,9 @@ export default {
       minWidth: {
         login: "21.5rem",
       },
+      maxWidth: {
+        "with-header": "90rem",
+      },
     },
   },
 } satisfies Config;

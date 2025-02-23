@@ -6,9 +6,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <>
+    <div className="max-w-with-header mx-auto">
       <Header />
       {children}
-    </>
+    </div>
   );
 }

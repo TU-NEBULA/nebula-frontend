@@ -23,6 +23,7 @@ export default {
         login: "21.5rem",
       },
       maxWidth: {
+        ...baseConfig.theme?.extend.maxWidth,
         "with-header": "90rem",
       },
     },

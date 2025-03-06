@@ -28,3 +28,10 @@ export const checkAuth = async () => {
 
   return !!accessToken;
 };
+
+export const setTempToken = async () => {
+  const cookieStorage = await cookies();
+  const accessToken = cookieStorage.set("accessToken", "ey~");
+
+  return !!accessToken;
+};

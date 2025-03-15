@@ -4,27 +4,11 @@ import { cookies } from "next/headers";
 
 export const setupAuth = async () => {
   const cookieStorage = await cookies();
-  const accessToken = cookieStorage.get("Authorization");
+  const accessToken = cookieStorage.get("Authorization")?.value;
 
-  if (!accessToken) return false;
+  if (!accessToken) return { status: false, data: null };
 
-  const refreshToken = cookieStorage.get("refreshToken");
-  cookieStorage.set("accessToken", accessToken.value);
-  cookieStorage.set("refreshToken", refreshToken.value);
-  cookieStorage.delete("Authorization");
+  const refreshToken = cookieStorage.get("refreshToken")?.value;
 
-  return true;
-};
-
-export const removeAuth = async () => {
-  const cookieStorage = await cookies();
-  cookieStorage.delete("accessToken");
-  cookieStorage.delete("refreshToken");
-};
-
-export const checkAuth = async () => {
-  const cookieStorage = await cookies();
-  const accessToken = cookieStorage.get("accessToken");
-
-  return !!accessToken;
+  return { status: true, data: { accessToken, refreshToken } };
 };

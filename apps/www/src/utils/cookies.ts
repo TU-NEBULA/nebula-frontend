@@ -12,10 +12,3 @@ export const setupAuth = async () => {
 
   return { status: true, data: { accessToken, refreshToken } };
 };
-
-export const setTempToken = async () => {
-  const cookieStorage = await cookies();
-  const accessToken = cookieStorage.set("accessToken", "ey~");
-
-  return !!accessToken;
-};

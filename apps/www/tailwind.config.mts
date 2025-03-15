@@ -15,7 +15,7 @@ export default {
         graph: "442px",
       },
       fontSize: {
-        ...baseConfig.theme?.extend.fontSize,
+        ...baseConfig.theme?.extend?.fontSize,
         "landing-title": ["10rem", { fontWeight: "bold" }],
         "landing-sub-title": ["5rem", { fontWeight: "bold" }],
       },
@@ -23,7 +23,7 @@ export default {
         login: "21.5rem",
       },
       maxWidth: {
-        ...baseConfig.theme?.extend.maxWidth,
+        ...baseConfig.theme?.extend?.maxWidth,
         "with-header": "90rem",
       },
     },

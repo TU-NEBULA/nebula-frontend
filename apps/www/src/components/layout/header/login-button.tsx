@@ -1,5 +1,3 @@
-"use client";
-
 import { useRouter } from "next/navigation";
 
 import { useUserStore } from "@/lib/zustand/user";
@@ -12,7 +10,7 @@ const LoginButton = ({ token }: LoginButtonProps) => {
   const router = useRouter();
   const setUserStore = useUserStore((state) => state.setUser);
 
-  const isLogin = !!token;
+  const isLogin = token;
   const name = isLogin ? "Logout" : "Login";
 
   const onClick = async () => {

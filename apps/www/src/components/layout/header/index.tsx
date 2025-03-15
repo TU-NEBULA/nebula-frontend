@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,8 +8,8 @@ import { useUserStore } from "@/lib/zustand/user";
 
 import LoginButton from "./login-button";
 
-const Header = async () => {
-  const userStore = useUserStore.getState();
+const Header = () => {
+  const userStore = useUserStore();
 
   return (
     <header className="text-white py-6 px-10 flex justify-between">

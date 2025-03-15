@@ -26,7 +26,19 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
       headers,
     });
 
-    return res.json();
+    // 응답이 실패 상태일 경우 에러 텍스트로 반환
+    if (!res.ok) {
+      const errorText = await res.text();
+      throw new Error(errorText);
+    }
+
+    // Content-Type이 JSON이면 파싱, 아니면 그냥 텍스트 반환
+    const contentType = res.headers.get("content-type") || "";
+    if (contentType.includes("application/json")) {
+      return res.json();
+    } else {
+      return res.text();
+    }
   } catch (error) {
     return error as Error;
   }

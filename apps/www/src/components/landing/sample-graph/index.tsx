@@ -28,7 +28,7 @@ const SampleGraph = () => {
       if (typeof window !== "undefined" && graphRef.current) {
         const ForceGraph3D = (await import("3d-force-graph")).default;
         const graph = new ForceGraph3D(graphRef.current);
-        const width = (containerRef.current?.clientWidth - 146) / 2 || 0;
+        const width = ((containerRef.current?.clientWidth || 1440) - 146) / 2 || 0;
 
         await graph
           .width(width)
@@ -45,7 +45,7 @@ const SampleGraph = () => {
           .nodeOpacity(1)
           .onNodeClick((node: NodeObject) => {
             const { x, y, z } = graph.cameraPosition();
-            const gaps = [node.x - x, node.y - y, node.z - z];
+            const gaps = [node.x! - x, node.y! - y, node.z! - z];
             const maxIndex = gaps.findIndex(
               (gap) => Math.abs(gap) === Math.max(...gaps.map(Math.abs))
             );
@@ -60,11 +60,10 @@ const SampleGraph = () => {
           })
           .backgroundColor("#111")
           .d3AlphaDecay(0.1)
-          .d3Force("charge")
-          .strength(-40);
+          .d3Force("charge");
 
         window.addEventListener("resize", () => {
-          const width = (containerRef.current?.clientWidth - 146) / 2 || 0;
+          const width = ((containerRef.current?.clientWidth || 1440) - 146) / 2 || 0;
           graph.width(width);
         });
       }

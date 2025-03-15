@@ -7,10 +7,15 @@ const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
   const accessToken = useUserStore.getState().accessToken;
   const Authorization = `Bearer ${accessToken}`;
-  const body = _body ? JSON.stringify(_body) : undefined;
+
+  let body: BodyInit | undefined;
+  if (_body) {
+    body = _body instanceof FormData ? _body : JSON.stringify(_body);
+  }
   const headers: HeadersInit = {
     ...options?.headers,
     ...(accessToken && { Authorization }),
+    ...(_body && !(_body instanceof FormData) ? { "Content-Type": "application/json" } : {}),
   };
 
   try {
@@ -21,9 +26,6 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
       headers,
     });
 
-    if (!res.ok) {
-      return { status: res.status, statusText: res.statusText, text: await res.text() };
-    }
     return res.json();
   } catch (error) {
     return error as Error;

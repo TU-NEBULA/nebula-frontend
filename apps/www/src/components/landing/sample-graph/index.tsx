@@ -78,8 +78,8 @@ const SampleGraph = () => {
   return (
     <section className="py-28">
       {/* TODO: 해당 부분 어떤 내용 보여줄지 재정의하기 */}
-      <div ref={containerRef} className="p-12 border border-gray7 flex w-full rounded-lg gap-12">
-        <div className="space-y-5">
+      <div ref={containerRef} className="p-12 border border-gray7 flex rounded-lg gap-12">
+        <div className="space-y-5 flex-1">
           <h2 className="text-landing-sub-title text-4xl leading-none">
             북마크를
             <br />
@@ -93,7 +93,7 @@ const SampleGraph = () => {
         <div
           ref={graphRef}
           id="sample-graph"
-          className="border border-gray7 w-full h-graph rounded-sm md:block hidden"
+          className="border border-gray7 h-graph flex-1 rounded-sm md:block hidden"
         />
       </div>
     </section>

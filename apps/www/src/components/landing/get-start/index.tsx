@@ -3,15 +3,14 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { checkAuth } from "@/utils/cookies";
+import { useUserStore } from "@/lib/zustand/user";
 
 const GetStart = () => {
   const router = useRouter();
+  const user = useUserStore((state) => state.accessToken);
 
   const onRouteBookmark = async () => {
-    const isLogin = await checkAuth();
-
-    if (isLogin) return router.push("/bookmarks");
+    if (user) return router.push("/bookmarks");
 
     router.push("/login");
   };

@@ -1,17 +1,16 @@
-import { cookies } from "next/headers";
+import { useUserStore } from "@/lib/zustand/user";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
 const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
-  const cookieStorage = await cookies();
-  const token = cookieStorage.get("token");
-  const Authorization = `Bearer ${token.value}`;
+  const accessToken = useUserStore.getState().accessToken;
+  const Authorization = `Bearer ${accessToken}`;
   const body = _body ? JSON.stringify(_body) : undefined;
   const headers: HeadersInit = {
     ...options?.headers,
-    ...(token && { Authorization }),
+    ...(accessToken && { Authorization }),
   };
 
   try {

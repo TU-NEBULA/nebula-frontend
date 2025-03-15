@@ -48,7 +48,7 @@ const Graph = ({ onOpen }: GraphProps) => {
           .nodeLabel((node: NodeObject) => node.name || "")
           .nodeColor(() => "#a3a3a3")
           .nodeOpacity(1)
-          .onNodeClick((node: NodeObject) => {
+          .onNodeClick((node: Required<NodeObject>) => {
             onOpen(node.id);
             const { x, y, z } = graph.cameraPosition();
             const gaps = [node.x - x, node.y - y, node.z - z];
@@ -67,8 +67,7 @@ const Graph = ({ onOpen }: GraphProps) => {
           .backgroundColor("#111")
           .showNavInfo(false)
           .d3AlphaDecay(0.1)
-          .d3Force("charge")
-          .strength(-40);
+          .d3Force("charge");
 
         window.addEventListener("resize", function handleResize() {
           graph.width(graphRef.current?.clientWidth || 0);

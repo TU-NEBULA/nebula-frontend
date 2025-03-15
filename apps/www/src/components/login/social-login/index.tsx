@@ -1,3 +1,5 @@
+"use client";
+
 import { onClickOauth } from "@/utils/login";
 import { SocialLoginButton } from "@repo/ui";
 

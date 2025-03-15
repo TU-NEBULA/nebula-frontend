@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 
-import BookmarkPage from "@/pages/bookmark-page";
+import BookmarkPage from "@/page/bookmark-page";
 import { Spinner } from "@repo/ui";
 
 const Bookmarks = () => {

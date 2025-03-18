@@ -1,36 +1,32 @@
 import { useEffect, useState } from "react";
 
 import Loading from "@/components/loading";
-import { METHOD, RESPONSE } from "@/constants/api";
-import { useFetch } from "@/hooks/use-fetch";
-import { SummarizeBookmarkDTO } from "@/models/bookmark";
-import { SummarizeBookmarkProps } from "@/types/bookmark";
+import { useCreateStar } from "@/state/mutation/star";
 import { getHtmlText, updateCurrentTab } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
-
-import { useNavigate } from "react-router-dom";
 
 const Bookmark = () => {
   const [currentTab, setCurrentTab] = useState({
     url: "사이트 url",
     title: "사이트 title",
   });
-  const navigate = useNavigate();
-
-  const { fetchData } = useFetch<SummarizeBookmarkProps, SummarizeBookmarkDTO>();
+  const { mutateAsync } = useCreateStar();
 
   const onClickAdd = async () => {
     const html = await getHtmlText();
     const htmlContent = html.split("------MultipartBoundary--")[1];
-    const res = await fetchData(
-      "/api/extract_data",
-      { url: currentTab.url, html_content: htmlContent },
-      METHOD.POST
-    );
-    if (res.code === RESPONSE.SUCCESS) {
-      return navigate("/create-bookmark", { state: { ...res.result, title: currentTab.title } });
-    }
-    // code 코드에 따른 에러 처리
+
+    const htmlBlob = new Blob([htmlContent], { type: "text/html" });
+    const htmlFile = new File([htmlBlob], "content.html", { type: "text/html" });
+
+    const formData = new FormData();
+    formData.append("htmlFile", htmlFile);
+
+    await mutateAsync({
+      title: currentTab.title,
+      siteUrl: currentTab.url,
+      htmlFile: formData,
+    });
   };
 
   useEffect(() => {

@@ -1,8 +1,10 @@
 import Logo from "@/assets/logo.svg?react";
-import { onClickGoogleAuth, onClickKakaoAuth } from "@/utils/login";
+import { useSocialLogin } from "@/hooks/use-social-login";
 import { SocialLoginButton } from "@repo/ui";
 
 const Home = () => {
+  const { onClickGoogleAuth, onClickKakaoAuth } = useSocialLogin();
+
   return (
     <main className="h-full gap-80 flex flex-col justify-center">
       <section className="space-y-4">

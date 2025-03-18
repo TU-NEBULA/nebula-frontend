@@ -23,8 +23,8 @@ const DEFAULT_BOOKMARK = {
   summary: "",
   memo: "",
   title: "",
-  url: "",
-  thubmnail: "",
+  siteUrl: "",
+  thumbnailUrl: "",
   keywords: [],
 };
 
@@ -185,10 +185,10 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
         </div>
         <Card
           Thumbnail={
-            bookmark.thubmnail ? (
+            bookmark.thumbnailUrl ? (
               <Image
-                src={bookmark.thubmnail}
-                alt={`${bookmark.url} thumbnail`}
+                src={bookmark.thumbnailUrl}
+                alt={`${bookmark.siteUrl} thumbnail`}
                 width={96}
                 height={96}
                 className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
@@ -197,8 +197,8 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
             ) : null
           }
           Link={
-            <Link target="_blank" href={bookmark.url} className="text-text text-gray3 truncate">
-              {bookmark.url || "url"}
+            <Link target="_blank" href={bookmark.siteUrl} className="text-text text-gray3 truncate">
+              {bookmark.siteUrl || "siteUrl"}
             </Link>
           }
           title={bookmark.title}

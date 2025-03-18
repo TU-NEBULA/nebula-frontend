@@ -4,7 +4,7 @@ import { useOutsideClick } from "../../hooks/use-outside-click";
 import { cn } from "../../utils/cn";
 
 interface CategoryProps {
-  id: number;
+  id: string;
   name: string;
 }
 
@@ -12,9 +12,9 @@ interface CardProps {
   Thumbnail: React.ReactNode;
   Link: React.ReactNode;
   title: string;
-  categoryId: number;
+  categoryId: string;
   categories: CategoryProps[];
-  onSelectCategory: (categoryId: number) => void;
+  onSelectCategory: (categoryId: string) => void;
   onAddCategory: (category: string) => Promise<void>;
 }
 

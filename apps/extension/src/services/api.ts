@@ -6,9 +6,10 @@ export const api = axios.create({
 
 api.interceptors.request.use(async (config) => {
   const storage = await chrome.storage.local.get();
+  console.log(storage);
 
-  if (storage.token) {
-    config.headers.Authorization = `Bearer ${storage.token}`;
+  if (storage.accessToken) {
+    config.headers.Authorization = `Bearer ${storage.accessToken}`;
   }
 
   return config;

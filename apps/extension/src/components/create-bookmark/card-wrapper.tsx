@@ -1,13 +1,20 @@
+import { useEffect } from "react";
+
 import { useGetCategory } from "@/state/query/category";
 import { CategoryListProps } from "@/types/category";
-import { BookmarkProps } from "@repo/types";
 import { Card } from "@repo/ui";
 
 import { Link } from "react-router-dom";
 
-interface CardProps extends BookmarkProps {
+interface CardWrapperProps {
+  thumbnailUrl: string;
+  siteUrl: string;
+  title: string;
+  categoryId: string;
+  isLoading: boolean;
   onSelectCategory: (categoryId: string) => void;
   onAddCategory: (category: string) => Promise<void>;
+  onUpdateCategory: (categories: CategoryListProps[]) => void;
 }
 
 export default function CardWrapper({
@@ -15,12 +22,18 @@ export default function CardWrapper({
   siteUrl,
   title,
   categoryId,
-  categories,
+  isLoading,
   onSelectCategory,
   onAddCategory,
-}: CardProps) {
+  onUpdateCategory,
+}: CardWrapperProps) {
   const { data } = useGetCategory();
-  console.log(data);
+
+  useEffect(() => {
+    if (data) {
+      onUpdateCategory(data?.result?.categoryList || []);
+    }
+  }, [data]);
 
   return (
     <Card
@@ -47,6 +60,7 @@ export default function CardWrapper({
       }
       onSelectCategory={onSelectCategory}
       onAddCategory={onAddCategory}
+      isLoading={isLoading}
     />
   );
 }

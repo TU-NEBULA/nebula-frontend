@@ -1,24 +1,16 @@
+import { queryClient } from "@/components/layout";
+import { CATEGORY } from "@/constants/category";
 import { createCategory } from "@/services/category";
 import { useMutation } from "@tanstack/react-query";
 
-import { useLoadingStore } from "../zustand/loading";
-
 export const useCreateCategory = () => {
-  const { setIsLoading } = useLoadingStore();
-
   return useMutation({
     mutationFn: createCategory,
-    onMutate: () => {
-      setIsLoading(true);
-    },
-    onSuccess: (data) => {
-      console.log(data);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CATEGORY.GET] });
     },
     onError: (error) => {
       console.log(error);
-    },
-    onSettled: () => {
-      setIsLoading(false);
     },
   });
 };

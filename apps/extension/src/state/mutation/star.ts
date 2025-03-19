@@ -14,12 +14,11 @@ export const useCreateStar = () => {
     onMutate: () => {
       setIsLoading(true);
     },
-    onSuccess: (data, variable) => {
-      console.log(data, variable);
+    onSuccess: (data) => {
       navigate("/create-bookmark", { state: data.result });
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
     },
     onSettled: () => {
       setIsLoading(false);
@@ -36,12 +35,11 @@ export const useCompleteCreateStar = () => {
     onMutate: () => {
       setIsLoading(true);
     },
-    onSuccess: (data, variable) => {
-      console.log(data, variable);
+    onSuccess: () => {
       navigate("/bookmark");
     },
     onError: (error) => {
-      console.log(error);
+      console.error(error);
     },
     onSettled: () => {
       setIsLoading(false);

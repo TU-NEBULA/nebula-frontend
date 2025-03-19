@@ -14,6 +14,7 @@ interface CardProps {
   title: string;
   categoryId: string;
   categories: CategoryProps[];
+  isLoading?: boolean;
   onSelectCategory: (categoryId: string) => void;
   onAddCategory: (category: string) => Promise<void>;
 }
@@ -24,6 +25,7 @@ const Card = ({
   title,
   categoryId,
   categories,
+  isLoading,
   onSelectCategory,
   onAddCategory,
 }: CardProps) => {
@@ -57,13 +59,11 @@ const Card = ({
 
   const onCreateCategory = async () => {
     try {
-      // API 호출
-      console.log(edit.content);
       await onAddCategory(edit.content);
     } catch (error) {
       console.error(error);
     } finally {
-      setEdit({ start: false, content: "" });
+      setEdit((prev) => ({ ...prev, content: "" }));
     }
   };
 
@@ -108,7 +108,8 @@ const Card = ({
                   placeholder="Add Here"
                   onClick={onStartEdit}
                   onKeyDown={onEnterKeyword}
-                  readOnly={!edit.start}
+                  disabled={isLoading}
+                  readOnly={!edit.start || isLoading}
                   className={cn(
                     "p-3 w-full placeholder:text-black1 text-black1",
                     !edit.start && "cursor-pointer"

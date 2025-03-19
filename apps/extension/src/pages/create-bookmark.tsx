@@ -2,12 +2,16 @@ import { useState } from "react";
 
 import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
+import CardWrapper from "@/components/create-bookmark/card-wrapper";
 import Loading from "@/components/loading";
+import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar } from "@/state/mutation/star";
+import { CategoryListProps } from "@/types/category";
 import { BookmarkProps } from "@repo/types";
-import { Card, cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
+import { cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
 
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
+
 const DEFAULT_BOOKMARK = {
   categoryId: "",
   categories: [],
@@ -22,6 +26,7 @@ const CreateBookmark = () => {
   const [bookmark, setBookmark] = useState<BookmarkProps>(Object.assign(DEFAULT_BOOKMARK, state));
 
   const { mutateAsync } = useCompleteCreateStar();
+  const { mutateAsync: mutateAsyncCategory, isPending } = useCreateCategory();
 
   if (!state) {
     return <Navigate to="/bad-request" replace />;
@@ -46,12 +51,7 @@ const CreateBookmark = () => {
   };
 
   const onAddCategory = async (category: string) => {
-    // API 호출
-    setBookmark((prev) => ({
-      ...prev,
-      category,
-      categories: [...prev.categories, { id: new Date().getTime().toString(), name: category }],
-    }));
+    await mutateAsyncCategory(category);
   };
 
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,6 +68,10 @@ const CreateBookmark = () => {
     }
   };
 
+  const onUpdateCategory = (categories: CategoryListProps[]) => {
+    setBookmark((prev) => ({ ...prev, categories }));
+  };
+
   const onClickSave = async () => {
     const categoryName = bookmark.categories.find(
       (category) => category.id === bookmark.categoryId
@@ -76,16 +80,17 @@ const CreateBookmark = () => {
     if (!categoryName) {
       return;
     }
+    const body = {
+      thumbnailUrl: state.thumbnailUrl,
+      summaryAI: bookmark.summary,
+      userMemo: bookmark.memo,
+      categoryName,
+      keywordList: bookmark.keywords,
+    };
 
     await mutateAsync({
       starId: state.starId,
-      body: {
-        thumbnailUrl: state.thumbnailUrl,
-        summaryAI: bookmark.summary,
-        userMemo: bookmark.memo,
-        categoryName,
-        keywordList: bookmark.keywords,
-      },
+      body,
     });
   };
 
@@ -102,28 +107,15 @@ const CreateBookmark = () => {
             <p className="text-text font-semibold">Nebula AI</p>
           </button>
         </header>
-        <Card
-          Thumbnail={
-            bookmark.thumbnailUrl ? (
-              <img
-                src={bookmark.thumbnailUrl}
-                alt={`${bookmark.siteUrl} thumbnail`}
-                width={64}
-                height={64}
-                className="aspect-square object-cover max-w-16 max-h-16 rounded-md"
-              />
-            ) : null
-          }
-          Link={
-            <Link target="_blank" to={bookmark.siteUrl} className="text-text text-gray6 truncate">
-              {bookmark.siteUrl || "siteUrl"}
-            </Link>
-          }
+        <CardWrapper
+          thumbnailUrl={bookmark.thumbnailUrl}
+          siteUrl={bookmark.siteUrl}
           title={bookmark.title}
           categoryId={bookmark.categoryId}
-          categories={bookmark.categories}
+          onUpdateCategory={onUpdateCategory}
           onSelectCategory={onSelectCategory}
           onAddCategory={onAddCategory}
+          isLoading={isPending}
         />
         <section>
           <Textarea

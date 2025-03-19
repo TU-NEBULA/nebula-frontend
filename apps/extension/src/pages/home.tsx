@@ -1,9 +1,26 @@
+import { useEffect, useState } from "react";
+
 import Logo from "@/assets/logo.svg?react";
 import { useSocialLogin } from "@/hooks/use-social-login";
 import { SocialLoginButton } from "@repo/ui";
 
+import { useNavigate } from "react-router-dom";
+
 const Home = () => {
-  const { onClickGoogleAuth, onClickKakaoAuth } = useSocialLogin();
+  const [isLoading, setIsLoading] = useState(false);
+  const { onClickOauth } = useSocialLogin(setIsLoading);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    (async () => {
+      const token = await chrome.storage.local.get("accessToken");
+
+      if (token) {
+        navigate("/bookmark");
+      }
+    })();
+  }, []);
 
   return (
     <main className="h-full gap-80 flex flex-col justify-center">
@@ -19,8 +36,16 @@ const Home = () => {
       </section>
       <section className="space-y-7">
         <div className="gap-2 flex flex-col">
-          <SocialLoginButton social="kakao" onClick={onClickKakaoAuth} />
-          <SocialLoginButton social="google" onClick={onClickGoogleAuth} />
+          <SocialLoginButton
+            disabled={isLoading}
+            social="kakao"
+            onClick={() => onClickOauth("kakao")}
+          />
+          <SocialLoginButton
+            disabled={isLoading}
+            social="google"
+            onClick={() => onClickOauth("google")}
+          />
         </div>
         <div className="text-description gap-3 flex items-center justify-center text-gray7">
           <button>이용약관</button>

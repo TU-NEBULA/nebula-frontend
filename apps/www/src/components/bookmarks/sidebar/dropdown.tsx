@@ -4,15 +4,16 @@ import { memo } from "react";
 import Image from "next/image";
 
 import arrowRight from "@/assets/icons/arrow-right.svg";
+import { CategoryProps } from "@/types/category";
 import { cn } from "@repo/ui";
 
 interface DropdownProps {
   open: boolean;
   title: string;
   icon: string;
-  items: { id: number; name: string }[];
+  items: CategoryProps[] | string[];
   onClick: () => void;
-  onClickItem: (id: number) => void;
+  onClickItem: (id: string) => void;
 }
 
 const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownProps) => {
@@ -45,12 +46,12 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
       {open && (
         <ul className="ml-8 my-2 border-l border-gray2 text-text">
           {items.map((item) => (
-            <li key={item.id}>
+            <li key={typeof item === "string" ? item : item.id}>
               <button
-                onClick={() => onClickItem(item.id)}
+                onClick={() => onClickItem(typeof item === "string" ? item : item.id)}
                 className="py-2 px-3 w-full text-start transition-colors hover:bg-gray1 active:bg-opacity-80"
               >
-                {item.name}
+                {typeof item === "string" ? item : item.name}
               </button>
             </li>
           ))}

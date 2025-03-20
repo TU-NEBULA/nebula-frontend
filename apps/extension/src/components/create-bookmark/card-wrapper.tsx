@@ -10,9 +10,9 @@ interface CardWrapperProps {
   thumbnailUrl: string;
   siteUrl: string;
   title: string;
-  categoryId: string;
+  categoryName: string;
   isLoading: boolean;
-  onSelectCategory: (categoryId: string) => void;
+  onSelectCategory: (category: string) => void;
   onAddCategory: (category: string) => Promise<void>;
   onUpdateCategory: (categories: CategoryListProps[]) => void;
 }
@@ -21,7 +21,7 @@ export default function CardWrapper({
   thumbnailUrl,
   siteUrl,
   title,
-  categoryId,
+  categoryName,
   isLoading,
   onSelectCategory,
   onAddCategory,
@@ -54,10 +54,8 @@ export default function CardWrapper({
         </Link>
       }
       title={title}
-      categoryId={categoryId}
-      categories={
-        (data?.result?.categoryList as Omit<CategoryListProps, "includedStarCnt">[]) || []
-      }
+      categoryName={categoryName}
+      categories={data?.result?.categoryList.map((category) => category.name) || []}
       onSelectCategory={onSelectCategory}
       onAddCategory={onAddCategory}
       isLoading={isLoading}

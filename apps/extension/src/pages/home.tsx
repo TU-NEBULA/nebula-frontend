@@ -14,9 +14,9 @@ const Home = () => {
 
   useEffect(() => {
     (async () => {
-      const token = await chrome.storage.local.get("accessToken");
+      const token = await chrome.storage.local.get();
 
-      if (token) {
+      if (token.accessToken) {
         navigate("/bookmark");
       }
     })();

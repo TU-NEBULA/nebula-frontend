@@ -1,5 +1,5 @@
 export interface BookmarkProps {
-  categoryId: string;
+  categoryName: string;
   categories: { id: string; name: string }[];
   summary: string;
   memo: string;

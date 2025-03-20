@@ -5,12 +5,21 @@ import { useCreateStar } from "@/state/mutation/star";
 import { getHtmlText, updateCurrentTab } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
 
+import { useNavigate } from "react-router-dom";
+
 const Bookmark = () => {
   const [currentTab, setCurrentTab] = useState({
     url: "사이트 url",
     title: "사이트 title",
   });
+
+  const navigate = useNavigate();
   const { mutateAsync } = useCreateStar();
+
+  const onClickLogout = async () => {
+    await chrome.storage.local.clear();
+    navigate("/");
+  };
 
   const onClickAdd = async () => {
     const html = await getHtmlText();
@@ -55,12 +64,20 @@ const Bookmark = () => {
             <p className="text-gray7">{currentTab.title}</p>
           </div>
         </section>
-        <RectangleButton
-          className={"w-full text-white transition-colors bg-black2"}
-          onClick={onClickAdd}
-        >
-          북마크에 추가하기
-        </RectangleButton>
+        <div className="flex flex-col gap-2">
+          <RectangleButton
+            className={"w-full text-white transition-colors bg-black2"}
+            onClick={onClickAdd}
+          >
+            북마크에 추가하기
+          </RectangleButton>
+          <RectangleButton
+            className={"w-full text-black2 transition-colors "}
+            onClick={onClickLogout}
+          >
+            로그아웃
+          </RectangleButton>
+        </div>
       </main>
     </Loading>
   );

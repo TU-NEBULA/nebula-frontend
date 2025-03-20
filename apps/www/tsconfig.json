@@ -12,8 +12,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@repo/ui": ["../../packages/ui/dist"]
+      "@/*": ["./src/*"]
     },
     "target": "ES2017",
     "skipLibCheck": true,

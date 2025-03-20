@@ -128,7 +128,7 @@ const Sidebar = () => {
             open={sidebar.categoryOpen}
             title="Category"
             icon={folder}
-            items={category?.result.categoryList}
+            items={category?.result.categoryList || []}
             onClick={() => onToggleDropdown("category")}
             onClickItem={onClickItem}
           />
@@ -136,7 +136,7 @@ const Sidebar = () => {
             open={sidebar.keywordOpen}
             title="Keyword"
             icon={search}
-            items={keyword?.result}
+            items={keyword?.result || []}
             onClick={() => onToggleDropdown("keyword")}
             onClickItem={onClickItem}
           />

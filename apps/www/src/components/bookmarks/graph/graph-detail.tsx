@@ -57,7 +57,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
   };
 
   const onAddCategory = async (category: string) => {
-    const categoryExist = categoryData?.result?.categoryList.find(
+    const categoryExist = (categoryData?.result?.categoryList || []).find(
       (c) => c.name === category.trim()
     );
     if (categoryExist) {
@@ -269,7 +269,9 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 edit.activated ? (edit.categoryName as string) : starData?.result?.categoryName
               }
               categories={
-                categoryData?.result?.categoryList.map((category) => category.name) as string[]
+                (categoryData?.result?.categoryList || []).map(
+                  (category) => category.name
+                ) as string[]
               }
               onSelectCategory={onSelectCategory}
               onAddCategory={onAddCategory}

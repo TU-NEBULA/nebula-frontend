@@ -2,38 +2,40 @@ import { useState } from "react";
 
 import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
+import CardWrapper from "@/components/create-bookmark/card-wrapper";
 import Loading from "@/components/loading";
-import { METHOD, RESPONSE } from "@/constants/api";
-import { useFetch } from "@/hooks/use-fetch";
-import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
+import { useCreateCategory } from "@/state/mutation/category";
+import { useCompleteCreateStar } from "@/state/mutation/star";
+import { CategoryListProps } from "@/types/category";
 import { BookmarkProps } from "@repo/types";
-import { Card, cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
+import { cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
 
-import { Link, Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 
 const DEFAULT_BOOKMARK = {
-  categoryId: -1,
+  categoryName: "",
   categories: [],
   summary: "",
   memo: "",
   keyword: "",
 };
+
 const CreateBookmark = () => {
   const { state } = useLocation();
-  const navigate = useReplaceNavigate();
 
   const [bookmark, setBookmark] = useState<BookmarkProps>(Object.assign(DEFAULT_BOOKMARK, state));
 
-  const { fetchData } = useFetch();
+  const { mutateAsync } = useCompleteCreateStar();
+  const { mutateAsync: mutateAsyncCategory, isPending } = useCreateCategory();
 
   if (!state) {
     return <Navigate to="/bad-request" replace />;
   }
 
-  const saveDisabled = bookmark.categoryId === -1;
+  const saveDisabled = bookmark.categoryName.trim() === "";
 
-  const onSelectCategory = (categoryId: number) => {
-    setBookmark((prev) => ({ ...prev, categoryId }));
+  const onSelectCategory = (category: string) => {
+    setBookmark((prev) => ({ ...prev, categoryName: category }));
   };
 
   const onChangeText = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
@@ -49,12 +51,7 @@ const CreateBookmark = () => {
   };
 
   const onAddCategory = async (category: string) => {
-    // API 호출
-    setBookmark((prev) => ({
-      ...prev,
-      category,
-      categories: [...prev.categories, { id: new Date().getTime(), name: category }],
-    }));
+    await mutateAsyncCategory(category);
   };
 
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -71,13 +68,30 @@ const CreateBookmark = () => {
     }
   };
 
-  const onClickSave = async () => {
-    const res = await fetchData("/api/bookmark", bookmark, METHOD.POST);
+  const onUpdateCategory = (categories: CategoryListProps[]) => {
+    setBookmark((prev) => ({ ...prev, categories }));
+  };
 
-    if (res.code === RESPONSE.SUCCESS) {
-      return navigate("/bookmark");
+  const onClickSave = async () => {
+    const categoryName = bookmark.categories.find(
+      (category) => category.name === bookmark.categoryName
+    )?.name;
+
+    if (!categoryName) {
+      return;
     }
-    // code 코드에 따른 에러 처리
+    const body = {
+      thumbnailUrl: state.thumbnailUrl,
+      summaryAI: bookmark.summary,
+      userMemo: bookmark.memo,
+      categoryName,
+      keywordList: bookmark.keywords,
+    };
+
+    await mutateAsync({
+      starId: state.starId,
+      body,
+    });
   };
 
   return (
@@ -93,28 +107,15 @@ const CreateBookmark = () => {
             <p className="text-text font-semibold">Nebula AI</p>
           </button>
         </header>
-        <Card
-          Thumbnail={
-            bookmark.thubmnail ? (
-              <img
-                src={bookmark.thubmnail}
-                alt={`${bookmark.url} thumbnail`}
-                width={64}
-                height={64}
-                className="aspect-square object-cover max-w-16 max-h-16 rounded-md"
-              />
-            ) : null
-          }
-          Link={
-            <Link target="_blank" to={bookmark.url} className="text-text text-gray6 truncate">
-              {bookmark.url || "url"}
-            </Link>
-          }
+        <CardWrapper
+          thumbnailUrl={bookmark.thumbnailUrl}
+          siteUrl={bookmark.siteUrl}
           title={bookmark.title}
-          categoryId={bookmark.categoryId}
-          categories={bookmark.categories}
+          categoryName={bookmark.categoryName}
+          onUpdateCategory={onUpdateCategory}
           onSelectCategory={onSelectCategory}
           onAddCategory={onAddCategory}
+          isLoading={isPending}
         />
         <section>
           <Textarea

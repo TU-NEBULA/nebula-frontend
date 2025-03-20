@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Loading from "@/components/loading";
-import { METHOD, RESPONSE } from "@/constants/api";
-import { useFetch } from "@/hooks/use-fetch";
-import { SummarizeBookmarkDTO } from "@/models/bookmark";
-import { SummarizeBookmarkProps } from "@/types/bookmark";
+import { useCreateStar } from "@/state/mutation/star";
 import { getHtmlText, updateCurrentTab } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
 
@@ -15,22 +12,30 @@ const Bookmark = () => {
     url: "사이트 url",
     title: "사이트 title",
   });
-  const navigate = useNavigate();
 
-  const { fetchData } = useFetch<SummarizeBookmarkProps, SummarizeBookmarkDTO>();
+  const navigate = useNavigate();
+  const { mutateAsync } = useCreateStar();
+
+  const onClickLogout = async () => {
+    await chrome.storage.local.clear();
+    navigate("/");
+  };
 
   const onClickAdd = async () => {
     const html = await getHtmlText();
     const htmlContent = html.split("------MultipartBoundary--")[1];
-    const res = await fetchData(
-      "/api/extract_data",
-      { url: currentTab.url, html_content: htmlContent },
-      METHOD.POST
-    );
-    if (res.code === RESPONSE.SUCCESS) {
-      return navigate("/create-bookmark", { state: { ...res.result, title: currentTab.title } });
-    }
-    // code 코드에 따른 에러 처리
+
+    const htmlBlob = new Blob([htmlContent], { type: "text/html" });
+    const htmlFile = new File([htmlBlob], "content.html", { type: "text/html" });
+
+    const formData = new FormData();
+    formData.append("htmlFile", htmlFile);
+
+    await mutateAsync({
+      title: currentTab.title,
+      siteUrl: currentTab.url,
+      htmlFile: formData,
+    });
   };
 
   useEffect(() => {
@@ -59,12 +64,20 @@ const Bookmark = () => {
             <p className="text-gray7">{currentTab.title}</p>
           </div>
         </section>
-        <RectangleButton
-          className={"w-full text-white transition-colors bg-black2"}
-          onClick={onClickAdd}
-        >
-          북마크에 추가하기
-        </RectangleButton>
+        <div className="flex flex-col gap-2">
+          <RectangleButton
+            className={"w-full text-white transition-colors bg-black2"}
+            onClick={onClickAdd}
+          >
+            북마크에 추가하기
+          </RectangleButton>
+          <RectangleButton
+            className={"w-full text-black2 transition-colors "}
+            onClick={onClickLogout}
+          >
+            로그아웃
+          </RectangleButton>
+        </div>
       </main>
     </Loading>
   );

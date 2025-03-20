@@ -1,11 +1,11 @@
 export interface BookmarkProps {
-  categoryId: number;
-  categories: { id: number; name: string }[];
+  categoryName: string;
+  categories: { id: string; name: string }[];
   summary: string;
   memo: string;
   keyword?: string;
   title: string;
-  thubmnail: string;
+  thumbnailUrl: string;
   keywords: string[];
-  url: string;
+  siteUrl: string;
 }

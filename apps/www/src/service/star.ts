@@ -1,8 +1,33 @@
 import { BaseResponseDTO } from "@/models";
-import { AllStarDTO } from "@/models/star";
+import { AllStarDTO, DeleteStarDTO } from "@/models/star";
+import { StarProps } from "@/types/graph";
 
 import api from "./api";
 
 export const getAllStars = async (): Promise<BaseResponseDTO<AllStarDTO>> => {
-  return await api.get("/api/v1/stars");
+  return await api.get("/stars");
+};
+
+export const getStarById = async (id: string): Promise<BaseResponseDTO<StarProps>> => {
+  return await api.get(`/stars/${id}`);
+};
+
+export const updateStar = async ({
+  id,
+  content,
+}: {
+  id: string;
+  content: {
+    title: string;
+    categoryName: string;
+    summaryAI: string;
+    userMemo: string;
+    keywordList: string[];
+  };
+}): Promise<BaseResponseDTO<StarProps>> => {
+  return await api.patch(`/stars/${id}`, content);
+};
+
+export const deleteStar = async (id: string): Promise<BaseResponseDTO<DeleteStarDTO>> => {
+  return await api.patch(`/stars/${id}/deactivate`);
 };

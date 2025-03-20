@@ -17,8 +17,8 @@
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@repo/types": "workspace:*",
     "@repo/ui": "workspace:*",
+    "@repo/types": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

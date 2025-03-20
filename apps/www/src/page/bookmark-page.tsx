@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import dynamic from "next/dynamic";
 
 import GraphDetail from "@/components/bookmarks/graph/graph-detail";
 import { useGetAllStars } from "@/lib/tanstack/query/star";
-import { Spinner } from "@repo/ui";
+import { cn, Spinner } from "@repo/ui";
 
 const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
   ssr: false,
@@ -19,13 +19,12 @@ const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
 const BookmarkPage = () => {
   const [detail, setDetail] = useState({
     open: false,
-    id: -1,
+    id: "",
   });
 
   const { data } = useGetAllStars();
-  console.log(data);
 
-  const onOpen = (id: number) => {
+  const onOpen = (id: string) => {
     setDetail({
       open: true,
       id,
@@ -35,13 +34,13 @@ const BookmarkPage = () => {
   const onClose = () => {
     setDetail({
       open: false,
-      id: -1,
+      id: "",
     });
   };
 
   return (
     <>
-      <Graph onOpen={onOpen} />
+      <Graph onOpen={onOpen} data={data?.result} />
       <GraphDetail open={detail.open} id={detail.id} onClose={onClose} />
     </>
   );

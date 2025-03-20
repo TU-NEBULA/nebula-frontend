@@ -3,30 +3,19 @@
 import { useEffect, useRef } from "react";
 
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
+import { AllStarDTO } from "@/models/star";
 import { Coords, LinkObject, NodeObject } from "@/types/graph";
 
 // className scene-tooltip으로 호버 시 스타일링하기
 
 interface GraphProps {
-  onOpen: (id: number) => void;
+  onOpen: (id: string) => void;
+  data: AllStarDTO;
 }
-
-const nodes = [
-  { id: 1, name: "red" },
-  { id: 2, name: "green" },
-  { id: 3, name: "blue" },
-  { id: 4, name: "yellow" },
-];
-
-const links = [
-  { source: 1, target: 2, width: 1 },
-  { source: 1, target: 3, width: 1 },
-  { source: 1, target: 4, width: 1 },
-];
 
 const fixedPosition = (position: number) => (position > 0 ? 250 : -250);
 
-const Graph = ({ onOpen }: GraphProps) => {
+const Graph = ({ onOpen, data }: GraphProps) => {
   const graphRef = useRef<HTMLDivElement>(null);
   // 선택된 필터로 link handling하기
   const { selectedFilter, setSelectedFilter } = useBookmarkStore();
@@ -37,7 +26,17 @@ const Graph = ({ onOpen }: GraphProps) => {
         const ForceGraph3D = (await import("3d-force-graph")).default;
         const graph = new ForceGraph3D(graphRef.current);
 
-        await graph
+        const nodes = data.starListDto.map((star) => ({
+          id: star.starId,
+          name: star.title,
+        }));
+        const links = data.linkListDto.map((link) => ({
+          source: link.linkedNodeIdList[0],
+          target: link.linkedNodeIdList[1],
+          width: link.similarity,
+        }));
+
+        graph
           .graphData({
             nodes: nodes as NodeObject[],
             links: links as LinkObject[],

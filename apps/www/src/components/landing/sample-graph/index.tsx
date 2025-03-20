@@ -5,16 +5,16 @@ import { useEffect, useRef } from "react";
 import { Coords, LinkObject, NodeObject } from "@/types/graph";
 
 const nodes = [
-  { id: 1, name: "개발" },
-  { id: 2, name: "프론트엔드" },
-  { id: 3, name: "백엔드" },
-  { id: 4, name: "임베디드" },
+  { id: "1", name: "개발" },
+  { id: "2", name: "프론트엔드" },
+  { id: "3", name: "백엔드" },
+  { id: "4", name: "임베디드" },
 ];
 
 const links = [
-  { source: 1, target: 2, width: 1 },
-  { source: 1, target: 3, width: 1 },
-  { source: 1, target: 4, width: 1 },
+  { source: "1", target: "2", width: 1 },
+  { source: "1", target: "3", width: 1 },
+  { source: "1", target: "4", width: 1 },
 ];
 
 const fixedPosition = (position: number) => (position > 0 ? 250 : -250);

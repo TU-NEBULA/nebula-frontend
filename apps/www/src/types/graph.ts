@@ -11,11 +11,11 @@ interface CommonProps {
 }
 
 export interface LinkObject extends CommonProps {
-  source?: number;
-  target?: number;
+  source?: string;
+  target?: string;
 }
 export interface NodeObject extends Coords, CommonProps {
-  id?: number;
+  id?: string;
   vx?: number;
   vy?: number;
   vz?: number;
@@ -26,4 +26,23 @@ export interface NodeObject extends Coords, CommonProps {
   name?: string;
   size?: number;
   importance?: boolean;
+}
+
+export interface StarProps {
+  starId: string;
+  categoryName: string;
+  title: string;
+  siteUrl: string;
+  thumbnailUrl: string;
+  summaryAI: string;
+  userMemo: string;
+  views: number;
+  keywordList: string[];
+}
+
+export interface LinkProps {
+  linkId: string;
+  sharedKeywordNum: number;
+  similarity: number;
+  linkedNodeIdList: string[];
 }

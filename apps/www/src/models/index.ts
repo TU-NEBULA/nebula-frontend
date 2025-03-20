@@ -1,5 +1,5 @@
 export interface BaseResponseDTO<T> {
-  isSusccess: boolean;
+  isSuccess: boolean;
   message: string;
   code: string;
   result: T;

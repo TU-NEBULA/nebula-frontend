@@ -9,6 +9,7 @@ import logo from "@/assets/icons/logo.svg";
 import logout from "@/assets/icons/logout.svg";
 import search from "@/assets/icons/search.svg";
 import { LINK_TYPE } from "@/constants/bookmark";
+import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
 
 import Dropdown from "./dropdown";
@@ -47,6 +48,7 @@ const filters = [LINK_TYPE.CATEGORY, LINK_TYPE.KEYWORD];
 
 const Sidebar = () => {
   const { selectedFilter, setSelectedFilter } = useBookmarkStore();
+  const [{ data: category }, { data: keyword }] = useGetKeywordCategory();
   const [sidebar, setSidebar] = useState({
     open: false,
     categoryOpen: false,
@@ -86,7 +88,7 @@ const Sidebar = () => {
     }));
   };
 
-  const onClickItem = (id: number) => {
+  const onClickItem = (id: string) => {
     // do something
   };
 
@@ -126,7 +128,7 @@ const Sidebar = () => {
             open={sidebar.categoryOpen}
             title="Category"
             icon={folder}
-            items={categories}
+            items={category?.result?.categoryList || []}
             onClick={() => onToggleDropdown("category")}
             onClickItem={onClickItem}
           />
@@ -134,7 +136,7 @@ const Sidebar = () => {
             open={sidebar.keywordOpen}
             title="Keyword"
             icon={search}
-            items={keywords}
+            items={keyword?.result || []}
             onClick={() => onToggleDropdown("keyword")}
             onClickItem={onClickItem}
           />

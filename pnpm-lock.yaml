@@ -111,6 +111,9 @@ importers:
       3d-force-graph:
         specifier: ^1.76.0
         version: 1.76.0
+      '@repo/ui':
+        specifier: workspace:*
+        version: link:../../packages/ui
       '@tanstack/react-query':
         specifier: ^5.59.20
         version: 5.64.1(react@19.0.0-rc-66855b96-20241106)
@@ -130,9 +133,6 @@ importers:
       '@repo/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@repo/ui':
-        specifier: workspace:*
-        version: link:../../packages/ui
       '@types/node':
         specifier: ^20
         version: 20.17.14

@@ -33,7 +33,7 @@ const customFetch = async (
   };
 
   try {
-    const res = await fetch(`${baseUrl}${url}`, {
+    const res = await fetch(`${baseUrl}/api/v1${url}`, {
       ...options,
       method,
       body,

@@ -128,7 +128,7 @@ const Sidebar = () => {
             open={sidebar.categoryOpen}
             title="Category"
             icon={folder}
-            items={category?.result.categoryList || []}
+            items={category?.result?.categoryList || []}
             onClick={() => onToggleDropdown("category")}
             onClickItem={onClickItem}
           />

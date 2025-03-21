@@ -36,7 +36,9 @@ const Card = ({
   const [dropdownRef] = useOutsideClick<HTMLDivElement>(() => isDropdownOpen && onCloseModal());
 
   const onToggle = () => {
-    setIsDropdownOpen((prev) => !prev);
+    if (editEnabled) {
+      setIsDropdownOpen((prev) => !prev);
+    }
   };
 
   const onStartEdit = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -45,7 +47,7 @@ const Card = ({
   };
 
   const onCloseModal = () => {
-    setEdit({ start: false, content: "", title: "" });
+    setEdit({ start: false, content: "", title: edit.title });
     onToggle();
   };
 
@@ -91,22 +93,20 @@ const Card = ({
               <p className="text-text text-black2 flex-1 truncate text-start">
                 {categoryName || "카테고리"}
               </p>
-              {editEnabled && (
-                <svg
-                  width="16"
-                  height="17"
-                  viewBox="0 0 16 17"
-                  fill="none"
-                  className={cn("transition-all", isDropdownOpen ? "rotate-180" : "rotate-0")}
-                >
-                  <path
-                    d="M3.33301 6.33971L7.03174 10.2439C7.55764 10.799 8.44171 10.799 8.96761 10.2439L12.6663 6.33971"
-                    stroke="black"
-                    strokeWidth="1.5"
-                    strokeLinecap="round"
-                  />
-                </svg>
-              )}
+              <svg
+                width="16"
+                height="17"
+                viewBox="0 0 16 17"
+                fill="none"
+                className={cn("transition-all", isDropdownOpen ? "rotate-180" : "rotate-0")}
+              >
+                <path
+                  d="M3.33301 6.33971L7.03174 10.2439C7.55764 10.799 8.44171 10.799 8.96761 10.2439L12.6663 6.33971"
+                  stroke="black"
+                  strokeWidth="1.5"
+                  strokeLinecap="round"
+                />
+              </svg>
             </button>
             {isDropdownOpen && editEnabled && (
               <div className="flex flex-col bg-white z-10 absolute w-32 mt-2 overflow-scroll text-text max-h-dropdown hide-scrollbar shadow-lg">

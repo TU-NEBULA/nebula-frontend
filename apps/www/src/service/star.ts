@@ -31,3 +31,13 @@ export const updateStar = async ({
 export const deleteStar = async (id: string): Promise<BaseResponseDTO<DeleteStarDTO>> => {
   return await api.patch(`/stars/${id}/deactivate`);
 };
+
+export const getStarByCategory = async (
+  categoryId: string
+): Promise<BaseResponseDTO<AllStarDTO>> => {
+  return await api.get(`/stars/categories/${categoryId}`);
+};
+
+export const getStarByKeyword = async (keyword: string): Promise<BaseResponseDTO<AllStarDTO>> => {
+  return await api.get(`/stars/keywords/${keyword}`);
+};

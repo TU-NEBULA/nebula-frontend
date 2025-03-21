@@ -1,11 +1,11 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 
 import GraphDetail from "@/components/bookmarks/graph/graph-detail";
 import { useGetAllStars } from "@/lib/tanstack/query/star";
-import { cn, Spinner } from "@repo/ui";
+import { Spinner } from "@repo/ui";
 
 const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
   ssr: false,

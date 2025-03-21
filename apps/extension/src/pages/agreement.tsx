@@ -1,17 +1,30 @@
 import { useState } from "react";
 
+import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { getBookMarks } from "@/utils/chrome";
 import { cn, RectangleButton } from "@repo/ui";
 
+import { useLocation } from "react-router-dom";
+
 const Agreement = () => {
   const [checked, setChecked] = useState(false);
+  const { state } = useLocation();
+
+  const navigate = useReplaceNavigate();
 
   const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
   };
 
-  const onClickGetBookmarks = () => {
-    getBookMarks();
+  const onClickGetBookmarks = async () => {
+    try {
+      const bookmarks = await getBookMarks();
+      console.log("onClickGetBookmarks", bookmarks);
+      chrome.storage.local.set(state);
+      navigate("/bookmark");
+    } catch (error) {
+      console.error("Error getting bookmarks:", error);
+    }
   };
 
   return (

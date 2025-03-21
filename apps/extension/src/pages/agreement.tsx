@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
+import { postTerm } from "@/services/term";
 import { getBookMarks } from "@/utils/chrome";
 import { cn, RectangleButton } from "@repo/ui";
 
@@ -19,9 +20,13 @@ const Agreement = () => {
   const onClickGetBookmarks = async () => {
     try {
       const bookmarks = await getBookMarks();
-      console.log("onClickGetBookmarks", bookmarks);
-      chrome.storage.local.set(state);
-      navigate("/bookmark");
+      const res = await postTerm(state.accessToken, {
+        "1": checked,
+      });
+      if (res.status === 200) {
+        chrome.storage.local.set(state);
+        navigate("/bookmark");
+      }
     } catch (error) {
       console.error("Error getting bookmarks:", error);
     }

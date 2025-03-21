@@ -32,11 +32,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
 
   const { mutateAsync: createCategory, isPending: createCategoryLoading } = useCreateCategory();
   const { mutateAsync: updateStar, isPending: updateStarLoading } = useUpdateStar();
-  const {
-    mutateAsync: deleteStar,
-    isPending: deleteStarLoading,
-    isSuccess: deleteStarSuccess,
-  } = useDeleteStar();
+  const { mutateAsync: deleteStar, isPending: deleteStarLoading } = useDeleteStar(onClose);
 
   const onSelectCategory = (categoryName: string) => {
     setEdit((prev) => ({ ...prev, categoryName }));
@@ -178,13 +174,6 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
       setEdit((prev) => ({ ...prev, ...starData.result }));
     }
   }, [starData]);
-
-  useEffect(() => {
-    if (deleteStarLoading && deleteStarSuccess) {
-      alert("북마크가 삭제되었습니다.");
-      onClose();
-    }
-  }, [deleteStarLoading, deleteStarSuccess]);
 
   return (
     <div

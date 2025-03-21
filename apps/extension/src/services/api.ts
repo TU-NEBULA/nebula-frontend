@@ -30,7 +30,7 @@ api.interceptors.response.use(
 
       if (refreshToken) {
         try {
-          const { data } = await api.get("/api/v1/oauth/reissue", {
+          const { data } = await api.get("/oauth/reissue", {
             headers: {
               Authorization: `Bearer ${refreshToken}`,
             },

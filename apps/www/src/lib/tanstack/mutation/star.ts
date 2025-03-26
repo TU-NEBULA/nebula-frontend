@@ -16,12 +16,14 @@ export const useUpdateStar = () => {
   });
 };
 
-export const useDeleteStar = () => {
+export const useDeleteStar = (callback: () => void) => {
   return useMutation({
     mutationFn: deleteStar,
     onSuccess: (data) => {
       queryClient.removeQueries({ queryKey: [STAR.GET_ALL] });
       queryClient.removeQueries({ queryKey: [STAR.GET_BY_ID, data.result.starId] });
+      alert("북마크가 삭제되었습니다.");
+      callback();
     },
     onError: (error) => {
       console.error(error);

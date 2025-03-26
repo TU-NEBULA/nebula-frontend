@@ -36,7 +36,9 @@ const Card = ({
   const [dropdownRef] = useOutsideClick<HTMLDivElement>(() => isDropdownOpen && onCloseModal());
 
   const onToggle = () => {
-    setIsDropdownOpen((prev) => !prev);
+    if (editEnabled) {
+      setIsDropdownOpen((prev) => !prev);
+    }
   };
 
   const onStartEdit = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -45,7 +47,7 @@ const Card = ({
   };
 
   const onCloseModal = () => {
-    setEdit({ start: false, content: "", title: "" });
+    setEdit({ start: false, content: "", title: edit.title });
     onToggle();
   };
 

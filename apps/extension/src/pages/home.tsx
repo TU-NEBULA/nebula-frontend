@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import Logo from "@/assets/logo.svg?react";
+import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { useSocialLogin } from "@/hooks/use-social-login";
 import { SocialLoginButton } from "@repo/ui";
 
@@ -10,7 +11,7 @@ const Home = () => {
   const [isLoading, setIsLoading] = useState(false);
   const { onClickOauth } = useSocialLogin(setIsLoading);
 
-  const navigate = useNavigate();
+  const navigate = useReplaceNavigate();
 
   useEffect(() => {
     (async () => {

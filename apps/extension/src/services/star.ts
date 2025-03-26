@@ -9,7 +9,7 @@ export const createStar = async ({
   siteUrl,
   htmlFile,
 }: SummarizeStarProps): Promise<BaseResponseDTO<SummarizeStarDTO>> => {
-  return (await api.post(`/api/v1/stars?title=${title}&siteUrl=${siteUrl}`, htmlFile)).data;
+  return (await api.post(`/stars?title=${title}&siteUrl=${siteUrl}`, htmlFile)).data;
 };
 
 export const completeCreateStar = async ({
@@ -19,5 +19,5 @@ export const completeCreateStar = async ({
   starId: string;
   body: CompleteSummarizeStarProps;
 }): Promise<BaseResponseDTO<CompleteSummarizeStarDTO>> => {
-  return (await api.patch(`/api/v1/stars/complete/${starId}`, body)).data;
+  return (await api.patch(`/stars/complete/${starId}`, body)).data;
 };

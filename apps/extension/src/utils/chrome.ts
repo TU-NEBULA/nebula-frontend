@@ -6,12 +6,14 @@ export const searchHistory = (text: string) => {
   });
 };
 
-export const getBookMarks = () => {
-  chrome.bookmarks.getTree((trees) => {
-    const makeUp = (items: chrome.bookmarks.BookmarkTreeNode[]) => {
-      return items.map(
-        (item: chrome.bookmarks.BookmarkTreeNode): chrome.bookmarks.BookmarkTreeNode => {
-          if (typeof item.children !== "undefined") {
+export const getBookMarks = (): Promise<chrome.bookmarks.BookmarkTreeNode[] | undefined> => {
+  return new Promise((resolve) => {
+    chrome.bookmarks.getTree((trees) => {
+      const makeUp = (
+        items: chrome.bookmarks.BookmarkTreeNode[]
+      ): chrome.bookmarks.BookmarkTreeNode[] => {
+        return items.map((item) => {
+          if (item.children) {
             return {
               id: item.id,
               title: item.title,
@@ -23,11 +25,12 @@ export const getBookMarks = () => {
             title: item.title,
             url: item.url,
           };
-        }
-      );
-    };
-    const result = makeUp(trees)[0].children;
-    console.log(result);
+        });
+      };
+      const result = makeUp(trees)[0].children;
+      console.log(result);
+      resolve(result);
+    });
   });
 };
 

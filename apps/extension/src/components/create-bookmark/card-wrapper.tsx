@@ -59,6 +59,7 @@ export default function CardWrapper({
       onSelectCategory={onSelectCategory}
       onAddCategory={onAddCategory}
       isLoading={isLoading}
+      editEnabled
     />
   );
 }

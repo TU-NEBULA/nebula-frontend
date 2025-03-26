@@ -19,7 +19,7 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
   };
 
   try {
-    const res = await fetch(`${baseUrl}/api/v1${url}`, {
+    const res = await fetch(`${baseUrl}${url}`, {
       ...options,
       method,
       body,

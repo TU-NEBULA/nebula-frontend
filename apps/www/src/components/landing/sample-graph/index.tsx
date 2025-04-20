@@ -73,7 +73,7 @@ export default function SampleGraph() {
     });
 
     const orbitRadius = 5;
-    const orbitSpeed = 0.02;
+    const orbitSpeed = 0.005;
 
     const bodies: { mesh: THREE.Mesh; angle: number; center: THREE.Vector3 }[] = [];
 
@@ -161,7 +161,7 @@ export default function SampleGraph() {
         className="p-12 border border-gray7 flex flex-col rounded-lg gap-12 md:flex-row"
       >
         <div className="space-y-5 flex-1">
-          <h2 className="md:text-landing-sub-title text-4xl leading-none">
+          <h2 className="lg:text-landing-sub-title md:text-5xl text-4xl md:leading-none">
             북마크를
             <br /> 노드로 관리
           </h2>

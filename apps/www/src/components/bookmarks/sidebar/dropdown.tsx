@@ -10,7 +10,7 @@ import { cn } from "@repo/ui";
 interface DropdownProps {
   open: boolean;
   title: string;
-  icon: string;
+  icon: React.ReactNode;
   items: CategoryProps[] | string[];
   onClick: () => void;
   onClickItem: (id: string) => void;
@@ -24,14 +24,7 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
         onClick={onClick}
       >
         <div className="flex items-center gap-2">
-          <Image
-            src={icon}
-            alt="카테고리 아이콘"
-            width={24}
-            height={24}
-            className="w-6 h-6"
-            draggable={false}
-          />
+          {icon}
           <p className="">{title}</p>
         </div>
         <Image

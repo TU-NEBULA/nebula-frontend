@@ -82,7 +82,7 @@ export default function Graph({ onOpen, data }: GraphProps) {
     let hoveredGroup: string | null = null;
 
     const orbitRadius = 5;
-    const orbitSpeed = 0.02;
+    const orbitSpeed = 0.005;
     const loader = new THREE.TextureLoader();
 
     const placementRange = 40;
@@ -196,12 +196,24 @@ export default function Graph({ onOpen, data }: GraphProps) {
       mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(bodies.map((b) => b.mesh));
-      if (hits.length) {
-        const m = hits[0].object as THREE.Mesh;
-        const id = m.userData.starId;
-        if (id) onOpen(id);
-      }
+      const hits = raycaster.intersectObjects(
+        bodies.map((b) => b.mesh),
+        false
+      );
+      if (!hits.length) return; // 클릭 대상 아님
+
+      const mesh = hits[0].object as THREE.Mesh;
+      const starId = mesh.userData.starId;
+      if (starId) onOpen(starId);
+
+      // push camera out farther from the clicked star
+      const distance = orbitRadius * 4;
+      // position camera above and in front of the star so it remains visible
+      const camOffset = new THREE.Vector3(0, distance * 0.75, distance);
+      camera.position.copy(mesh.position.clone().add(camOffset));
+      controls.target.copy(mesh.position);
+
+      controls.update();
     });
 
     const animate = () => {
@@ -230,7 +242,7 @@ export default function Graph({ onOpen, data }: GraphProps) {
       renderer.dispose();
       controls.dispose();
     };
-  }, [data, onOpen]);
+  }, [data]);
 
   return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
 }

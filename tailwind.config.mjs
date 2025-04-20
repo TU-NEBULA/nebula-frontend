@@ -12,6 +12,7 @@ export default {
         gray5: "#D6D6D6",
         gray6: "#C2C5CA",
         gray7: "#AFB4BA",
+        gray8: "#454746",
         white: "#FFFFFF",
         kakao: "#FEE500",
         highlight: "#CC3300",
@@ -33,6 +34,7 @@ export default {
       },
       minHeight: {
         keyword: "44px",
+        body: "calc(100dvh - 14.5625rem)",
       },
       maxHeight: {
         dropdown: "133px",

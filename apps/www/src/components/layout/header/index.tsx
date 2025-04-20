@@ -15,7 +15,10 @@ const Header = async () => {
         <Image src={logo} alt="nebula 로고" width={40} height={20} />
         <p className="text-xl font-semibold">Nebula</p>
       </Link>
-      <LoginButton token={token?.value || ""} />
+      <div className="flex items-center gap-6">
+        <Link href="/history">History List</Link>
+        <LoginButton token={token?.value || ""} />
+      </div>
     </header>
   );
 };

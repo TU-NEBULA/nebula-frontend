@@ -4,10 +4,9 @@ import { useState } from "react";
 import Image from "next/image";
 
 import doubleArrowLeft from "@/assets/icons/double-arrow-left.svg";
-import folder from "@/assets/icons/folder.svg";
 import logo from "@/assets/icons/logo.svg";
 import logout from "@/assets/icons/logout.svg";
-import search from "@/assets/icons/search.svg";
+import Icon from "@/components/common/icon";
 import { LINK_TYPE } from "@/constants/bookmark";
 import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
@@ -97,7 +96,7 @@ const Sidebar = () => {
           <Dropdown
             open={sidebar.categoryOpen}
             title="Category"
-            icon={folder}
+            icon={<Icon.folder />}
             items={category?.result?.categoryList || []}
             onClick={() => onToggleDropdown("category")}
             onClickItem={onClickItem}
@@ -105,7 +104,7 @@ const Sidebar = () => {
           <Dropdown
             open={sidebar.keywordOpen}
             title="Keyword"
-            icon={search}
+            icon={<Icon.search />}
             items={keyword?.result || []}
             onClick={() => onToggleDropdown("keyword")}
             onClickItem={onClickItem}

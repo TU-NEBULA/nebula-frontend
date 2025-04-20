@@ -1,3 +1,4 @@
+import { STAR } from "@/constants/star";
 import { BaseResponseDTO } from "@/models";
 import { AllStarDTO, DeleteStarDTO } from "@/models/star";
 import { StarProps } from "@/types/graph";
@@ -5,7 +6,7 @@ import { StarProps } from "@/types/graph";
 import api from "./api";
 
 export const getAllStars = async (): Promise<BaseResponseDTO<AllStarDTO>> => {
-  return await api.get("/stars");
+  return await api.get("/stars", { next: { tags: [STAR.GET_ALL] } });
 };
 
 export const getStarById = async (id: string): Promise<BaseResponseDTO<StarProps>> => {

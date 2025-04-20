@@ -237,8 +237,8 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                   <Image
                     src={starData?.result.thumbnailUrl}
                     alt={`${starData?.result.siteUrl} thumbnail`}
-                    width={96}
-                    height={96}
+                    width={160}
+                    height={160}
                     className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
                     draggable={false}
                   />

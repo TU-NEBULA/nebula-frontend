@@ -18,3 +18,9 @@ export const getCookie = async (name: string) => {
   const value = cookieStorage.get(name);
   return value;
 };
+
+export const removeAuth = async () => {
+  const cookieStorage = await cookies();
+  cookieStorage.delete("accessToken");
+  cookieStorage.delete("refreshToken");
+};

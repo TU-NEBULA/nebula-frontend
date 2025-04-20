@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { useUserStore } from "@/lib/zustand/user";
+import { removeAuth } from "@/utils/cookies";
 
 interface LoginButtonProps {
   token: string | null;
@@ -10,15 +10,13 @@ interface LoginButtonProps {
 
 const LoginButton = ({ token }: LoginButtonProps) => {
   const router = useRouter();
-  const setUserStore = useUserStore((state) => state.setUser);
 
-  const isLogin = token;
-  const name = isLogin ? "Logout" : "Login";
+  const name = token ? "Logout" : "Login";
 
   const onClick = async () => {
-    if (isLogin) {
-      setUserStore({ accessToken: null, refreshToken: null });
+    if (token) {
       alert("로그아웃 되었습니다.");
+      await removeAuth();
       return router.replace("/");
     }
     router.push("/login");

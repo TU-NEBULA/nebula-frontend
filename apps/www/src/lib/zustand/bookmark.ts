@@ -2,7 +2,7 @@ import { LINK_TYPE } from "@/constants/bookmark";
 
 import { create } from "zustand";
 
-type FilterType = LINK_TYPE.CATEGORY | LINK_TYPE.KEYWORD | "";
+type FilterType = LINK_TYPE.SIMILARITY | LINK_TYPE.KEYWORD | "";
 
 interface BookmarkStore {
   selectedFilter: FilterType;

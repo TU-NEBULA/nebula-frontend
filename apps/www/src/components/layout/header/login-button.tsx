@@ -15,7 +15,7 @@ const LoginButton = ({ token }: LoginButtonProps) => {
 
   const onClick = async () => {
     if (token) {
-      const res = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+      const res = await fetch("/api/auth/logout", { method: "POST" });
       if (res.ok) {
         await revalidatePaths(["/"]);
         alert("로그아웃 되었습니다.");

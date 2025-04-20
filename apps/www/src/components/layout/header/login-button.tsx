@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 
-import { revalidatePaths } from "@/utils/api";
+import { removeAuth } from "@/utils/cookies";
 
 interface LoginButtonProps {
   token: string | null;
@@ -15,12 +15,9 @@ const LoginButton = ({ token }: LoginButtonProps) => {
 
   const onClick = async () => {
     if (token) {
-      const res = await fetch("/api/auth/logout", { method: "POST" });
-      if (res.ok) {
-        await revalidatePaths(["/"]);
-        alert("로그아웃 되었습니다.");
-        router.replace("/");
-      }
+      await removeAuth();
+      alert("로그아웃 되었습니다.");
+      window.location.href = "/";
     } else {
       router.push("/login");
     }

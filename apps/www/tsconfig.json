@@ -24,6 +24,13 @@
     "types": ["@repo/types", "@repo/ui"],
     "strictNullChecks": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "tailwind.config.mts"],
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    "tailwind.config.mts",
+    "next.config.js"
+  ],
   "exclude": ["node_modules"]
 }

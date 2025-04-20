@@ -17,6 +17,7 @@ const LoginButton = ({ token }: LoginButtonProps) => {
       if (res.ok) {
         alert("로그아웃 되었습니다.");
         router.replace("/");
+        router.refresh();
       }
     } else {
       router.push("/login");

@@ -28,7 +28,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
   const [{ data: starData, isLoading: starLoading }, { data: categoryData }] =
     useGetGraphDetail(id);
 
-  const [edit, setEdit] = useState({ activated: false, keyword: "", ...starData?.result });
+  const [edit, setEdit] = useState({ activated: false, keyword: "", ...(starData?.result || {}) });
 
   const { mutateAsync: createCategory, isPending: createCategoryLoading } = useCreateCategory();
   const { mutateAsync: updateStar, isPending: updateStarLoading } = useUpdateStar();

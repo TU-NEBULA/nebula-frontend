@@ -1,17 +1,31 @@
-import { useUserStore } from "@/lib/zustand/user";
+import { getCookie } from "@/utils/cookies";
 
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
-  const accessToken = useUserStore.getState().accessToken;
+const customFetch = async (
+  url: string,
+  method: Method,
+  _body?: unknown,
+  options?: RequestInit,
+  isRetry = false
+) => {
+  let accessToken = "";
+  if (typeof window !== "undefined") {
+    const res = await fetch("/api/cookie");
+    const json = await res.json();
+    accessToken = json?.accessToken || "";
+  } else {
+    accessToken = (await getCookie("accessToken"))?.value || "";
+  }
   const Authorization = `Bearer ${accessToken}`;
 
   let body: BodyInit | undefined;
   if (_body) {
     body = _body instanceof FormData ? _body : JSON.stringify(_body);
   }
+
   const headers: HeadersInit = {
     ...options?.headers,
     ...(accessToken && { Authorization }),
@@ -26,13 +40,29 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
       headers,
     });
 
-    // 응답이 실패 상태일 경우 에러 텍스트로 반환
+    if (res.status === 401 && !isRetry) {
+      const refreshToken = (await getCookie("refreshToken"))?.value || "";
+      if (!refreshToken) {
+        throw new Error("Refresh token not found");
+      }
+      const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${refreshToken}`,
+        },
+      });
+      if (refreshResponse.ok) {
+        const res = await refreshResponse.json();
+        console.log("refresh response", res);
+      }
+    }
+
     if (!res.ok) {
       const errorText = await res.text();
       throw new Error(errorText);
     }
 
-    // Content-Type이 JSON이면 파싱, 아니면 그냥 텍스트 반환
     const contentType = res.headers.get("content-type") || "";
     if (contentType.includes("application/json")) {
       return res.json();

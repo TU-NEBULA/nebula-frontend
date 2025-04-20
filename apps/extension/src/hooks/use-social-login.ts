@@ -14,7 +14,6 @@ export const useSocialLogin = (setIsLoading: (isLoading: boolean) => void) => {
         url: provider === "google" ? googleLoginPage : kakaoLoginPage,
       },
       async (redirectUri) => {
-        console.log("redirectUri", redirectUri);
         setIsLoading(false);
         if (!redirectUri) {
           return alert("로그인에 실패했어요. 다시 시도해주세요.");
@@ -25,6 +24,7 @@ export const useSocialLogin = (setIsLoading: (isLoading: boolean) => void) => {
         const isAgreedBoolean = isAgreed === "true";
 
         if (isAgreedBoolean) {
+          chrome.storage.local.set({ accessToken, refreshToken });
           return navigate("/bookmark", { replace: true });
         }
         navigate("/agreement", { state: { accessToken, refreshToken }, replace: true });

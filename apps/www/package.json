@@ -9,18 +9,19 @@
     "lint": "pnpm eslint"
   },
   "dependencies": {
-    "3d-force-graph": "^1.76.0",
     "@tanstack/react-query": "^5.59.20",
     "next": "15.0.3",
     "react": "19.0.0-rc-66855b96-20241106",
     "react-dom": "19.0.0-rc-66855b96-20241106",
+    "three": "^0.175.0",
     "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "@repo/ui": "workspace:*",
     "@repo/types": "workspace:*",
+    "@repo/ui": "workspace:*",
     "@types/node": "^20",
     "@types/react": "^18",
-    "@types/react-dom": "^18"
+    "@types/react-dom": "^18",
+    "@types/three": "^0.175.0"
   }
 }

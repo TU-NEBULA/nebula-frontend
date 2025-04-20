@@ -1,28 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
+import { Usable, use, useState } from "react";
 
+import Graph from "@/components/bookmarks/graph";
 import GraphDetail from "@/components/bookmarks/graph/graph-detail";
-import { useGetAllStars } from "@/lib/tanstack/query/star";
-import { Spinner } from "@repo/ui";
+import { BaseResponseDTO } from "@/models";
+import { AllStarDTO } from "@/models/star";
 
-const Graph = dynamic(() => import("@/components/bookmarks/graph"), {
-  ssr: false,
-  loading: () => (
-    <div className="w-full h-screen flex justify-center items-center">
-      <Spinner theme="dark" />
-    </div>
-  ),
-});
+interface BookmarkPageProps {
+  promisedData: Usable<BaseResponseDTO<AllStarDTO>>;
+}
 
-const BookmarkPage = () => {
+const BookmarkPage = ({ promisedData }: BookmarkPageProps) => {
   const [detail, setDetail] = useState({
     open: false,
     id: "",
   });
 
-  const { data } = useGetAllStars();
+  const data = use<BaseResponseDTO<AllStarDTO>>(promisedData);
 
   const onOpen = (id: string) => {
     setDetail({

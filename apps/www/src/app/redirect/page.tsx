@@ -17,7 +17,7 @@ const RedirectPage = () => {
       const result = await setupAuth();
       if (!result.status) alert("잘못된 접근입니다.");
       userStore.setUser(result.data as TokenProps);
-      router.replace("/");
+      router.replace("/bookmarks");
     })();
   }, []);
 

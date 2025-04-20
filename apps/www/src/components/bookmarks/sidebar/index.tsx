@@ -14,37 +14,7 @@ import { useBookmarkStore } from "@/lib/zustand/bookmark";
 
 import Dropdown from "./dropdown";
 
-const categories = [
-  {
-    id: 1,
-    name: "Category 1",
-  },
-  {
-    id: 2,
-    name: "Category 2",
-  },
-  {
-    id: 3,
-    name: "Category 3",
-  },
-];
-
-const keywords = [
-  {
-    id: 1,
-    name: "Keyword 1",
-  },
-  {
-    id: 2,
-    name: "Keyword 2",
-  },
-  {
-    id: 3,
-    name: "Keyword 3",
-  },
-];
-
-const filters = [LINK_TYPE.CATEGORY, LINK_TYPE.KEYWORD];
+const filters = [LINK_TYPE.SIMILARITY, LINK_TYPE.KEYWORD];
 
 const Sidebar = () => {
   const { selectedFilter, setSelectedFilter } = useBookmarkStore();

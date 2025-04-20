@@ -12,3 +12,9 @@ export const setupAuth = async () => {
 
   return { status: true, data: { accessToken, refreshToken } };
 };
+
+export const getCookie = async (name: string) => {
+  const cookieStorage = await cookies();
+  const value = cookieStorage.get(name);
+  return value;
+};

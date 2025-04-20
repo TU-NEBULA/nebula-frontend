@@ -3,14 +3,15 @@
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-import { useUserStore } from "@/lib/zustand/user";
+import { getCookie } from "@/utils/cookies";
 
 const GetStart = () => {
   const router = useRouter();
-  const user = useUserStore((state) => state.accessToken);
 
   const onRouteBookmark = async () => {
-    if (user) return router.push("/bookmarks");
+    const token = await getCookie("accessToken");
+
+    if (token?.value) return router.push("/bookmarks");
 
     router.push("/login");
   };
@@ -24,7 +25,6 @@ const GetStart = () => {
         <p className="text-sm text-gray7">북마크 정보와 관리된 노드들을 볼 수 있는 페이지 입니다</p>
       </div>
       <div className="text-end space-y-2">
-        {/* TODO: 링크 수정 */}
         <Link
           className="text-2xl"
           href="https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ko"

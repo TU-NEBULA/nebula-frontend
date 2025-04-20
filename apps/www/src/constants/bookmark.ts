@@ -1,4 +1,4 @@
 export enum LINK_TYPE {
-  CATEGORY = "CATEGORY",
+  SIMILARITY = "SIMILARITY",
   KEYWORD = "KEYWORD",
 }

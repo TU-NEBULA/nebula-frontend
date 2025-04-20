@@ -1,9 +1,12 @@
 import { Suspense } from "react";
 
 import BookmarkPage from "@/page/bookmark-page";
+import { getAllStars } from "@/service/star";
 import { Spinner } from "@repo/ui";
 
 const Bookmarks = () => {
+  const data = getAllStars();
+
   return (
     <Suspense
       fallback={
@@ -12,7 +15,7 @@ const Bookmarks = () => {
         </div>
       }
     >
-      <BookmarkPage />
+      <BookmarkPage promisedData={data} />
     </Suspense>
   );
 };

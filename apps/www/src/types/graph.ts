@@ -26,6 +26,8 @@ export interface NodeObject extends Coords, CommonProps {
   name?: string;
   size?: number;
   importance?: boolean;
+  icon?: string | null;
+  color?: string;
 }
 
 export interface StarProps {
@@ -38,6 +40,7 @@ export interface StarProps {
   userMemo: string;
   views: number;
   keywordList: string[];
+  faviconUrl: string | null;
 }
 
 export interface LinkProps {

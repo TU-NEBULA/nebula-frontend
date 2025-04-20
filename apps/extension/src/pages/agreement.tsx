@@ -2,6 +2,7 @@ import { useState } from "react";
 
 import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { postTerm } from "@/services/term";
+import { useGetTerm } from "@/state/query/term";
 import { getBookMarks } from "@/utils/chrome";
 import { cn, RectangleButton } from "@repo/ui";
 
@@ -12,6 +13,8 @@ const Agreement = () => {
   const { state } = useLocation();
 
   const navigate = useReplaceNavigate();
+
+  const { data, isLoading } = useGetTerm(state.accessToken);
 
   const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
@@ -48,10 +51,7 @@ const Agreement = () => {
             북마크정보 수집 및 이용 동의 <span className="text-highlight">*</span>
           </p>
           <p className="font-light rounded-sm border border-gray5 p-2">
-            네뷸라 서비스는 사용자가 저장한 크롬 북마크 정보를 분석하고 시각화하여 더 나은 북마크
-            기록과 환경을 제공합니다. 이를 위해 사용자의 북마크 정보를 수집하고 활용할 수 있으며,
-            동의하신 경우에만 서비스 이용이 가능합니다. 수집된 정보로 사용자 개개인의 북마크 기록을
-            분석하고, 비슷한 관심사를 가진 다른 사용자들의 정보를 분석하여 유용한 정보를 제공합니다.
+            {isLoading ? "로딩중..." : data?.result?.map((term) => term.content).join("\n")}
           </p>
           <div className="text-description flex items-center gap-1 font-normal">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />

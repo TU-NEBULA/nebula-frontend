@@ -9,6 +9,10 @@
   color: #111;
 }
 
+.gradient-background {
+  background: linear-gradient(180deg, #111 80%, #336cec 100%);
+}
+
 .hide-scrollbar {
   ::-webkit-scrollbar {
     display: none;

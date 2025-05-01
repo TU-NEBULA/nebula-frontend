@@ -80,9 +80,9 @@ const Sidebar = () => {
   };
 
   return (
-    <aside id="sidebar" className="flex fixed left-0 h-full z-10">
+    <>
       <section
-        className="bg-white p-5 transition-all flex flex-col justify-between"
+        className="bg-white p-5 transition-all flex flex-col justify-between h-screen fixed left-0 z-10"
         style={sidebarStyle}
       >
         <div className="flex flex-col gap-5">
@@ -131,37 +131,40 @@ const Sidebar = () => {
           )}
         </div>
       </section>
-      <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
-        <legend className="">Filter</legend>
-        {filters.map((filter) => (
-          <label key={filter} className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="filter"
-              value={filter}
-              checked={bookmarkStore.selectedFilter === filter}
-              onChange={() => onSelectFilter(filter)}
-            />
-            <span className="text-text">{filter}</span>
-          </label>
-        ))}
-      </fieldset>
-      <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
-        <legend className="">Theme</legend>
-        {themes.map((theme) => (
-          <label key={theme} className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              name="theme"
-              value={theme}
-              checked={bookmarkStore.selectedTheme === theme}
-              onChange={() => onSelectTheme(theme)}
-            />
-            <span className="text-text">{theme}</span>
-          </label>
-        ))}
-      </fieldset>
-      {bookmarkStore.selectedTheme === GRAPH_THEME.GRAPH && (
+      <section
+        className="flex h-max transition-all fixed z-10"
+        style={{ left: sidebar.open ? "16rem" : "4.5rem" }}
+      >
+        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+          <legend className="">Filter</legend>
+          {filters.map((filter) => (
+            <label key={filter} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="filter"
+                value={filter}
+                checked={bookmarkStore.selectedFilter === filter}
+                onChange={() => onSelectFilter(filter)}
+              />
+              <span className="text-text">{filter}</span>
+            </label>
+          ))}
+        </fieldset>
+        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+          <legend className="">Theme</legend>
+          {themes.map((theme) => (
+            <label key={theme} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="theme"
+                value={theme}
+                checked={bookmarkStore.selectedTheme === theme}
+                onChange={() => onSelectTheme(theme)}
+              />
+              <span className="text-text">{theme}</span>
+            </label>
+          ))}
+        </fieldset>
         <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
           <legend className="">Type</legend>
           {types.map((type) => (
@@ -177,8 +180,17 @@ const Sidebar = () => {
             </label>
           ))}
         </fieldset>
-      )}
-    </aside>
+        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+          <legend className="">Color</legend>
+          <input
+            type="color"
+            value={bookmarkStore.selectedColor}
+            onChange={(e) => bookmarkStore.setSelectedColor(e.target.value)}
+            className="w-full h-8 rounded cursor-pointer"
+          />
+        </fieldset>
+      </section>
+    </>
   );
 };
 

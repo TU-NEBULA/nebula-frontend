@@ -18,7 +18,7 @@ const fixedPosition = (position: number) => (position > 0 ? 250 : -250);
 
 const Graph = ({ onOpen, data }: GraphProps) => {
   const graphRef = useRef<HTMLDivElement>(null);
-  const { selectedType } = useBookmarkStore();
+  const { selectedType, selectedColor } = useBookmarkStore();
 
   useEffect(() => {
     const loadGraph = async () => {
@@ -36,7 +36,7 @@ const Graph = ({ onOpen, data }: GraphProps) => {
         const nodes = data.starListDto.map((star) => ({
           id: star.starId,
           name: star.title,
-          color: "#a3a3a3",
+          color: selectedType === GRAPH_TYPE.COLOR ? selectedColor : "#a3a3a3",
           icon: star.faviconUrl || "/velog.png",
         }));
 
@@ -56,7 +56,6 @@ const Graph = ({ onOpen, data }: GraphProps) => {
           .linkOpacity(1)
           .nodeLabel((node: NodeObject) => node.name || "")
           .nodeOpacity(1)
-
           .nodeThreeObject((node: NodeObject) => {
             const geometry = new THREE.SphereGeometry(10, 32, 32);
 
@@ -105,15 +104,15 @@ const Graph = ({ onOpen, data }: GraphProps) => {
           graph.width(graphRef.current?.clientWidth || 0);
           graph.height(graphRef.current?.clientHeight || 0);
         });
+
+        return () => {
+          window.removeEventListener("resize", function handleRemoveResize() {});
+        };
       }
     };
 
     loadGraph();
-
-    return () => {
-      window.removeEventListener("resize", function handleRemoveResize() {});
-    };
-  }, [selectedType]);
+  }, [data, selectedType, selectedColor]);
 
   return <main ref={graphRef} className="w-full h-full" />;
 };

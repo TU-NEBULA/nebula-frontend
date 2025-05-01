@@ -7,7 +7,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="max-w-with-header mx-auto bg-gradient-to-b from-black2 from-80% to-[#336CEC]">
+    <div className="max-w-with-header mx-auto">
       <Header />
       {children}
       <Footer />

@@ -2,7 +2,10 @@
 
 import { useEffect, useRef } from "react";
 
+import { GRAPH_TYPE } from "@/constants/bookmark";
+import { useBookmarkStore } from "@/lib/zustand/bookmark";
 import { AllStarDTO } from "@/models/star";
+import { LinkProps, StarProps } from "@/types/graph";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -13,6 +16,7 @@ interface GraphProps {
 }
 
 export default function Planet({ onOpen, data }: GraphProps) {
+  const { selectedType, selectedColor } = useBookmarkStore();
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -29,36 +33,41 @@ export default function Planet({ onOpen, data }: GraphProps) {
       color: "#fff",
       borderRadius: "4px",
       display: "none",
+      whiteSpace: "nowrap",
+      fontSize: "12px",
+      zIndex: "10",
     });
     container.appendChild(tooltip);
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x111111);
-    const width = container.clientWidth;
-    const height = container.clientHeight;
+    let width = container.clientWidth;
+    let height = container.clientHeight;
     const camera = new THREE.PerspectiveCamera(60, width / height, 0.1, 1000);
     camera.position.set(0, 20, 30);
+
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.enableRotate = true;
-    controls.enableZoom = true;
-    controls.zoomSpeed = 1;
-    controls.rotateSpeed = 1;
     controls.minDistance = 5;
     controls.maxDistance = 100;
 
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const dirLight = new THREE.DirectionalLight(0xffffff, 1);
     dirLight.position.set(20, 30, 20);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 1024;
+    dirLight.shadow.mapSize.height = 1024;
     scene.add(dirLight);
 
-    const stars = data.starListDto;
-    const links = data.linkListDto.map((l) => l.linkedNodeIdList as [string, string]);
+    const stars: StarProps[] = data.starListDto;
+    const links: LinkProps[] = data.linkListDto;
     const parent: Record<string, string> = {};
     const find = (x: string): string => (parent[x] === x ? x : (parent[x] = find(parent[x])));
     const union = (a: string, b: string) => {
@@ -67,7 +76,7 @@ export default function Planet({ onOpen, data }: GraphProps) {
       if (pa !== pb) parent[pb] = pa;
     };
     stars.forEach((s) => (parent[s.starId] = s.starId));
-    links.forEach(([a, b]) => union(a, b));
+    links.forEach((l) => union(l.linkedNodeIdList[0], l.linkedNodeIdList[1]));
     const groups: Record<string, string[]> = {};
     stars.forEach((s) => {
       const r = find(s.starId);
@@ -75,26 +84,60 @@ export default function Planet({ onOpen, data }: GraphProps) {
       groups[r].push(s.starId);
     });
 
-    const maxViews = Math.max(...stars.map((s) => s.views), 1);
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let hoveredGroup: string | null = null;
+    const groupKeywords: Record<string, string[]> = {};
+    Object.keys(groups).forEach((root) => {
+      const shared = links
+        .filter(
+          (l) =>
+            groups[root].includes(l.linkedNodeIdList[0]) &&
+            groups[root].includes(l.linkedNodeIdList[1])
+        )
+        .flatMap((l) => l.sharedKeywords);
+      const uniqueShared = Array.from(new Set(shared));
+      if (uniqueShared.length > 0) {
+        groupKeywords[root] = uniqueShared;
+      } else {
+        const rep = stars.find((s) => s.starId === root);
+        groupKeywords[root] = rep && rep.keywordList.length > 0 ? [rep.keywordList[0]] : [];
+      }
+    });
 
     const orbitRadius = 5;
     const orbitSpeed = 0.005;
     const loader = new THREE.TextureLoader();
-
     const placementRange = 40;
     const centerRadius = 3;
     const minCenterDist = orbitRadius * 2 + centerRadius * 2;
     const centers: THREE.Vector3[] = [];
-    const centerMap: Record<string, THREE.Vector3> = {};
 
-    const bodies: { mesh: THREE.Mesh; angle: number; center: THREE.Vector3; groupKey: string }[] =
-      [];
+    type Body = { mesh: THREE.Mesh; angle: number; center: THREE.Vector3; star: StarProps };
+    const bodies: Body[] = [];
 
-    Object.keys(groups).forEach((root) => {
+    function makeLabel(text: string): THREE.Sprite {
+      const canvas = document.createElement("canvas");
+      const ctx = canvas.getContext("2d")!;
+      const fontSize = 48;
+      ctx.font = `${fontSize}px Arial`;
+      const widthText = ctx.measureText(text).width;
+      canvas.width = widthText;
+      canvas.height = fontSize;
+      ctx.font = `${fontSize}px Arial`;
+      ctx.fillStyle = "#ccc";
+      ctx.fillText(text, 0, fontSize * 0.8);
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.needsUpdate = true;
+      const material = new THREE.SpriteMaterial({
+        map: texture,
+        transparent: true,
+        depthTest: false,
+      });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(widthText / 30, fontSize / 30, 1);
+      sprite.renderOrder = Infinity;
+      return sprite;
+    }
+
+    Object.entries(groups).forEach(([root, members]) => {
       let cx: number,
         cz: number,
         attempts = 0;
@@ -106,72 +149,77 @@ export default function Planet({ onOpen, data }: GraphProps) {
         centers.some((c) => c.distanceTo(new THREE.Vector3(cx, 0, cz)) < minCenterDist) &&
         attempts < 100
       );
-      const cy = 0;
-      const center = new THREE.Vector3(cx, cy, cz);
+      const center = new THREE.Vector3(cx, 0, cz);
       centers.push(center);
-      centerMap[root] = center;
 
       const cgeo = new THREE.SphereGeometry(centerRadius, 32, 32);
       const cmat = new THREE.MeshStandardMaterial({
         emissive: 0xffaa00,
-        emissiveIntensity: 1.5,
-        color: 0x222222,
+        emissiveIntensity: 0.7,
+        color: 0xffaa00,
       });
-      const cm = new THREE.Mesh(cgeo, cmat);
-      cm.position.copy(center);
-      scene.add(cm);
+      const centerMesh = new THREE.Mesh(cgeo, cmat);
+      centerMesh.position.copy(center);
+      centerMesh.castShadow = true;
+      centerMesh.receiveShadow = true;
+      scene.add(centerMesh);
 
-      const rgeo = new THREE.RingGeometry(orbitRadius - 0.5, orbitRadius + 0.5, 64);
-      const rmat = new THREE.MeshBasicMaterial({
+      const kwText = (groupKeywords[root] || []).join(", ");
+      if (kwText) {
+        const label = makeLabel(kwText);
+        label.position.copy(center);
+        scene.add(label);
+      }
+
+      const ring = new THREE.RingGeometry(orbitRadius - 0.5, orbitRadius + 0.5, 64);
+      const ringMat = new THREE.MeshBasicMaterial({
         color: 0x888888,
         side: THREE.DoubleSide,
         transparent: true,
         opacity: 0.3,
       });
-      const rm = new THREE.Mesh(rgeo, rmat);
-      rm.rotation.x = Math.PI / 2;
-      rm.position.copy(center);
-      scene.add(rm);
+      const ringMesh = new THREE.Mesh(ring, ringMat);
+      ringMesh.rotation.x = Math.PI / 2;
+      ringMesh.position.copy(center);
+      scene.add(ringMesh);
 
-      groups[root].forEach((starId, j) => {
+      members.forEach((starId, j) => {
         const star = stars.find((s) => s.starId === starId)!;
-        const iconUrl = star.faviconUrl || "/velog.png";
-        const size = 0.5 + (star.views / maxViews) * 0.5;
+        const size = 0.5 + (star.views / Math.max(...stars.map((s) => s.views))) * 0.5;
         const geo = new THREE.SphereGeometry(size, 32, 32);
-        const mat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-        loader.load(
-          iconUrl,
-          (tex) => {
+
+        let mat: THREE.MeshStandardMaterial;
+        if (selectedType === GRAPH_TYPE.COLOR) {
+          mat = new THREE.MeshStandardMaterial({ color: selectedColor });
+        } else {
+          mat = new THREE.MeshStandardMaterial({ color: 0xffffff });
+          loader.load(star.faviconUrl || "/velog.png", (tex) => {
             mat.map = tex;
             mat.needsUpdate = true;
-          },
-          undefined,
-          () => {
-            loader.load("/velog.png", (t) => {
-              mat.map = t;
-              mat.needsUpdate = true;
-            });
-          }
-        );
+          });
+        }
+
         const mesh = new THREE.Mesh(geo, mat);
-        mesh.userData = { starId, groupKey: root };
-        const angle = (j / groups[root].length) * Math.PI * 2;
+        mesh.userData = { starId: star.starId, title: star.title };
+        const angle = (j / members.length) * Math.PI * 2;
         mesh.position.set(
           cx + orbitRadius * Math.cos(angle),
-          cy,
+          0,
           cz + orbitRadius * Math.sin(angle)
         );
         scene.add(mesh);
-        bodies.push({ mesh, angle, center: center.clone(), groupKey: root });
+        bodies.push({ mesh, angle, center: center.clone(), star });
       });
     });
 
-    const maxStar = stars.length > 0 ? stars.reduce((a, b) => (a.views >= b.views ? a : b)) : null;
-    const focusCenter = maxStar ? centerMap[find(maxStar.starId)] : null;
-    if (focusCenter) {
-      controls.target.copy(focusCenter);
-      camera.lookAt(focusCenter);
+    if (bodies.length) {
+      controls.target.copy(bodies[0].center);
+      camera.lookAt(bodies[0].center);
     }
+
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+    let hovered: Body | null = null;
 
     container.addEventListener("pointermove", (e) => {
       const rect = container.getBoundingClientRect();
@@ -180,48 +228,33 @@ export default function Planet({ onOpen, data }: GraphProps) {
       raycaster.setFromCamera(mouse, camera);
       const hits = raycaster.intersectObjects(bodies.map((b) => b.mesh));
       if (hits.length) {
-        const m = hits[0].object as THREE.Mesh;
-        hoveredGroup = m.userData.groupKey;
-        const s = stars.find((s) => s.starId === hoveredGroup)!;
-        tooltip.innerText = s.title;
+        const mesh = hits[0].object as THREE.Mesh;
+        hovered = bodies.find((b) => b.mesh === mesh)!;
+        const kws = hovered.star.keywordList.join(", ");
+        tooltip.innerHTML = `<strong>${hovered.star.title}</strong><br>${kws}`;
         tooltip.style.left = `${e.clientX - rect.left + 10}px`;
         tooltip.style.top = `${e.clientY - rect.top + 10}px`;
         tooltip.style.display = "block";
       } else {
-        hoveredGroup = null;
+        hovered = null;
         tooltip.style.display = "none";
       }
     });
 
     container.addEventListener("pointerdown", (e) => {
-      const rect = container.getBoundingClientRect();
-      mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const hits = raycaster.intersectObjects(
-        bodies.map((b) => b.mesh),
-        false
-      );
-      if (!hits.length) return; // 클릭 대상 아님
-
-      const mesh = hits[0].object as THREE.Mesh;
-      const starId = mesh.userData.starId;
-      if (starId) onOpen(starId);
-
-      // push camera out farther from the clicked star
+      if (!hovered) return;
+      onOpen(hovered.star.starId);
       const distance = orbitRadius * 4;
-      // position camera above and in front of the star so it remains visible
       const camOffset = new THREE.Vector3(0, distance * 0.75, distance);
-      camera.position.copy(mesh.position.clone().add(camOffset));
-      controls.target.copy(mesh.position);
-
+      camera.position.copy(hovered.mesh.position.clone().add(camOffset));
+      controls.target.copy(hovered.mesh.position);
       controls.update();
     });
 
     const animate = () => {
       requestAnimationFrame(animate);
       bodies.forEach((b) => {
-        if (b.groupKey !== hoveredGroup) {
+        if (hovered !== b) {
           b.angle += orbitSpeed;
           b.mesh.position.x = b.center.x + orbitRadius * Math.cos(b.angle);
           b.mesh.position.z = b.center.z + orbitRadius * Math.sin(b.angle);
@@ -233,18 +266,19 @@ export default function Planet({ onOpen, data }: GraphProps) {
     animate();
 
     window.addEventListener("resize", () => {
-      const w = container.clientWidth;
-      const h = container.clientHeight;
-      renderer.setSize(w, h);
-      camera.aspect = w / h;
+      width = container.clientWidth;
+      height = container.clientHeight;
+      renderer.setSize(width, height);
+      camera.aspect = width / height;
       camera.updateProjectionMatrix();
     });
 
     return () => {
       renderer.dispose();
       controls.dispose();
+      window.removeEventListener("resize", () => {});
     };
-  }, [data]);
+  }, [data, selectedType, selectedColor]);
 
   return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
 }

@@ -46,6 +46,7 @@ export interface StarProps {
 export interface LinkProps {
   linkId: string;
   sharedKeywordNum: number;
+  sharedKeywords: string[];
   similarity: number;
   linkedNodeIdList: string[];
 }

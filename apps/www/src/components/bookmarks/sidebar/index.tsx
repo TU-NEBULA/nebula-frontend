@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { Usable, use, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 import doubleArrowLeft from "@/assets/icons/double-arrow-left.svg";
 import logo from "@/assets/icons/logo.svg";
@@ -10,6 +11,8 @@ import Icon from "@/components/common/icon";
 import { GRAPH_THEME, GRAPH_TYPE, LINK_TYPE } from "@/constants/bookmark";
 import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
+import { BaseResponseDTO } from "@/models";
+import { UserInfoDTO } from "@/models/user";
 
 import Dropdown from "./dropdown";
 
@@ -17,15 +20,24 @@ const filters = [LINK_TYPE.SIMILARITY, LINK_TYPE.KEYWORD];
 const themes = [GRAPH_THEME.PLANET, GRAPH_THEME.GRAPH];
 const types = [GRAPH_TYPE.COLOR, GRAPH_TYPE.LOGO];
 
-const Sidebar = () => {
-  const bookmarkStore = useBookmarkStore();
-  const [{ data: category }, { data: keyword }] = useGetKeywordCategory();
+interface SidebarProps {
+  userInfo: Usable<BaseResponseDTO<UserInfoDTO>>;
+}
+
+const Sidebar = ({ userInfo }: SidebarProps) => {
   const [sidebar, setSidebar] = useState({
     open: false,
     categoryOpen: false,
     keywordOpen: false,
     profileOpen: false,
   });
+  const data = use(userInfo);
+
+  const router = useRouter();
+
+  const bookmarkStore = useBookmarkStore();
+
+  const [{ data: category }, { data: keyword }] = useGetKeywordCategory();
 
   const onToggleSidebar = () => {
     setSidebar((prev) => ({
@@ -79,6 +91,15 @@ const Sidebar = () => {
     width: sidebar.open ? "16rem" : "4.5rem",
   };
 
+  const onLogout = async () => {
+    const res = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
+    if (res.ok) {
+      alert("로그아웃 되었습니다.");
+      router.replace("/");
+      router.refresh();
+    }
+  };
+
   return (
     <>
       <section
@@ -122,9 +143,12 @@ const Sidebar = () => {
         </div>
         <div className="relative flex items-center gap-2">
           <button onClick={onToggleProfile} className="min-w-8 min-h-8 bg-gray5 rounded-lg" />
-          <p className="truncate">frontend.lany@gmail.com</p>
+          <p className="truncate">{data.result.email}</p>
           {sidebar.profileOpen && (
-            <button className="bg-white text-text absolute py-2 px-6 rounded-lg -right-6 translate-x-full bottom-0 flex items-center gap-2 min-w-32">
+            <button
+              onClick={onLogout}
+              className="bg-white text-text absolute py-2 px-6 rounded-lg -right-6 translate-x-full bottom-0 flex items-center gap-2 min-w-32"
+            >
               <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />
               <p>Logout</p>
             </button>

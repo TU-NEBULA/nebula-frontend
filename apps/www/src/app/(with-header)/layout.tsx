@@ -7,10 +7,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="max-w-with-header mx-auto">
-      <Header />
-      {children}
-      <Footer />
+    <div className="gradient-background">
+      <div className="max-w-with-header mx-auto">
+        <Header />
+        {children}
+        <Footer />
+      </div>
     </div>
   );
 }

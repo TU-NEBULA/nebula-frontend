@@ -15,10 +15,17 @@ interface GraphProps {
   data: AllStarDTO;
 }
 
+type Body = { mesh: THREE.Mesh; angle: number; center: THREE.Vector3; star: StarProps };
+
 export default function Planet({ onOpen, data }: GraphProps) {
   const { selectedType, selectedColor } = useBookmarkStore();
   const containerRef = useRef<HTMLDivElement>(null);
+  const bodiesRef = useRef<Body[]>([]);
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
+  const controlsRef = useRef<OrbitControls | null>(null);
 
+  // 초기 설정 및 씬 구성
   useEffect(() => {
     const container = containerRef.current!;
     container.innerHTML = "";
@@ -40,6 +47,7 @@ export default function Planet({ onOpen, data }: GraphProps) {
     container.appendChild(tooltip);
 
     const scene = new THREE.Scene();
+    sceneRef.current = scene;
     scene.background = new THREE.Color(0x111111);
     let width = container.clientWidth;
     let height = container.clientHeight;
@@ -47,12 +55,14 @@ export default function Planet({ onOpen, data }: GraphProps) {
     camera.position.set(0, 20, 30);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true });
+    rendererRef.current = renderer;
     renderer.setSize(width, height);
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
+    controlsRef.current = controls;
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.minDistance = 5;
@@ -110,7 +120,6 @@ export default function Planet({ onOpen, data }: GraphProps) {
     const minCenterDist = orbitRadius * 2 + centerRadius * 2;
     const centers: THREE.Vector3[] = [];
 
-    type Body = { mesh: THREE.Mesh; angle: number; center: THREE.Vector3; star: StarProps };
     const bodies: Body[] = [];
 
     function makeLabel(text: string): THREE.Sprite {
@@ -188,19 +197,13 @@ export default function Planet({ onOpen, data }: GraphProps) {
         const size = 0.5 + (star.views / Math.max(...stars.map((s) => s.views))) * 0.5;
         const geo = new THREE.SphereGeometry(size, 32, 32);
 
-        let mat: THREE.MeshStandardMaterial;
-        if (selectedType === GRAPH_TYPE.COLOR) {
-          mat = new THREE.MeshStandardMaterial({ color: selectedColor });
-        } else {
-          mat = new THREE.MeshStandardMaterial({ color: 0xffffff });
-          loader.load(star.faviconUrl || "/velog.png", (tex) => {
-            mat.map = tex;
-            mat.needsUpdate = true;
-          });
-        }
-
+        const mat = new THREE.MeshStandardMaterial({ color: selectedColor });
         const mesh = new THREE.Mesh(geo, mat);
-        mesh.userData = { starId: star.starId, title: star.title };
+        mesh.userData = {
+          starId: star.starId,
+          title: star.title,
+          faviconUrl: star.faviconUrl || "/velog.png",
+        };
         const angle = (j / members.length) * Math.PI * 2;
         mesh.position.set(
           cx + orbitRadius * Math.cos(angle),
@@ -211,6 +214,8 @@ export default function Planet({ onOpen, data }: GraphProps) {
         bodies.push({ mesh, angle, center: center.clone(), star });
       });
     });
+
+    bodiesRef.current = bodies;
 
     if (bodies.length) {
       controls.target.copy(bodies[0].center);
@@ -278,7 +283,29 @@ export default function Planet({ onOpen, data }: GraphProps) {
       controls.dispose();
       window.removeEventListener("resize", () => {});
     };
-  }, [data, selectedType, selectedColor]);
+  }, [data]);
+
+  // 타입과 색상 변경 시 재질만 업데이트
+  useEffect(() => {
+    if (!bodiesRef.current) return;
+
+    bodiesRef.current.forEach((body) => {
+      const material = body.mesh.material as THREE.MeshStandardMaterial;
+
+      if (selectedType === GRAPH_TYPE.COLOR) {
+        material.color.set(selectedColor);
+        material.map = null;
+      } else {
+        material.color.set("#ffffff");
+        const loader = new THREE.TextureLoader();
+        loader.load(body.mesh.userData.faviconUrl, (texture) => {
+          material.map = texture;
+          material.needsUpdate = true;
+        });
+      }
+      material.needsUpdate = true;
+    });
+  }, [selectedType, selectedColor]);
 
   return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
 }

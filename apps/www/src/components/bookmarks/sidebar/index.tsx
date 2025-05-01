@@ -7,16 +7,18 @@ import doubleArrowLeft from "@/assets/icons/double-arrow-left.svg";
 import logo from "@/assets/icons/logo.svg";
 import logout from "@/assets/icons/logout.svg";
 import Icon from "@/components/common/icon";
-import { LINK_TYPE } from "@/constants/bookmark";
+import { GRAPH_THEME, GRAPH_TYPE, LINK_TYPE } from "@/constants/bookmark";
 import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
 
 import Dropdown from "./dropdown";
 
 const filters = [LINK_TYPE.SIMILARITY, LINK_TYPE.KEYWORD];
+const themes = [GRAPH_THEME.PLANET, GRAPH_THEME.GRAPH];
+const types = [GRAPH_TYPE.COLOR, GRAPH_TYPE.LOGO];
 
 const Sidebar = () => {
-  const { selectedFilter, setSelectedFilter } = useBookmarkStore();
+  const bookmarkStore = useBookmarkStore();
   const [{ data: category }, { data: keyword }] = useGetKeywordCategory();
   const [sidebar, setSidebar] = useState({
     open: false,
@@ -62,7 +64,15 @@ const Sidebar = () => {
   };
 
   const onSelectFilter = (filter: LINK_TYPE) => {
-    setSelectedFilter(selectedFilter === filter ? "" : filter);
+    bookmarkStore.setSelectedFilter(bookmarkStore.selectedFilter === filter ? "" : filter);
+  };
+
+  const onSelectTheme = (theme: GRAPH_THEME) => {
+    bookmarkStore.setSelectedTheme(theme);
+  };
+
+  const onSelectType = (type: GRAPH_TYPE) => {
+    bookmarkStore.setSelectedType(type);
   };
 
   const sidebarStyle = {
@@ -129,13 +139,45 @@ const Sidebar = () => {
               type="checkbox"
               name="filter"
               value={filter}
-              checked={selectedFilter === filter}
+              checked={bookmarkStore.selectedFilter === filter}
               onChange={() => onSelectFilter(filter)}
             />
             <span className="text-text">{filter}</span>
           </label>
         ))}
       </fieldset>
+      <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+        <legend className="">Theme</legend>
+        {themes.map((theme) => (
+          <label key={theme} className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              name="theme"
+              value={theme}
+              checked={bookmarkStore.selectedTheme === theme}
+              onChange={() => onSelectTheme(theme)}
+            />
+            <span className="text-text">{theme}</span>
+          </label>
+        ))}
+      </fieldset>
+      {bookmarkStore.selectedTheme === GRAPH_THEME.GRAPH && (
+        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+          <legend className="">Type</legend>
+          {types.map((type) => (
+            <label key={type} className="flex items-center gap-2">
+              <input
+                type="checkbox"
+                name="type"
+                value={type}
+                checked={bookmarkStore.selectedType === type}
+                onChange={() => onSelectType(type)}
+              />
+              <span className="text-text">{type}</span>
+            </label>
+          ))}
+        </fieldset>
+      )}
     </aside>
   );
 };

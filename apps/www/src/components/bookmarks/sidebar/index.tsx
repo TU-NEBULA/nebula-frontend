@@ -13,6 +13,7 @@ import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
 import { BaseResponseDTO } from "@/models";
 import { UserInfoDTO } from "@/models/user";
+import { removeAuth } from "@/utils/cookies";
 
 import Dropdown from "./dropdown";
 
@@ -92,12 +93,10 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
   };
 
   const onLogout = async () => {
-    const res = await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    if (res.ok) {
-      alert("로그아웃 되었습니다.");
-      router.replace("/");
-      router.refresh();
-    }
+    await removeAuth();
+    alert("로그아웃 되었습니다.");
+    router.replace("/");
+    router.refresh();
   };
 
   return (

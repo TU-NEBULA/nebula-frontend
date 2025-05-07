@@ -2,15 +2,13 @@
 
 import { cookies } from "next/headers";
 
-export const setupAuth = async () => {
+export const checkAuth = async () => {
   const cookieStorage = await cookies();
   const accessToken = cookieStorage.get("accessToken")?.value;
 
-  if (!accessToken) return { status: false, data: { accessToken: null, refreshToken: null } };
+  if (!accessToken) return false;
 
-  const refreshToken = cookieStorage.get("refreshToken")?.value;
-
-  return { status: true, data: { accessToken, refreshToken } };
+  return true;
 };
 
 export const getCookie = async (name: string) => {
@@ -21,6 +19,18 @@ export const getCookie = async (name: string) => {
 
 export const removeAuth = async () => {
   const cookieStorage = await cookies();
-  cookieStorage.delete("accessToken");
-  cookieStorage.delete("refreshToken");
+  cookieStorage.delete({
+    name: "accessToken",
+    domain: ".nebula-ai.kr",
+    path: "/",
+    sameSite: "none",
+    secure: true,
+  });
+  cookieStorage.delete({
+    name: "refreshToken",
+    domain: ".nebula-ai.kr",
+    path: "/",
+    sameSite: "none",
+    secure: true,
+  });
 };

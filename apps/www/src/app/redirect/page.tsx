@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 
-import { setupAuth } from "@/utils/cookies";
+import { checkAuth } from "@/utils/cookies";
 import { Spinner } from "@repo/ui";
 
 const RedirectPage = () => {
@@ -11,8 +11,8 @@ const RedirectPage = () => {
 
   useEffect(() => {
     (async () => {
-      const result = await setupAuth();
-      if (!result.status) alert("잘못된 접근입니다.");
+      const isValidRequest = await checkAuth();
+      if (!isValidRequest) alert("잘못된 접근입니다.");
       router.replace("/bookmarks");
     })();
   }, []);

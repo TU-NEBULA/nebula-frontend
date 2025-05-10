@@ -45,16 +45,16 @@ export default async function HistoryPage({ searchParams }: HistoryPageProps) {
   });
 
   return (
-    <main className="min-h-body px-10 max-w-with-header space-y-5">
+    <main className="max-w-with-header min-h-body space-y-5 px-10">
       <SearchBar />
       <section className="space-y-2.5">
-        <h1 className="text-white text-3xl font-semibold">방문 기록</h1>
-        <div className="bg-white p-5 rounded-lg">
+        <h1 className="text-3xl font-semibold text-white">방문 기록</h1>
+        <div className="rounded-lg bg-white p-5">
           <div className="space-y-8">
             <p className="font-semibold">오늘 - {formatDate(1745136598684.041)}</p>
             <div className="space-y-5">
               {filteredDummies.map((dummy) => (
-                <div key={dummy.id} className="flex gap-2 font-medium text-xs">
+                <div key={dummy.id} className="flex gap-2 text-xs font-medium">
                   <div className="flex-1 text-gray8">{formatTime(dummy.lastVisitTime)}</div>
                   <div className="flex-[2] truncate">{dummy.title}</div>
                   <Link

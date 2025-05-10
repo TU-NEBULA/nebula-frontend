@@ -3,9 +3,9 @@ import SampleGraph from "@/components/landing/sample-graph";
 
 export default function LandingPage() {
   return (
-    <main className="text-white px-10">
-      <section className="flex md:flex-row flex-col items-center justify-between py-28 ">
-        <div className="flex flex-col gap-20 flex-1">
+    <main className="px-10 text-white">
+      <section className="flex flex-col items-center justify-between py-28 md:flex-row">
+        <div className="flex flex-1 flex-col gap-20">
           <h1 className="md:text-landing-title text-landing-sub-title">Nebula</h1>
           <div className="text-xl">
             {/* TODO: 랜딩 페이지 문구 수정 */}

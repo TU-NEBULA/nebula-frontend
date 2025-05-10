@@ -4,7 +4,7 @@ import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { postTerm } from "@/services/term";
 import { useGetTerm } from "@/state/query/term";
 import { getBookMarks } from "@/utils/chrome";
-import { cn, RectangleButton } from "@repo/ui";
+import { RectangleButton } from "@repo/ui";
 
 import { useLocation } from "react-router-dom";
 
@@ -36,7 +36,7 @@ const Agreement = () => {
   };
 
   return (
-    <main className="h-full gap-44 flex flex-col justify-center">
+    <main className="flex h-full flex-col justify-center gap-44">
       <section className="space-y-7">
         <div className="space-y-4">
           <h1 className="text-notification">
@@ -50,20 +50,16 @@ const Agreement = () => {
           <p className="text-body">
             북마크정보 수집 및 이용 동의 <span className="text-highlight">*</span>
           </p>
-          <p className="font-light rounded-sm border border-gray5 p-2">
+          <p className="rounded-sm border border-gray5 p-2 font-light">
             {isLoading ? "로딩중..." : data?.result?.map((term) => term.content).join("\n")}
           </p>
-          <div className="text-description flex items-center gap-1 font-normal">
+          <div className="flex items-center gap-1 text-description font-normal">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />
             <label htmlFor="agreement">(필수) 북마크 정보 수집 및 이용에 동의합니다.</label>
           </div>
         </div>
       </section>
-      <RectangleButton
-        className={cn("text-white transition-colors", checked && "bg-black2")}
-        onClick={onClickGetBookmarks}
-        disabled={!checked}
-      >
+      <RectangleButton onClick={onClickGetBookmarks} disabled={!checked}>
         불러오기
       </RectangleButton>
     </main>

@@ -158,10 +158,10 @@ export default function SampleGraph() {
     <section className="py-28">
       <div
         ref={containerRef}
-        className="p-12 border border-gray7 flex flex-col rounded-lg gap-12 md:flex-row"
+        className="flex flex-col gap-12 rounded-lg border border-gray7 p-12 md:flex-row"
       >
-        <div className="space-y-5 flex-1">
-          <h2 className="lg:text-landing-sub-title md:text-5xl text-4xl md:leading-none">
+        <div className="flex-1 space-y-5">
+          <h2 className="lg:text-landing-sub-title text-4xl md:text-5xl md:leading-none">
             북마크를
             <br /> 노드로 관리
           </h2>
@@ -173,7 +173,7 @@ export default function SampleGraph() {
         <div
           ref={graphRef}
           id="sample-graph"
-          className="border border-gray7 h-graph flex-1 rounded-sm block"
+          className="h-graph block flex-1 rounded-sm border border-gray7"
         />
       </div>
     </section>

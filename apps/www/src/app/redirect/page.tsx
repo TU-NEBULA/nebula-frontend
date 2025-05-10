@@ -18,7 +18,7 @@ const RedirectPage = () => {
   }, []);
 
   return (
-    <main className="flex justify-center items-center h-screen overflow-hidden">
+    <main className="flex h-screen items-center justify-center overflow-hidden">
       <Spinner theme="dark" />
     </main>
   );

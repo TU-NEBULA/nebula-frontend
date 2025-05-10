@@ -24,11 +24,11 @@ const Home = () => {
   }, []);
 
   return (
-    <main className="h-full gap-80 flex flex-col justify-center">
+    <main className="flex h-full flex-col justify-center gap-80">
       <section className="space-y-4">
         <div className="text-notification">
           <p>검색 기록 최적화</p>
-          <div className="gap-2 flex items-center">
+          <div className="flex items-center gap-2">
             <p>네뷸라</p>
             <Logo />
           </div>
@@ -36,7 +36,7 @@ const Home = () => {
         <p className="text-black2">크롬 익스텐션 실행을 위해 로그인 해주세요.</p>
       </section>
       <section className="space-y-7">
-        <div className="gap-2 flex flex-col">
+        <div className="flex flex-col gap-2">
           <SocialLoginButton
             disabled={isLoading}
             social="kakao"
@@ -48,7 +48,7 @@ const Home = () => {
             onClick={() => onClickOauth("google")}
           />
         </div>
-        <div className="text-description gap-3 flex items-center justify-center text-gray7">
+        <div className="flex items-center justify-center gap-3 text-description text-gray7">
           <button>이용약관</button>
           <div className="h-3 w-px bg-gray5" />
           <button>개인정보처리방침</button>

@@ -18,7 +18,7 @@ interface HistoryListProps {
 export default function HistoryList({ q, page }: HistoryListProps) {
   const router = useRouter();
 
-  const { data, isLoading } = useGetHistories(page);
+  const { data, isLoading, error } = useGetHistories(page);
 
   const grouped = useMemo(
     () =>
@@ -61,6 +61,24 @@ export default function HistoryList({ q, page }: HistoryListProps) {
     );
   }
 
+  if (error) {
+    return (
+      <div className="flex flex-1 items-center justify-center rounded-lg bg-white">
+        <p className="text-highlight">
+          데이터를 불러오는 중 오류가 발생했습니다. 다시 시도해주세요.
+        </p>
+      </div>
+    );
+  }
+
+  if (!data?.result?.content?.length) {
+    return (
+      <div className="flex flex-1 items-center justify-center rounded-lg bg-white">
+        <p className="text-white">결과가 없습니다.</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="space-y-5">
@@ -85,7 +103,7 @@ export default function HistoryList({ q, page }: HistoryListProps) {
         <button
           onClick={() => {
             if (!prevDisabled) {
-              router.push(`?page=${startPage - 1}${q ? `&q=${q}` : ""}`);
+              router.push(`?page=${startPage - 1}${q ? `&q=${encodeURIComponent(q)}` : ""}`);
             }
           }}
           disabled={prevDisabled}
@@ -116,7 +134,7 @@ export default function HistoryList({ q, page }: HistoryListProps) {
         <button
           onClick={() => {
             if (!nextDisabled) {
-              router.push(`?page=${endPage + 1}${q ? `&q=${q}` : ""}`);
+              router.push(`?page=${endPage + 1}${q ? `&q=${encodeURIComponent(q)}` : ""}`);
             }
           }}
           disabled={nextDisabled}

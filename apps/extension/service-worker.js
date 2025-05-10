@@ -40,16 +40,35 @@ chrome.alarms.onAlarm.addListener(async (alarm) => {
               return rest;
             });
 
-            try {
-              await fetch(`${baseUrl}/histories`, {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                },
-                body: JSON.stringify(sendData),
-              });
-            } catch (e) {
-              console.error("Failed to send chunk", e);
+            let retryCount = 0;
+            const maxRetries = 3;
+            let success = false;
+
+            while (!success && retryCount < maxRetries) {
+              try {
+                await fetch(`${baseUrl}/histories`, {
+                  method: "POST",
+                  headers: {
+                    "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(sendData),
+                  credentials: "include",
+                });
+                success = true;
+              } catch (e) {
+                console.error("Failed to send chunk", e);
+                console.error(`Failed to send chunk (attempt ${retryCount + 1}/${maxRetries})`, e);
+                retryCount++;
+                if (retryCount < maxRetries) {
+                  await new Promise((resolve) =>
+                    setTimeout(resolve, 1000 * Math.pow(2, retryCount))
+                  );
+                }
+              }
+
+              if (!success) {
+                console.error("Failed to send chunk after multiple attempts");
+              }
             }
           }
         }

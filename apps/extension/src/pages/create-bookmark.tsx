@@ -19,6 +19,10 @@ const DEFAULT_BOOKMARK = {
   summary: "",
   memo: "",
   keyword: "",
+  keywords: [],
+  title: "",
+  thumbnailUrl: "",
+  siteUrl: "",
 };
 
 const CreateBookmark = () => {

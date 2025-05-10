@@ -3,8 +3,14 @@ import { HistoryDTO } from "@/models/history";
 
 import api from "./api";
 
-export const getHistories = async (
-  page: string
-): Promise<BaseResponseDTO<PaginationResponseDTO<HistoryDTO>>> => {
-  return await api.get(`/histories?page=${page}&size=10`);
+export const getHistories = async ({
+  page,
+  keyword,
+}: {
+  page: string;
+  keyword: string;
+}): Promise<BaseResponseDTO<PaginationResponseDTO<HistoryDTO>>> => {
+  return await api.get(
+    `/histories/search?page=${page}&size=10&keyword=${encodeURIComponent(keyword)}`
+  );
 };

@@ -7,11 +7,11 @@ interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement
 function Textarea({ id, label, className, ...restProps }: TextareaProps) {
   return (
     <div className="space-y-1">
-      <h2 className="text-text text-gray6">{label}</h2>
+      <h2 className="text-sm text-gray6">{label}</h2>
       <textarea
         id={id}
         className={cn(
-          "resize-none w-full bg-gray1 bg-opacity-50 p-2 text-text min-h-24 rounded-sm read-only:cursor-default",
+          "min-h-24 w-full resize-none rounded-sm bg-gray1 bg-opacity-50 p-2 text-xs read-only:cursor-default",
           className
         )}
         {...restProps}

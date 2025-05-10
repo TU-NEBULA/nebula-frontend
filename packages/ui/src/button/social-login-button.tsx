@@ -72,10 +72,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 
   return (
     <RectangleButton
-      className={cn(
-        "text-body flex justify-center items-center gap-2 border disabled:bg-opacity-40",
-        socials[social].style
-      )}
+      className={cn("text-body flex items-center justify-center gap-2", socials[social].style)}
       {...restProps}
     >
       {socials[social].logo()}

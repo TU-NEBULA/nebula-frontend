@@ -1,16 +1,23 @@
 import { cn } from "../../utils/cn";
 
-const RectangleButton = ({
-  children,
-  className,
-  disabled,
-  ...restProps
-}: React.ButtonHTMLAttributes<HTMLButtonElement>) => {
+const theme = {
+  default: "bg-black2 text-white border-black2",
+  outline: "bg-white text-black2 border-black2",
+  warning: "bg-highlight text-white border-highlight",
+};
+
+interface RectangleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  variation?: keyof typeof theme;
+}
+
+const RectangleButton = (props: RectangleButtonProps) => {
+  const { children, className, variation = "default", ...restProps } = props;
+
   return (
     <button
       className={cn(
-        "rounded-sm py-2 font-medium hover:bg-opacity-90 active:bg-opacity-80",
-        disabled && "bg-gray5 cursor-default hover:bg-opacity-100 active:bg-opacity-100",
+        "flex-1 rounded-sm border py-2 font-medium transition-colors disabled:border-gray5 disabled:bg-gray5 disabled:text-white",
+        theme[variation],
         className
       )}
       {...restProps}

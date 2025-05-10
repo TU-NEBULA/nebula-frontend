@@ -137,7 +137,7 @@ const Graph = ({ onOpen, data }: GraphProps) => {
     });
   }, [selectedType, selectedColor]);
 
-  return <main ref={graphRef} className="w-full h-full" />;
+  return <main ref={graphRef} className="h-full w-full" />;
 };
 
 export default Graph;

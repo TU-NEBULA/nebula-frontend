@@ -2,7 +2,7 @@ import SocialLogin from "@/components/login/social-login";
 
 const LoginPage = () => {
   return (
-    <main className="h-screen gap-80 flex flex-col justify-center mx-auto min-w-login max-w-sidebar px-10">
+    <main className="min-w-login mx-auto flex h-screen max-w-sidebar flex-col justify-center gap-80 px-10">
       <section className="space-y-4">
         <div className="text-notification text-white">
           <p>검색 기록 최적화</p>
@@ -12,7 +12,7 @@ const LoginPage = () => {
       </section>
       <section className="space-y-7">
         <SocialLogin />
-        <div className="text-description gap-3 flex items-center justify-center text-gray7">
+        <div className="flex items-center justify-center gap-3 text-description text-gray7">
           <button>이용약관</button>
           <div className="h-3 w-px bg-gray5" />
           <button>개인정보처리방침</button>

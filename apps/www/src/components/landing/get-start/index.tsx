@@ -17,14 +17,14 @@ const GetStart = () => {
   };
 
   return (
-    <div className="space-y-7 md:block hidden flex-1">
-      <div className="text-end space-y-2">
+    <div className="hidden flex-1 space-y-7 md:block">
+      <div className="space-y-2 text-end">
         <button onClick={onRouteBookmark} className="text-2xl">
           시작페이지
         </button>
         <p className="text-sm text-gray7">북마크 정보와 관리된 노드들을 볼 수 있는 페이지 입니다</p>
       </div>
-      <div className="text-end space-y-2">
+      <div className="space-y-2 text-end">
         <Link
           className="text-2xl"
           href="https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ko"

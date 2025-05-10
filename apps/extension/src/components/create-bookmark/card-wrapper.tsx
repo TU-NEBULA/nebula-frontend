@@ -44,12 +44,12 @@ export default function CardWrapper({
             alt={`${siteUrl} thumbnail`}
             width={64}
             height={64}
-            className="aspect-square object-cover max-w-16 max-h-16 rounded-md"
+            className="aspect-square max-h-16 max-w-16 rounded-md object-cover"
           />
         ) : null
       }
       Link={
-        <Link target="_blank" to={siteUrl} className="text-text text-gray6 truncate">
+        <Link target="_blank" to={siteUrl} className="truncate text-text text-gray6">
           {siteUrl || "siteUrl"}
         </Link>
       }

@@ -20,7 +20,7 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
   return (
     <section className="flex flex-col overflow-hidden">
       <button
-        className="flex items-center justify-between w-full overflow-hidden px-1"
+        className="flex w-full items-center justify-between overflow-hidden px-1"
         onClick={onClick}
       >
         <div className="flex items-center gap-2">
@@ -37,12 +37,12 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
         />
       </button>
       {open && (
-        <ul className="ml-8 my-2 border-l border-gray2 text-text">
+        <ul className="my-2 ml-8 border-l border-gray2 text-text">
           {items.map((item) => (
             <li key={typeof item === "string" ? item : item.id}>
               <button
                 onClick={() => onClickItem(typeof item === "string" ? item : item.id)}
-                className="py-2 px-3 w-full text-start transition-colors hover:bg-gray1 active:bg-opacity-80"
+                className="w-full px-3 py-2 text-start transition-colors hover:bg-gray1 active:bg-opacity-80"
               >
                 {typeof item === "string" ? item : item.name}
               </button>

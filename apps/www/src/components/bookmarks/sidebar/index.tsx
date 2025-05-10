@@ -102,13 +102,13 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
   return (
     <>
       <section
-        className="bg-white p-5 transition-all flex flex-col justify-between h-screen fixed left-0 z-10"
+        className="fixed left-0 z-10 flex h-screen flex-col justify-between bg-white p-5 transition-all"
         style={sidebarStyle}
       >
         <div className="flex flex-col gap-5">
           <div className="flex justify-between overflow-hidden">
-            <button onClick={onToggleSidebar} className="flex items-center gap-2 ">
-              <div className="bg-black2 rounded-lg w-8 h-8 flex justify-center items-center">
+            <button onClick={onToggleSidebar} className="flex items-center gap-2">
+              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black2">
                 <Image src={logo} alt="nebula 로고" width={24} height={12} draggable={false} />
               </div>
               <p>Nebula</p>
@@ -141,12 +141,12 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
           />
         </div>
         <div className="relative flex items-center gap-2">
-          <button onClick={onToggleProfile} className="min-w-8 min-h-8 bg-gray5 rounded-lg" />
+          <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />
           <p className="truncate">{data.result.email}</p>
           {sidebar.profileOpen && (
             <button
               onClick={onLogout}
-              className="bg-white text-text absolute py-2 px-6 rounded-lg -right-6 translate-x-full bottom-0 flex items-center gap-2 min-w-32"
+              className="absolute -right-6 bottom-0 flex min-w-32 translate-x-full items-center gap-2 rounded-lg bg-white px-6 py-2 text-text"
             >
               <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />
               <p>Logout</p>
@@ -155,10 +155,10 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
         </div>
       </section>
       <section
-        className="flex h-max transition-all fixed z-10"
+        className="fixed z-10 flex h-max transition-all"
         style={{ left: sidebar.open ? "16rem" : "4.5rem" }}
       >
-        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+        <fieldset className="m-3 flex h-max flex-col gap-3 p-2 text-white">
           <legend className="">Filter</legend>
           {filters.map((filter) => (
             <label key={filter} className="flex items-center gap-2">
@@ -173,7 +173,7 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
             </label>
           ))}
         </fieldset>
-        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+        <fieldset className="m-3 flex h-max flex-col gap-3 p-2 text-white">
           <legend className="">Theme</legend>
           {themes.map((theme) => (
             <label key={theme} className="flex items-center gap-2">
@@ -188,7 +188,7 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
             </label>
           ))}
         </fieldset>
-        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+        <fieldset className="m-3 flex h-max flex-col gap-3 p-2 text-white">
           <legend className="">Type</legend>
           {types.map((type) => (
             <label key={type} className="flex items-center gap-2">
@@ -203,13 +203,13 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
             </label>
           ))}
         </fieldset>
-        <fieldset className="text-white flex flex-col gap-3 m-3 h-max p-2">
+        <fieldset className="m-3 flex h-max flex-col gap-3 p-2 text-white">
           <legend className="">Color</legend>
           <input
             type="color"
             value={bookmarkStore.selectedColor}
             onChange={(e) => bookmarkStore.setSelectedColor(e.target.value)}
-            className="w-full h-8 rounded cursor-pointer"
+            className="h-8 w-full cursor-pointer rounded"
           />
         </fieldset>
       </section>

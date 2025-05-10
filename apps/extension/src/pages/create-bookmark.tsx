@@ -8,7 +8,7 @@ import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar } from "@/state/mutation/star";
 import { useGetKeywords } from "@/state/query/keyword";
 import { CategoryListProps } from "@/types/category";
-import { BookmarkProps } from "@repo/types";
+import { CompleteSummarizeStarProps } from "@/types/star";
 import { Keyword, RectangleButton, Textarea } from "@repo/ui";
 
 import { Navigate, useLocation } from "react-router-dom";
@@ -16,15 +16,22 @@ import { Navigate, useLocation } from "react-router-dom";
 const DEFAULT_BOOKMARK = {
   categoryName: "",
   categories: [],
-  summary: "",
-  memo: "",
+  summaryAI: "",
+  userMemo: "",
   keyword: "",
 };
+
+interface StateProps extends CompleteSummarizeStarProps {
+  categoryName: string;
+  categories: CategoryListProps[];
+  keyword: string;
+  keywords: string[];
+}
 
 const CreateBookmark = () => {
   const { state } = useLocation();
 
-  const [bookmark, setBookmark] = useState<BookmarkProps>(Object.assign(DEFAULT_BOOKMARK, state));
+  const [bookmark, setBookmark] = useState<StateProps>(Object.assign(DEFAULT_BOOKMARK, state));
 
   const { mutateAsync } = useCompleteCreateStar();
   const { mutateAsync: mutateAsyncCategory, isPending } = useCreateCategory();
@@ -86,19 +93,13 @@ const CreateBookmark = () => {
     if (!categoryName) {
       return;
     }
+
     const body = {
-      thumbnailUrl: state.thumbnailUrl,
-      summaryAI: bookmark.summary,
-      userMemo: bookmark.memo,
-      categoryName,
+      ...bookmark,
       keywordList: bookmark.keywords,
-      faviconUrl: state.faviconUrl,
     };
 
-    await mutateAsync({
-      starId: state.starId,
-      body,
-    });
+    await mutateAsync(body);
   };
 
   return (
@@ -126,16 +127,16 @@ const CreateBookmark = () => {
         />
         <section>
           <Textarea
-            id="summary"
+            id="summaryAI"
             label="요약"
-            value={bookmark.summary}
+            value={bookmark.summaryAI}
             onChange={onChangeText}
             placeholder="북마크에 대한 요약을 작성할 수 있어요."
           />
           <Textarea
-            id="memo"
+            id="userMemo"
             label="메모"
-            value={bookmark.memo}
+            value={bookmark.userMemo}
             onChange={onChangeText}
             placeholder="북마크에 대한 메모를 작성할 수 있어요."
           />

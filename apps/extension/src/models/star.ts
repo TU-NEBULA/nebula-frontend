@@ -1,9 +1,10 @@
 export interface SummarizeStarDTO {
-  starId: string;
   title: string;
   siteUrl: string;
   thumbnailUrl: string;
+  faviconUrl: string;
   keywords: string[];
+  s3key: string;
 }
 
 export interface CompleteSummarizeStarDTO {

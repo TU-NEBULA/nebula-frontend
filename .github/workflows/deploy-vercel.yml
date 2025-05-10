@@ -25,7 +25,7 @@ jobs:
       - name: Link Vercel Project
         run: |
           npx vercel link --yes \
-            --token "$VERCEL_TOKEN" \
+            --token "$VERCEL_TOKEN" \        # ← 토큰 플래그 추가
             --scope "$VERCEL_ORG_ID" \
             --project "$VERCEL_PROJECT_ID"
 
@@ -72,9 +72,12 @@ jobs:
 
           # 3) 에러 키워드 감지 → 같은 URL에 대해 Redeploy
           if echo "$DEPLOY_LOG" | grep -q 'Error!'; then
-            echo "❗️ 초기 배포 실패, 동일 URL에 대해 재배포 실행: $DEPLOY_URL"
+            echo "❗️ 초기 배포 실패 — 재배포: $DEPLOY_URL"
             npx vercel redeploy "$DEPLOY_URL" \
               --token "$VERCEL_TOKEN" \
-              --confirm
-            # 만약 두 번째도 실패 시 자동으로 에러 코드 반환
+              --scope "$VERCEL_ORG_ID"
+            if [ $? -ne 0 ]; then
+              echo "::error::Redeploy도 실패했습니다!"
+              exit 1
+            fi
           fi

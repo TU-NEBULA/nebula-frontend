@@ -59,3 +59,15 @@ jobs:
               exit 1
             fi
           fi
+
+          # 2) URL 파싱 (vercel CLI는 실패해도 URL을 먼저 출력합니다)
+          DEPLOY_URL=$(echo "$DEPLOY_LOG" | grep -Eo 'https?://[a-zA-Z0-9.-]+\.vercel\.app' | head -n1)
+
+          # 3) 에러 키워드 감지 → 같은 URL에 대해 Redeploy
+          if echo "$DEPLOY_LOG" | grep -q 'Error!'; then
+            echo "❗️ 초기 배포 실패, 동일 URL에 대해 재배포 실행: $DEPLOY_URL"
+            npx vercel redeploy "$DEPLOY_URL" \
+              --token "$VERCEL_TOKEN" \
+              --confirm
+            # 만약 두 번째도 실패 시 자동으로 에러 코드 반환
+          fi

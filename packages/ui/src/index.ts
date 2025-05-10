@@ -9,3 +9,4 @@ export { default as Modal } from "./modal";
 export { cn } from "../utils/cn";
 
 export { useOutsideClick } from "../hooks/use-outside-click";
+export { useDebounce } from "../hooks/use-debounce";

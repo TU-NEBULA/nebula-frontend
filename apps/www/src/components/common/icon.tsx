@@ -33,6 +33,38 @@ const Icon = {
       />
     </svg>
   ),
+  arrowRight: ({ size = 24, fill = "#111" }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M9.25977 19L15.1161 13.4519C15.9488 12.663 15.9488 11.3369 15.1161 10.5481L9.25977 4.99998"
+        stroke={fill}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+  arrowLeft: ({ size = 24, fill = "#111" }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M15.7402 4.99998L9.8839 10.5481C9.0512 11.337 9.0512 12.6631 9.8839 13.4519L15.7402 19"
+        stroke={fill}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
 };
 
 export default Icon;

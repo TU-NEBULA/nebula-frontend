@@ -4,3 +4,9 @@ export interface BaseResponseDTO<T> {
   code: string;
   result: T;
 }
+
+export interface PaginationResponseDTO<T> {
+  content: T[];
+  maxPage: number;
+  hasNext: boolean;
+}

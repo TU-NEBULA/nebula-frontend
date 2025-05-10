@@ -1,7 +1,7 @@
 import { BaseResponseDTO } from "@/models";
 
-import { api } from "./api";
+import { apiV1 } from "../apis/api-v1";
 
 export const getKeywords = async (): Promise<BaseResponseDTO<string[]>> => {
-  return (await api.get("/keywords")).data;
+  return (await apiV1.get("/keywords")).data;
 };

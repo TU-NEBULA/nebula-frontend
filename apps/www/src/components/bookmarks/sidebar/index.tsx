@@ -138,6 +138,19 @@ const Sidebar = () => {
             />
           </Suspense>
         </div>
+        <div className="relative flex items-center gap-2">
+          <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />
+          <p className="truncate">{data?.result?.email}</p>
+          {sidebar.profileOpen && (
+            <button
+              onClick={onLogout}
+              className="absolute -right-6 bottom-0 flex min-w-32 translate-x-full items-center gap-2 rounded-lg bg-white px-6 py-2 text-text"
+            >
+              <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />
+              <p>Logout</p>
+            </button>
+          )}
+        </div>
         <Suspense fallback={<div>Loading...</div>}>
           <div className="relative flex items-center gap-2">
             <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />

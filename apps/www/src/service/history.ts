@@ -10,5 +10,7 @@ export const getHistories = async ({
   page: string;
   keyword: string;
 }): Promise<BaseResponseDTO<PaginationResponseDTO<HistoryDTO>>> => {
-  return await api.get(`/histories/search?page=${page}&size=10&keyword=${keyword}`);
+  return await api.get(
+    `/histories/search?page=${page}&size=10&keyword=${encodeURIComponent(keyword)}`
+  );
 };

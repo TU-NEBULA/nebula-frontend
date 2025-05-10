@@ -47,17 +47,17 @@ const Bookmark = () => {
     });
   };
 
-  useEffect(() => {
-    updateCurrentTab(setCurrentTab);
-    chrome.tabs.onActivated.addListener(() => {
-      updateCurrentTab(setCurrentTab);
-    });
-    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
-      if (changeInfo.status === "complete") {
-        updateCurrentTab(setCurrentTab);
-      }
-    });
-  }, []);
+  // useEffect(() => {
+  //   updateCurrentTab(setCurrentTab);
+  //   chrome.tabs.onActivated.addListener(() => {
+  //     updateCurrentTab(setCurrentTab);
+  //   });
+  //   chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+  //     if (changeInfo.status === "complete") {
+  //       updateCurrentTab(setCurrentTab);
+  //     }
+  //   });
+  // }, []);
 
   return (
     <Loading title="페이지를 요약하고 있어요!">

@@ -2,13 +2,7 @@ type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-const customFetch = async (
-  url: string,
-  method: Method,
-  _body?: unknown,
-  options?: RequestInit,
-  isRetry?: boolean
-) => {
+const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
   let body: BodyInit | undefined;
   if (_body) {
     body = _body instanceof FormData ? _body : JSON.stringify(_body);
@@ -28,19 +22,19 @@ const customFetch = async (
       headers,
     });
 
-    if (res.status === 401 && !isRetry) {
-      const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include",
-      });
-      if (refreshResponse.ok) {
-        const res = await refreshResponse.json();
-        console.log("refresh response", res);
-      }
-    }
+    // if (res.status === 401 && !isRetry) {
+    //   const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     credentials: "include",
+    //   });
+    //   if (refreshResponse.ok) {
+    //     const res = await refreshResponse.json();
+    //     console.log("refresh response", res);
+    //   }
+    // }
 
     if (!res.ok) {
       const errorText = await res.text();

@@ -142,7 +142,7 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
         </div>
         <div className="relative flex items-center gap-2">
           <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />
-          <p className="truncate">{data.result.email}</p>
+          <p className="truncate">{data?.result?.email}</p>
           {sidebar.profileOpen && (
             <button
               onClick={onLogout}

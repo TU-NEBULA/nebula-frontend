@@ -11,7 +11,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 }) => {
   const socials = {
     kakao: {
-      style: "bg-kakao border-kakao",
+      style: "bg-kakao border-kakao hover:bg-kakao active:bg-kakao",
       name: "카카오",
       logo: () => (
         <svg
@@ -31,7 +31,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       ),
     },
     google: {
-      style: "bg-white border-black3",
+      style: "bg-white border-black3 hover:white active:white",
       name: "Google",
       logo: () => (
         <svg

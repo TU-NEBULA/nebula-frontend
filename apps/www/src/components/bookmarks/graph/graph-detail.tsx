@@ -62,6 +62,14 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
     await createCategory(category);
   };
 
+  const onUpdateKeyword = (keyword: string) => {
+    setEdit((prev) => ({
+      ...prev,
+      keyword: "",
+      keywordList: [...(prev.keywordList || []), keyword],
+    }));
+  };
+
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && edit.activated) {
       const { value } = e.target as HTMLInputElement;
@@ -70,11 +78,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
         (starData?.result?.keywordList.length as number) < 3 &&
         !e.nativeEvent.isComposing
       ) {
-        setEdit((prev) => ({
-          ...prev,
-          keyword: "",
-          keywordList: [...(prev.keywordList || []), value],
-        }));
+        onUpdateKeyword(value);
         e.currentTarget.blur();
       }
     }
@@ -289,9 +293,11 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 keywords={edit.activated ? edit.keywordList || [] : starData?.result?.keywordList}
                 value={edit.activated ? edit.keyword : ""}
                 readOnly={!edit.activated}
+                keywordList={[]}
                 onChange={onChangeText}
                 onDeleteKeyword={onDeleteKeyword}
                 onKeyDown={onEnterKeyword}
+                onUpdateKeyword={onUpdateKeyword}
               />
             </section>
             <button

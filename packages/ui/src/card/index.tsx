@@ -90,7 +90,7 @@ const Card = ({
           {Link}
           <div ref={dropdownRef}>
             <button onClick={onToggle} className="mt-2 flex items-center gap-2 py-0.5">
-              <p className="text-black3 flex-1 truncate text-start text-title">
+              <p className="flex-1 truncate text-start text-title text-black3">
                 {categoryName || "카테고리"}
               </p>
               {editEnabled && (

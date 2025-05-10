@@ -6,6 +6,7 @@ import CardWrapper from "@/components/create-bookmark/card-wrapper";
 import Loading from "@/components/loading";
 import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar } from "@/state/mutation/star";
+import { useGetKeywords } from "@/state/query/keyword";
 import { CategoryListProps } from "@/types/category";
 import { BookmarkProps } from "@repo/types";
 import { Keyword, RectangleButton, Textarea } from "@repo/ui";
@@ -18,10 +19,6 @@ const DEFAULT_BOOKMARK = {
   summary: "",
   memo: "",
   keyword: "",
-  keywords: [],
-  title: "",
-  thumbnailUrl: "",
-  siteUrl: "",
 };
 
 const CreateBookmark = () => {
@@ -31,6 +28,8 @@ const CreateBookmark = () => {
 
   const { mutateAsync } = useCompleteCreateStar();
   const { mutateAsync: mutateAsyncCategory, isPending } = useCreateCategory();
+
+  const { data: keywords } = useGetKeywords();
 
   if (!state) {
     return <Navigate to="/bad-request" replace />;
@@ -58,16 +57,19 @@ const CreateBookmark = () => {
     await mutateAsyncCategory(category);
   };
 
+  const onUpdateKeyword = (keyword: string) => {
+    setBookmark((prev) => ({
+      ...prev,
+      keyword: "",
+      keywords: [...prev.keywords, keyword],
+    }));
+  };
+
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
       const { value } = e.target as HTMLInputElement;
-      if (value && bookmark.keywords.length < 3 && !e.nativeEvent.isComposing) {
-        setBookmark((prev) => ({
-          ...prev,
-          keyword: "",
-          keywords: [...prev.keywords, value],
-        }));
-        e.currentTarget.blur();
+      if (value && bookmark.keywords.length < 3) {
+        onUpdateKeyword(value);
       }
     }
   };
@@ -108,7 +110,7 @@ const CreateBookmark = () => {
           </div>
           <button className="flex items-center gap-1">
             <AISummary />
-            <p className="text-text font-semibold">Nebula AI</p>
+            <p className="text-xs font-semibold">Nebula AI</p>
           </button>
         </header>
         <CardWrapper
@@ -140,9 +142,11 @@ const CreateBookmark = () => {
             id="keyword"
             keywords={bookmark.keywords}
             value={bookmark.keyword}
+            keywordList={keywords?.result || []}
             onChange={onChangeText}
             onDeleteKeyword={onDeleteKeyword}
             onKeyDown={onEnterKeyword}
+            onUpdateKeyword={onUpdateKeyword}
           />
         </section>
         <section className="flex gap-3">

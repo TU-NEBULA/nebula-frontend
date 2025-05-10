@@ -76,8 +76,8 @@ export default function Planet({ onOpen, data }: GraphProps) {
     dirLight.shadow.mapSize.height = 1024;
     scene.add(dirLight);
 
-    const stars: StarProps[] = data.starListDto;
-    const links: LinkProps[] = data.linkListDto;
+    const stars: StarProps[] = data.starListDto || [];
+    const links: LinkProps[] = data.linkListDto || [];
     const parent: Record<string, string> = {};
     const find = (x: string): string => (parent[x] === x ? x : (parent[x] = find(parent[x])));
     const union = (a: string, b: string) => {

@@ -5,22 +5,22 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-export default function SampleGraph() {
-  const data = {
-    starListDto: [
-      { starId: "1", views: 10 },
-      { starId: "2", views: 5 },
-      { starId: "3", views: 8 },
-      { starId: "4", views: 2 },
-      { starId: "5", views: 15 },
-    ],
-    linkListDto: [
-      { linkedNodeIdList: ["1", "2"] },
-      { linkedNodeIdList: ["1", "3"] },
-      { linkedNodeIdList: ["1", "4"] },
-    ],
-  };
+const data = {
+  starListDto: [
+    { starId: "1", views: 10 },
+    { starId: "2", views: 5 },
+    { starId: "3", views: 8 },
+    { starId: "4", views: 2 },
+    { starId: "5", views: 15 },
+  ],
+  linkListDto: [
+    { linkedNodeIdList: ["1", "2"] },
+    { linkedNodeIdList: ["1", "3"] },
+    { linkedNodeIdList: ["1", "4"] },
+  ],
+};
 
+export default function SampleGraph() {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
 

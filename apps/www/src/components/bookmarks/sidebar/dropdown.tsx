@@ -36,7 +36,7 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
           draggable={false}
         />
       </button>
-      {open && (
+      {open && items.length > 0 && (
         <ul className="my-2 ml-8 border-l border-gray2 text-text">
           {items.map((item) => (
             <li key={typeof item === "string" ? item : item.id}>

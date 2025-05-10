@@ -7,6 +7,8 @@ import { RectangleButton } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
 
+const url = import.meta.env.VITE_BASE_URL;
+
 const Bookmark = () => {
   const [currentTab, setCurrentTab] = useState({
     url: "사이트 url",
@@ -17,7 +19,14 @@ const Bookmark = () => {
   const { mutateAsync } = useCreateStar();
 
   const onClickLogout = async () => {
-    await chrome.storage.local.clear();
+    await chrome.cookies.remove({
+      url,
+      name: "accessToken",
+    });
+    await chrome.cookies.remove({
+      url,
+      name: "refreshToken",
+    });
     navigate("/");
   };
 
@@ -38,17 +47,17 @@ const Bookmark = () => {
     });
   };
 
-  // useEffect(() => {
-  //   updateCurrentTab(setCurrentTab);
-  //   chrome.tabs.onActivated.addListener(() => {
-  //     updateCurrentTab(setCurrentTab);
-  //   });
-  //   chrome.tabs.onUpdated.addListener((_, changeInfo) => {
-  //     if (changeInfo.status === "complete") {
-  //       updateCurrentTab(setCurrentTab);
-  //     }
-  //   });
-  // }, []);
+  useEffect(() => {
+    updateCurrentTab(setCurrentTab);
+    chrome.tabs.onActivated.addListener(() => {
+      updateCurrentTab(setCurrentTab);
+    });
+    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+      if (changeInfo.status === "complete") {
+        updateCurrentTab(setCurrentTab);
+      }
+    });
+  }, []);
 
   return (
     <Loading title="페이지를 요약하고 있어요!">

@@ -1,15 +1,10 @@
 import axios from "axios";
 
-export const api = axios.create({
-  baseURL: import.meta.env.VITE_BASE_URL,
-});
+const baseURL = import.meta.env.VITE_BASE_URL;
 
-api.interceptors.request.use(async (config) => {
-  const storage = await chrome.storage.local.get();
-  if (storage.accessToken) {
-    config.headers.Authorization = `Bearer ${storage.accessToken}`;
-  }
-  return config;
+export const api = axios.create({
+  baseURL,
+  withCredentials: true,
 });
 
 api.interceptors.response.use(
@@ -25,24 +20,22 @@ api.interceptors.response.use(
     ) {
       originalRequest._retry = true;
 
-      const storage = await chrome.storage.local.get();
-      const refreshToken = storage.refreshToken;
+      try {
+        const { data } = await api.get("/oauth/reissue", {
+          withCredentials: true,
+        });
 
-      if (refreshToken) {
-        try {
-          const { data } = await api.get("/oauth/reissue", {
-            headers: {
-              Authorization: `Bearer ${refreshToken}`,
-            },
-          });
+        await chrome.cookies.set({
+          url: baseURL,
+          name: "accessToken",
+          value: data.result.accessToken,
+          path: "/",
+          httpOnly: true,
+        });
 
-          await chrome.storage.local.set(data);
-
-          originalRequest.headers.Authorization = `Bearer ${data.accessToken}`;
-          return api(originalRequest);
-        } catch (refreshError) {
-          return Promise.reject(refreshError);
-        }
+        return api(originalRequest);
+      } catch (refreshError) {
+        return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);

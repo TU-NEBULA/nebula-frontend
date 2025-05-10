@@ -8,6 +8,8 @@ import { RectangleButton } from "@repo/ui";
 
 import { useLocation } from "react-router-dom";
 
+const url = import.meta.env.VITE_BASE_URL;
+
 const Agreement = () => {
   const [checked, setChecked] = useState(false);
   const { state } = useLocation();
@@ -27,7 +29,20 @@ const Agreement = () => {
         "1": checked,
       });
       if (res.status === 200) {
-        chrome.storage.local.set(state);
+        chrome.cookies.set({
+          url,
+          name: "accessToken",
+          value: state.accessToken,
+          path: "/",
+          httpOnly: true,
+        });
+        chrome.cookies.set({
+          url,
+          name: "refreshToken",
+          value: state.refreshToken,
+          path: "/",
+          httpOnly: true,
+        });
         navigate("/bookmark");
       }
     } catch (error) {

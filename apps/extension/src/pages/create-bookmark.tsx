@@ -92,6 +92,7 @@ const CreateBookmark = () => {
       userMemo: bookmark.memo,
       categoryName,
       keywordList: bookmark.keywords,
+      faviconUrl: state.faviconUrl,
     };
 
     await mutateAsync({

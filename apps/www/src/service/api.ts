@@ -22,19 +22,10 @@ const customFetch = async (url: string, method: Method, _body?: unknown, options
       headers,
     });
 
-    // if (res.status === 401 && !isRetry) {
-    //   const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     credentials: "include",
-    //   });
-    //   if (refreshResponse.ok) {
-    //     const res = await refreshResponse.json();
-    //     console.log("refresh response", res);
-    //   }
-    // }
+    if (res.status === 401 && typeof window !== "undefined") {
+      window.location.replace("/login");
+      return new Promise(() => {});
+    }
 
     if (!res.ok) {
       const errorText = await res.text();

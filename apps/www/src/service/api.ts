@@ -1,26 +1,8 @@
-import { getCookie } from "@/utils/cookies";
-
 type Method = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
-const customFetch = async (
-  url: string,
-  method: Method,
-  _body?: unknown,
-  options?: RequestInit,
-  isRetry = false
-) => {
-  let accessToken = "";
-  if (typeof window !== "undefined") {
-    const res = await fetch("/api/cookie");
-    const json = await res.json();
-    accessToken = json?.accessToken || "";
-  } else {
-    accessToken = (await getCookie("accessToken"))?.value || "";
-  }
-  const Authorization = `Bearer ${accessToken}`;
-
+const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
   let body: BodyInit | undefined;
   if (_body) {
     body = _body instanceof FormData ? _body : JSON.stringify(_body);
@@ -28,7 +10,6 @@ const customFetch = async (
 
   const headers: HeadersInit = {
     ...options?.headers,
-    ...(accessToken && { Authorization }),
     ...(_body && !(_body instanceof FormData) ? { "Content-Type": "application/json" } : {}),
   };
 
@@ -37,26 +18,23 @@ const customFetch = async (
       ...options,
       method,
       body,
+      credentials: "include",
       headers,
     });
 
-    if (res.status === 401 && !isRetry) {
-      const refreshToken = (await getCookie("refreshToken"))?.value || "";
-      if (!refreshToken) {
-        throw new Error("Refresh token not found");
-      }
-      const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${refreshToken}`,
-        },
-      });
-      if (refreshResponse.ok) {
-        const res = await refreshResponse.json();
-        console.log("refresh response", res);
-      }
-    }
+    // if (res.status === 401 && !isRetry) {
+    //   const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     credentials: "include",
+    //   });
+    //   if (refreshResponse.ok) {
+    //     const res = await refreshResponse.json();
+    //     console.log("refresh response", res);
+    //   }
+    // }
 
     if (!res.ok) {
       const errorText = await res.text();

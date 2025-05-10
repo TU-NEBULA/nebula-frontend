@@ -11,7 +11,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 }) => {
   const socials = {
     kakao: {
-      style: "bg-kakao border-kakao",
+      style: "bg-kakao border-kakao hover:bg-kakao active:bg-kakao disabled:bg-kakao/90",
       name: "카카오",
       logo: () => (
         <svg
@@ -31,7 +31,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       ),
     },
     google: {
-      style: "bg-white border-black2",
+      style: "bg-white border-black3 hover:white active:white disabled:bg-white/90",
       name: "Google",
       logo: () => (
         <svg
@@ -72,10 +72,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
 
   return (
     <RectangleButton
-      className={cn(
-        "text-body flex justify-center items-center gap-2 border disabled:bg-opacity-40",
-        socials[social].style
-      )}
+      className={cn("text-body flex items-center justify-center gap-2", socials[social].style)}
       {...restProps}
     >
       {socials[social].logo()}

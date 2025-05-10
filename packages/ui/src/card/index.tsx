@@ -78,19 +78,19 @@ const Card = ({
   return (
     <>
       <section className="flex items-center gap-3">
-        {Thumbnail ? Thumbnail : <div className="min-w-16 aspect-square bg-gray5 rounded-md" />}
-        <div className="text-title truncate flex flex-col h-full justify-center">
+        {Thumbnail ? Thumbnail : <div className="aspect-square min-w-16 rounded-md bg-gray5" />}
+        <div className="flex h-full flex-col justify-center truncate">
           <input
             value={editEnabled ? edit.title : title}
             placeholder="제목을 입력해주세요."
             onChange={onChangeTitle}
-            className="outline-none"
+            className="font-semibold outline-none"
             readOnly={!editEnabled || isLoading}
           />
           {Link}
           <div ref={dropdownRef}>
-            <button onClick={onToggle} className="flex gap-2 items-center py-0.5 mt-2">
-              <p className="text-text text-black2 flex-1 truncate text-start">
+            <button onClick={onToggle} className="mt-2 flex items-center gap-2 py-0.5">
+              <p className="flex-1 truncate text-start text-title text-black3">
                 {categoryName || "카테고리"}
               </p>
               {editEnabled && (
@@ -111,7 +111,7 @@ const Card = ({
               )}
             </button>
             {isDropdownOpen && editEnabled && (
-              <div className="flex flex-col bg-white z-10 absolute w-32 mt-2 overflow-scroll text-text max-h-dropdown hide-scrollbar shadow-lg">
+              <div className="hide-scrollbar absolute z-10 mt-2 flex max-h-dropdown w-32 flex-col overflow-scroll bg-white text-text shadow-lg">
                 <input
                   value={edit.content}
                   onChange={onChangeText}
@@ -121,7 +121,7 @@ const Card = ({
                   disabled={isLoading}
                   readOnly={!edit.start || isLoading}
                   className={cn(
-                    "p-3 w-full placeholder:text-black1 text-black1",
+                    "w-full p-3 text-black1 placeholder:text-black1",
                     !edit.start && "cursor-pointer"
                   )}
                 />
@@ -130,7 +130,7 @@ const Card = ({
                     key={category}
                     onClick={() => onSelectCategory(category)}
                     className={cn(
-                      "text-start p-3 w-full text-gray7 hover:bg-gray1",
+                      "w-full p-3 text-start text-gray7 hover:bg-gray1",
                       category === categoryName && "bg-gray1"
                     )}
                   >

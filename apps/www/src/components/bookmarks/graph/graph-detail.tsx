@@ -62,6 +62,14 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
     await createCategory(category);
   };
 
+  const onUpdateKeyword = (keyword: string) => {
+    setEdit((prev) => ({
+      ...prev,
+      keyword: "",
+      keywordList: [...(prev.keywordList || []), keyword],
+    }));
+  };
+
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter" && edit.activated) {
       const { value } = e.target as HTMLInputElement;
@@ -70,11 +78,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
         (starData?.result?.keywordList.length as number) < 3 &&
         !e.nativeEvent.isComposing
       ) {
-        setEdit((prev) => ({
-          ...prev,
-          keyword: "",
-          keywordList: [...(prev.keywordList || []), value],
-        }));
+        onUpdateKeyword(value);
         e.currentTarget.blur();
       }
     }
@@ -178,13 +182,13 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
   return (
     <div
       className={cn(
-        "bg-white flex fixed right-0 z-10 min-w-sidebar max-w-sidebar h-full transition-transform translate-x-full overflow-y-scroll",
+        "fixed right-0 z-10 flex h-full min-w-sidebar max-w-sidebar translate-x-full overflow-y-scroll bg-white transition-transform",
         open && "translate-x-0"
       )}
       style={{ width }}
     >
       {starLoading || deleteStarLoading ? (
-        <div className="flex justify-center items-center  w-full h-full">
+        <div className="flex h-full w-full items-center justify-center">
           <Spinner />
         </div>
       ) : starData?.isSuccess ? (
@@ -198,8 +202,8 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
               draggable={false}
             />
           </button>
-          <div className="flex flex-col p-3 gap-6 w-full">
-            <div className="flex justify-between items-center">
+          <div className="flex w-full flex-col gap-6 p-3">
+            <div className="flex items-center justify-between">
               <button onClick={onCloseDetail} className="w-max active:opacity-80">
                 <Image
                   src={doubleArrowRight}
@@ -211,7 +215,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
               </button>
               <div className="flex items-center gap-2">
                 {updateStarLoading ? (
-                  <div className="w-6 h-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
+                  <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
                 ) : (
                   <>
                     {edit.activated && (
@@ -239,7 +243,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                     alt={`${starData?.result.siteUrl} thumbnail`}
                     width={160}
                     height={160}
-                    className="aspect-square object-cover max-w-24 max-h-24 rounded-md"
+                    className="aspect-square max-h-24 max-w-24 rounded-md object-cover"
                     draggable={false}
                   />
                 ) : null
@@ -248,7 +252,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 <Link
                   target="_blank"
                   href={starData?.result.siteUrl || "https://www.nebula-ai.kr"}
-                  className="text-text text-gray7 truncate"
+                  className="truncate text-xs text-gray7"
                 >
                   {starData?.result.siteUrl || "siteUrl"}
                 </Link>
@@ -289,13 +293,15 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 keywords={edit.activated ? edit.keywordList || [] : starData?.result?.keywordList}
                 value={edit.activated ? edit.keyword : ""}
                 readOnly={!edit.activated}
+                keywordList={[]}
                 onChange={onChangeText}
                 onDeleteKeyword={onDeleteKeyword}
                 onKeyDown={onEnterKeyword}
+                onUpdateKeyword={onUpdateKeyword}
               />
             </section>
             <button
-              className="bg-highlight w-max h-max p-2.5 rounded-full absolute bottom-3 right-3"
+              className="absolute bottom-3 right-3 h-max w-max rounded-full bg-highlight p-2.5"
               onClick={onOpenDeleteModal}
             >
               <Image src={trash} alt="북마크 삭제하기" width={20} height={20} draggable={false} />
@@ -308,16 +314,10 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
               callback={onCloseDeleteModal}
             >
               <div className="flex w-full gap-3">
-                <RectangleButton
-                  className="flex-1 border border-gray5"
-                  onClick={onCloseDeleteModal}
-                >
+                <RectangleButton variation="outline" onClick={onCloseDeleteModal}>
                   취소
                 </RectangleButton>
-                <RectangleButton
-                  className="flex-1 bg-highlight text-white transition-colors"
-                  onClick={onDeleteBookmark}
-                >
+                <RectangleButton variation="warning" onClick={onDeleteBookmark}>
                   삭제
                 </RectangleButton>
               </div>
@@ -325,14 +325,9 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
           )}
         </>
       ) : (
-        <div className="flex flex-col justify-center items-center w-full h-full gap-4 px-2">
+        <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-2">
           <p>북마크를 찾을 수 없습니다.</p>
-          <RectangleButton
-            onClick={onCloseDetail}
-            className="w-full text-white transition-colors bg-black2"
-          >
-            상세 창 닫기
-          </RectangleButton>
+          <RectangleButton onClick={onCloseDetail}>상세 창 닫기</RectangleButton>
         </div>
       )}
     </div>

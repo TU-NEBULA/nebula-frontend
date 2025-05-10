@@ -6,9 +6,10 @@ import CardWrapper from "@/components/create-bookmark/card-wrapper";
 import Loading from "@/components/loading";
 import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar } from "@/state/mutation/star";
+import { useGetKeywords } from "@/state/query/keyword";
 import { CategoryListProps } from "@/types/category";
 import { BookmarkProps } from "@repo/types";
-import { cn, Keyword, RectangleButton, Textarea } from "@repo/ui";
+import { Keyword, RectangleButton, Textarea } from "@repo/ui";
 
 import { Navigate, useLocation } from "react-router-dom";
 
@@ -27,6 +28,8 @@ const CreateBookmark = () => {
 
   const { mutateAsync } = useCompleteCreateStar();
   const { mutateAsync: mutateAsyncCategory, isPending } = useCreateCategory();
+
+  const { data: keywords } = useGetKeywords();
 
   if (!state) {
     return <Navigate to="/bad-request" replace />;
@@ -54,16 +57,19 @@ const CreateBookmark = () => {
     await mutateAsyncCategory(category);
   };
 
+  const onUpdateKeyword = (keyword: string) => {
+    setBookmark((prev) => ({
+      ...prev,
+      keyword: "",
+      keywords: [...prev.keywords, keyword],
+    }));
+  };
+
   const onEnterKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" && !e.nativeEvent.isComposing) {
       const { value } = e.target as HTMLInputElement;
-      if (value && bookmark.keywords.length < 3 && !e.nativeEvent.isComposing) {
-        setBookmark((prev) => ({
-          ...prev,
-          keyword: "",
-          keywords: [...prev.keywords, value],
-        }));
-        e.currentTarget.blur();
+      if (value && bookmark.keywords.length < 3) {
+        onUpdateKeyword(value);
       }
     }
   };
@@ -86,6 +92,7 @@ const CreateBookmark = () => {
       userMemo: bookmark.memo,
       categoryName,
       keywordList: bookmark.keywords,
+      faviconUrl: state.faviconUrl,
     };
 
     await mutateAsync({
@@ -96,15 +103,15 @@ const CreateBookmark = () => {
 
   return (
     <Loading title="북마크를 저장하고 있어요!">
-      <main className="h-full flex flex-col gap-6">
+      <main className="flex h-full flex-col gap-6">
         <header className="flex items-center justify-between">
-          <div className="flex gap-1 items-center">
+          <div className="flex items-center gap-1">
             <Logo />
             <p className="text-description font-bold">Nebula</p>
           </div>
-          <button className="flex gap-1 items-center">
+          <button className="flex items-center gap-1">
             <AISummary />
-            <p className="text-text font-semibold">Nebula AI</p>
+            <p className="text-xs font-semibold">Nebula AI</p>
           </button>
         </header>
         <CardWrapper
@@ -136,18 +143,16 @@ const CreateBookmark = () => {
             id="keyword"
             keywords={bookmark.keywords}
             value={bookmark.keyword}
+            keywordList={keywords?.result || []}
             onChange={onChangeText}
             onDeleteKeyword={onDeleteKeyword}
             onKeyDown={onEnterKeyword}
+            onUpdateKeyword={onUpdateKeyword}
           />
         </section>
         <section className="flex gap-3">
-          <RectangleButton className="border border-gray5 text-gray5 flex-1">취소</RectangleButton>
-          <RectangleButton
-            disabled={saveDisabled}
-            className={cn("border text-white flex-1", !saveDisabled && "bg-black2")}
-            onClick={onClickSave}
-          >
+          <RectangleButton variation="outline">취소</RectangleButton>
+          <RectangleButton disabled={saveDisabled} onClick={onClickSave}>
             저장
           </RectangleButton>
         </section>

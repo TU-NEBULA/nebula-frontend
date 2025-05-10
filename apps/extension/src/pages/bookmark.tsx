@@ -7,6 +7,8 @@ import { RectangleButton } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
 
+const url = import.meta.env.VITE_BASE_URL;
+
 const Bookmark = () => {
   const [currentTab, setCurrentTab] = useState({
     url: "사이트 url",
@@ -17,7 +19,14 @@ const Bookmark = () => {
   const { mutateAsync } = useCreateStar();
 
   const onClickLogout = async () => {
-    await chrome.storage.local.clear();
+    await chrome.cookies.remove({
+      url,
+      name: "accessToken",
+    });
+    await chrome.cookies.remove({
+      url,
+      name: "refreshToken",
+    });
     navigate("/");
   };
 
@@ -52,29 +61,21 @@ const Bookmark = () => {
 
   return (
     <Loading title="페이지를 요약하고 있어요!">
-      <main className="h-full gap-28 flex flex-col justify-center overflow-x-hidden">
+      <main className="flex h-full flex-col justify-center gap-28 overflow-x-hidden">
         <h1 className="text-notification">현재 페이지 정보</h1>
         <section className="space-y-4">
-          <div className="space-y-2 text-body">
+          <div className="text-body space-y-2">
             <h2>URL</h2>
             <p className="text-gray7">{currentTab.url}</p>
           </div>
-          <div className="space-y-2 text-body">
+          <div className="text-body space-y-2">
             <h2>Title</h2>
             <p className="text-gray7">{currentTab.title}</p>
           </div>
         </section>
         <div className="flex flex-col gap-2">
-          <RectangleButton
-            className={"w-full text-white transition-colors bg-black2"}
-            onClick={onClickAdd}
-          >
-            북마크에 추가하기
-          </RectangleButton>
-          <RectangleButton
-            className={"w-full text-black2 transition-colors "}
-            onClick={onClickLogout}
-          >
+          <RectangleButton onClick={onClickAdd}>북마크에 추가하기</RectangleButton>
+          <RectangleButton variation="outline" onClick={onClickLogout}>
             로그아웃
           </RectangleButton>
         </div>

@@ -10,7 +10,7 @@ const Header = async () => {
   const token = await getCookie("accessToken");
 
   return (
-    <header className="text-white py-6 px-10 flex justify-between">
+    <header className="flex justify-between px-10 py-6 text-white">
       <Link href="/" className="flex items-center gap-2">
         <Image src={logo} alt="nebula 로고" width={40} height={20} />
         <p className="text-xl font-semibold">Nebula</p>

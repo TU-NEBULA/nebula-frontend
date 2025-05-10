@@ -2,7 +2,7 @@ import { Spinner } from "@repo/ui";
 
 export default function Redirect() {
   return (
-    <main className="h-full flex justify-center items-center w-full ">
+    <main className="flex h-full w-full items-center justify-center">
       <Spinner />
     </main>
   );

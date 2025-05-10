@@ -10,7 +10,7 @@ const Loading = ({ title, children }: LoadingProps) => {
   const isLoading = useLoadingStore((state) => state.isLoading);
 
   return isLoading ? (
-    <div className="h-full flex flex-col justify-center items-center gap-10 text-notification">
+    <div className="flex h-full flex-col items-center justify-center gap-10 text-notification">
       {title}
       <Spinner />
     </div>

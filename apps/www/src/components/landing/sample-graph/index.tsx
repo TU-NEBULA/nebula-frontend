@@ -5,22 +5,22 @@ import { useEffect, useRef } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-export default function SampleGraph() {
-  const data = {
-    starListDto: [
-      { starId: "1", views: 10 },
-      { starId: "2", views: 5 },
-      { starId: "3", views: 8 },
-      { starId: "4", views: 2 },
-      { starId: "5", views: 15 },
-    ],
-    linkListDto: [
-      { linkedNodeIdList: ["1", "2"] },
-      { linkedNodeIdList: ["1", "3"] },
-      { linkedNodeIdList: ["1", "4"] },
-    ],
-  };
+const data = {
+  starListDto: [
+    { starId: "1", views: 10 },
+    { starId: "2", views: 5 },
+    { starId: "3", views: 8 },
+    { starId: "4", views: 2 },
+    { starId: "5", views: 15 },
+  ],
+  linkListDto: [
+    { linkedNodeIdList: ["1", "2"] },
+    { linkedNodeIdList: ["1", "3"] },
+    { linkedNodeIdList: ["1", "4"] },
+  ],
+};
 
+export default function SampleGraph() {
   const containerRef = useRef<HTMLDivElement>(null);
   const graphRef = useRef<HTMLDivElement>(null);
 
@@ -54,8 +54,8 @@ export default function SampleGraph() {
     dirLight.position.set(20, 30, 20);
     scene.add(dirLight);
 
-    const stars = data.starListDto.map((s) => s.starId);
-    const links = data.linkListDto.map((l) => l.linkedNodeIdList as [string, string]);
+    const stars = data?.starListDto.map((s) => s.starId) || [];
+    const links = data?.linkListDto.map((l) => l.linkedNodeIdList as [string, string]) || [];
     const parent: Record<string, string> = {};
     const find = (x: string): string => (parent[x] === x ? x : (parent[x] = find(parent[x])));
     const union = (a: string, b: string) => {
@@ -158,10 +158,10 @@ export default function SampleGraph() {
     <section className="py-28">
       <div
         ref={containerRef}
-        className="p-12 border border-gray7 flex flex-col rounded-lg gap-12 md:flex-row"
+        className="flex flex-col gap-12 rounded-lg border border-gray7 p-12 md:flex-row"
       >
-        <div className="space-y-5 flex-1">
-          <h2 className="lg:text-landing-sub-title md:text-5xl text-4xl md:leading-none">
+        <div className="flex-1 space-y-5">
+          <h2 className="lg:text-landing-sub-title text-4xl md:text-5xl md:leading-none">
             북마크를
             <br /> 노드로 관리
           </h2>
@@ -173,7 +173,7 @@ export default function SampleGraph() {
         <div
           ref={graphRef}
           id="sample-graph"
-          className="border border-gray7 h-graph flex-1 rounded-sm block"
+          className="h-graph block flex-1 rounded-sm border border-gray7"
         />
       </div>
     </section>

@@ -34,43 +34,25 @@ jobs:
         run: |
           set +e
 
-          # 1) 프로덕션 배포 실행 (로그 캡처)
-          npx vercel --prod --confirm \
+          # 1) Initial production deploy (capture logs)
+          npx vercel --prod --yes \
             --token "$VERCEL_TOKEN" \
             --scope "$VERCEL_ORG_ID" > deploy.log 2>&1
           EXIT_CODE=$?
           cat deploy.log
 
-          # 2) 실패(exit code != 0) 시 Redeploy 실행
+          # Extract deployment URL
+          DEPLOY_URL=$(grep -Eo 'https?://[A-Za-z0-9.-]+\.vercel\.app' deploy.log | head -n1)
+
+          # 2) If deploy failed, Redeploy using URL
           if [ $EXIT_CODE -ne 0 ]; then
-            echo "❗ 초기 배포 실패 (exit code=$EXIT_CODE) — Redeploy 실행"
-
-            # 배포 ID 파싱
-            DEPLOY_ID=$(grep -Eo '/[A-Za-z0-9]{28}' deploy.log | head -n1 | tr -d '/')
-
-            # Redeploy
-            npx vercel redeploy "$DEPLOY_ID" \
-              --token "$VERCEL_TOKEN" \
-              --scope "$VERCEL_ORG_ID"
-
-            # Redeploy 실패 시 에러 반환
-            if [ $? -ne 0 ]; then
-              echo "::error::Redeploy도 실패했습니다!"
-              exit 1
-            fi
-          fi
-
-          # 2) URL 파싱 (vercel CLI는 실패해도 URL을 먼저 출력합니다)
-          DEPLOY_URL=$(echo "$DEPLOY_LOG" | grep -Eo 'https?://[a-zA-Z0-9.-]+\.vercel\.app' | head -n1)
-
-          # 3) 에러 키워드 감지 → 같은 URL에 대해 Redeploy
-          if echo "$DEPLOY_LOG" | grep -q 'Error!'; then
-            echo "❗️ 초기 배포 실패 — 재배포: $DEPLOY_URL"
+            echo "❗️ Initial deployment failed (exit code=$EXIT_CODE). Redeploying: $DEPLOY_URL"
             npx vercel redeploy "$DEPLOY_URL" \
               --token "$VERCEL_TOKEN" \
-              --scope "$VERCEL_ORG_ID"
-            if [ $? -ne 0 ]; then
-              echo "::error::Redeploy도 실패했습니다!"
+              --scope "$VERCEL_ORG_ID" --yes
+            REDO_EXIT=$?
+            if [ $REDO_EXIT -ne 0 ]; then
+              echo "::error::Redeploy failed (exit code=$REDO_EXIT)!"
               exit 1
             fi
           fi

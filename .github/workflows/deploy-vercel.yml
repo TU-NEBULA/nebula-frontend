@@ -33,16 +33,27 @@ jobs:
         shell: bash
         run: |
           set +e
-          DEPLOY_LOG=$(npx vercel --prod --confirm \
+
+          # 1) 프로덕션 배포 실행 (로그 캡처)
+          npx vercel --prod --confirm \
             --token "$VERCEL_TOKEN" \
-            --scope "$VERCEL_ORG_ID" 2>&1)
-          echo "$DEPLOY_LOG"
-          DEPLOY_URL=$(echo "$DEPLOY_LOG" | grep -Eo 'https?://[A-Za-z0-9.-]+\.vercel\.app' | head -n1)
-          if echo "$DEPLOY_LOG" | grep -q 'Error!'; then
-            echo "❗️ 초기 배포 실패 — 재배포: $DEPLOY_URL"
-            npx vercel redeploy "$DEPLOY_URL" \
+            --scope "$VERCEL_ORG_ID" > deploy.log 2>&1
+          EXIT_CODE=$?
+          cat deploy.log
+
+          # 2) 실패(exit code != 0) 시 Redeploy 실행
+          if [ $EXIT_CODE -ne 0 ]; then
+            echo "❗ 초기 배포 실패 (exit code=$EXIT_CODE) — Redeploy 실행"
+
+            # 배포 ID 파싱
+            DEPLOY_ID=$(grep -Eo '/[A-Za-z0-9]{28}' deploy.log | head -n1 | tr -d '/')
+
+            # Redeploy
+            npx vercel redeploy "$DEPLOY_ID" \
               --token "$VERCEL_TOKEN" \
               --scope "$VERCEL_ORG_ID"
+
+            # Redeploy 실패 시 에러 반환
             if [ $? -ne 0 ]; then
               echo "::error::Redeploy도 실패했습니다!"
               exit 1

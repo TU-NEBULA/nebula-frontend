@@ -1,6 +1,6 @@
 "use client";
 
-import { Usable, use, useState } from "react";
+import { Suspense, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 
@@ -10,9 +10,8 @@ import logout from "@/assets/icons/logout.svg";
 import Icon from "@/components/common/icon";
 import { GRAPH_THEME, GRAPH_TYPE, LINK_TYPE } from "@/constants/bookmark";
 import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
+import { useGetUserInfo } from "@/lib/tanstack/query/user";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
-import { BaseResponseDTO } from "@/models";
-import { UserInfoDTO } from "@/models/user";
 import { removeAuth } from "@/utils/cookies";
 
 import Dropdown from "./dropdown";
@@ -21,18 +20,15 @@ const filters = [LINK_TYPE.SIMILARITY, LINK_TYPE.KEYWORD];
 const themes = [GRAPH_THEME.PLANET, GRAPH_THEME.GRAPH];
 const types = [GRAPH_TYPE.COLOR, GRAPH_TYPE.LOGO];
 
-interface SidebarProps {
-  userInfo: Usable<BaseResponseDTO<UserInfoDTO>>;
-}
-
-const Sidebar = ({ userInfo }: SidebarProps) => {
+const Sidebar = () => {
   const [sidebar, setSidebar] = useState({
     open: false,
     categoryOpen: false,
     keywordOpen: false,
     profileOpen: false,
   });
-  const data = use(userInfo);
+
+  const { data } = useGetUserInfo();
 
   const router = useRouter();
 
@@ -108,7 +104,7 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
         <div className="flex flex-col gap-5">
           <div className="flex justify-between overflow-hidden">
             <button onClick={onToggleSidebar} className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black3">
+              <div className="bg-black3 flex h-8 w-8 items-center justify-center rounded-lg">
                 <Image src={logo} alt="nebula 로고" width={24} height={12} draggable={false} />
               </div>
               <p>Nebula</p>
@@ -123,36 +119,40 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
               />
             </button>
           </div>
-          <Dropdown
-            open={sidebar.categoryOpen}
-            title="Category"
-            icon={<Icon.folder />}
-            items={category?.result?.categoryList || []}
-            onClick={() => onToggleDropdown("category")}
-            onClickItem={onClickItem}
-          />
-          <Dropdown
-            open={sidebar.keywordOpen}
-            title="Keyword"
-            icon={<Icon.search />}
-            items={keyword?.result || []}
-            onClick={() => onToggleDropdown("keyword")}
-            onClickItem={onClickItem}
-          />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Dropdown
+              open={sidebar.categoryOpen}
+              title="Category"
+              icon={<Icon.folder />}
+              items={category?.result?.categoryList || []}
+              onClick={() => onToggleDropdown("category")}
+              onClickItem={onClickItem}
+            />
+            <Dropdown
+              open={sidebar.keywordOpen}
+              title="Keyword"
+              icon={<Icon.search />}
+              items={keyword?.result || []}
+              onClick={() => onToggleDropdown("keyword")}
+              onClickItem={onClickItem}
+            />
+          </Suspense>
         </div>
-        <div className="relative flex items-center gap-2">
-          <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />
-          <p className="truncate">{data?.result?.email}</p>
-          {sidebar.profileOpen && (
-            <button
-              onClick={onLogout}
-              className="absolute -right-6 bottom-0 flex min-w-32 translate-x-full items-center gap-2 rounded-lg bg-white px-6 py-2 text-text"
-            >
-              <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />
-              <p>Logout</p>
-            </button>
-          )}
-        </div>
+        <Suspense fallback={<div>Loading...</div>}>
+          <div className="relative flex items-center gap-2">
+            <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />
+            <p className="truncate">{data?.result?.email || "example@example.com"}</p>
+            {sidebar.profileOpen && (
+              <button
+                onClick={onLogout}
+                className="absolute -right-6 bottom-0 flex min-w-32 translate-x-full items-center gap-2 rounded-lg bg-white px-6 py-2 text-text"
+              >
+                <Image src={logout} alt="로그아웃 버튼" width={24} height={24} draggable={false} />
+                <p>Logout</p>
+              </button>
+            )}
+          </div>
+        </Suspense>
       </section>
       <section
         className="fixed z-10 flex h-max transition-all"

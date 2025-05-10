@@ -1,4 +1,4 @@
-export const formatDate = (date: number) => {
+export const formatDate = (date: string) => {
   const formatter = new Intl.DateTimeFormat("ko-KR", {
     year: "numeric",
     month: "long",
@@ -6,7 +6,7 @@ export const formatDate = (date: number) => {
     weekday: "long",
   });
 
-  return formatter.format(date);
+  return formatter.format(new Date(date));
 };
 
 export const formatTime = (date: number) => {

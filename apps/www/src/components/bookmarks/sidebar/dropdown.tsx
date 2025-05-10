@@ -1,9 +1,8 @@
 "use client";
 
 import { memo } from "react";
-import Image from "next/image";
 
-import arrowRight from "@/assets/icons/arrow-right.svg";
+import Icon from "@/components/common/icon";
 import { CategoryProps } from "@/types/category";
 import { cn } from "@repo/ui";
 
@@ -27,17 +26,12 @@ const Dropdown = ({ open, title, icon, items, onClick, onClickItem }: DropdownPr
           {icon}
           <p className="">{title}</p>
         </div>
-        <Image
-          src={arrowRight}
-          alt="카테고리 메뉴 열기 버튼"
-          width={24}
-          height={24}
-          className={cn("transition-transform", open && "rotate-90")}
-          draggable={false}
-        />
+        <div className={cn("transition-transform", open && "rotate-90")}>
+          <Icon.arrowRight />
+        </div>
       </button>
       {open && items.length > 0 && (
-        <ul className="my-2 ml-8 border-l border-gray2 text-text">
+        <ul className="my-2 ml-8 border-l border-gray2 text-xs">
           {items.map((item) => (
             <li key={typeof item === "string" ? item : item.id}>
               <button

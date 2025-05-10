@@ -1,17 +1,13 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { redirect, RedirectType } from "next/navigation";
 
 import { Spinner } from "@repo/ui";
 
 const RedirectPage = () => {
-  const router = useRouter();
-
   useEffect(() => {
-    (async () => {
-      router.replace("/bookmarks");
-    })();
+    redirect("/bookmarks", RedirectType.replace);
   }, []);
 
   return (

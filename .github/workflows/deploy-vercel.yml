@@ -2,7 +2,8 @@ name: Deploy to Vercel with Redeploy-on-Failure
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
   deploy:
@@ -13,13 +14,18 @@ jobs:
       VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
 
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: "22.x" }
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
 
       - name: Link Vercel Project
         run: |
           npx vercel link --yes \
+            --token "$VERCEL_TOKEN" \
             --scope "$VERCEL_ORG_ID" \
             --project "$VERCEL_PROJECT_ID"
 
@@ -61,18 +67,14 @@ jobs:
             fi
           fi
 
-          # 2) 배포 URL 추출
-          URL=$(echo "$LOG" | grep -Eo 'https?://[A-Za-z0-9.-]+\.vercel\.app' | head -n1)
+          # 2) URL 파싱 (vercel CLI는 실패해도 URL을 먼저 출력합니다)
+          DEPLOY_URL=$(echo "$DEPLOY_LOG" | grep -Eo 'https?://[a-zA-Z0-9.-]+\.vercel\.app' | head -n1)
 
-          # 3) 에러 감지 → redeploy
-          if echo "$LOG" | grep -q 'Error!'; then
-            echo "⚠️ 초기 배포 실패 — 같은 URL로 재배포: $URL"
-            npx vercel redeploy "$URL" \
+          # 3) 에러 키워드 감지 → 같은 URL에 대해 Redeploy
+          if echo "$DEPLOY_LOG" | grep -q 'Error!'; then
+            echo "❗️ 초기 배포 실패, 동일 URL에 대해 재배포 실행: $DEPLOY_URL"
+            npx vercel redeploy "$DEPLOY_URL" \
               --token "$VERCEL_TOKEN" \
-              --scope "$VERCEL_ORG_ID"
-            # redeploy도 실패하면 마지막에 exit 1 처리
-            if [ $? -ne 0 ]; then
-              echo "::error::Redeploy도 실패했습니다!"
-              exit 1
-            fi
+              --confirm
+            # 만약 두 번째도 실패 시 자동으로 에러 코드 반환
           fi

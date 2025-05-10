@@ -11,8 +11,11 @@ const RedirectPage = () => {
 
   useEffect(() => {
     (async () => {
-      const isValidRequest = await checkAuth();
-      if (!isValidRequest) alert("잘못된 접근입니다.");
+      // const isValidRequest = await checkAuth();
+      // if (!isValidRequest) {
+      //   alert("잘못된 접근입니다.");
+      //   return router.replace("/");
+      // }
       router.replace("/bookmarks");
     })();
   }, []);

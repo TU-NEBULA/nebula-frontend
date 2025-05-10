@@ -10,7 +10,7 @@ function ErrorPage({ title, subtitle }: ErrorPageProps) {
   const navigate = useReplaceNavigate();
 
   const onClick = () => {
-    navigate("/");
+    navigate("/bookmark");
   };
 
   return (
@@ -19,7 +19,9 @@ function ErrorPage({ title, subtitle }: ErrorPageProps) {
         <h1 className="text-notification">{title}</h1>
         <h2 className="text-title text-gray2">{subtitle}</h2>
       </div>
-      <RectangleButton onClick={onClick}>홈으로 돌아가기</RectangleButton>
+      <RectangleButton onClick={onClick} className="w-full flex-none">
+        홈으로 돌아가기
+      </RectangleButton>
     </main>
   );
 }

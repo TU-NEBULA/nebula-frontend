@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const baseURL = import.meta.env.VITE_BASE_URL;
+const baseURL = import.meta.env.VITE_BASE_URL_V2;
 
-export const api = axios.create({
+export const apiV2 = axios.create({
   baseURL,
   withCredentials: true,
 });
 
-api.interceptors.response.use(
+apiV2.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
@@ -21,7 +21,7 @@ api.interceptors.response.use(
       originalRequest._retry = true;
 
       try {
-        const { data } = await api.get("/oauth/reissue", {
+        const { data } = await apiV2.get("/oauth/reissue", {
           withCredentials: true,
         });
 
@@ -33,7 +33,7 @@ api.interceptors.response.use(
           httpOnly: true,
         });
 
-        return api(originalRequest);
+        return apiV2(originalRequest);
       } catch (refreshError) {
         return Promise.reject(refreshError);
       }

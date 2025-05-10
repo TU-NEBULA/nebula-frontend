@@ -49,7 +49,7 @@ jobs:
             echo "❗️ Initial deployment failed (exit code=$EXIT_CODE). Redeploying: $DEPLOY_URL"
             npx vercel redeploy "$DEPLOY_URL" \
               --token "$VERCEL_TOKEN" \
-              --scope "$VERCEL_ORG_ID" --yes
+              --scope "$VERCEL_ORG_ID"
             REDO_EXIT=$?
             if [ $REDO_EXIT -ne 0 ]; then
               echo "::error::Redeploy failed (exit code=$REDO_EXIT)!"

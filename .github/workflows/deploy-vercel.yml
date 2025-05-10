@@ -1,0 +1,43 @@
+name: Deploy to Vercel with Retry
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-prod:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        attempt: [1, 2, 3]
+      fail-fast: false
+
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22.x"
+
+      - name: Deploy Production
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_TEAM_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: "--prod"
+          working-directory: .
+        continue-on-error: ${{ matrix.attempt < 3 }}
+
+      - name: Check final status
+        if: ${{ matrix.attempt == 3 && failure() }}
+        run: |
+          echo "::error::3번 모두 재시도했지만 배포에 실패했습니다."
+          exit 1

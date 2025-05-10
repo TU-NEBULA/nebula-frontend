@@ -31,7 +31,7 @@ const SocialLoginButton: React.FC<SocialLoginButtonProps> = ({
       ),
     },
     google: {
-      style: "bg-white border-black2",
+      style: "bg-white border-black3",
       name: "Google",
       logo: () => (
         <svg

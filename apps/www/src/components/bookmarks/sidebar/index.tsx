@@ -108,7 +108,7 @@ const Sidebar = ({ userInfo }: SidebarProps) => {
         <div className="flex flex-col gap-5">
           <div className="flex justify-between overflow-hidden">
             <button onClick={onToggleSidebar} className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-black2">
+              <div className="bg-black3 flex h-8 w-8 items-center justify-center rounded-lg">
                 <Image src={logo} alt="nebula 로고" width={24} height={12} draggable={false} />
               </div>
               <p>Nebula</p>

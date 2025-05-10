@@ -1,9 +1,9 @@
 import { cn } from "../../utils/cn";
 
 const theme = {
-  default: "bg-black2 text-white border-black2",
-  outline: "bg-white text-black2 border-black2",
-  warning: "bg-highlight text-white border-highlight",
+  default: "bg-black1 text-white border-black1 hover:bg-black3 active:bg-black3",
+  outline: "bg-white text-black3 border-black1 hover:bg-gray3 active:bg-gray1",
+  warning: "bg-highlight text-white border-highlight hover:bg-red-600 active:bg-red-500",
 };
 
 interface RectangleButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {

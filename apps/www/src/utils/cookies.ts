@@ -2,15 +2,6 @@
 
 import { cookies } from "next/headers";
 
-export const checkAuth = async () => {
-  const cookieStorage = await cookies();
-  const accessToken = cookieStorage.get("accessToken")?.value;
-
-  if (!accessToken) return false;
-
-  return true;
-};
-
 export const getCookie = async (name: string) => {
   const cookieStorage = await cookies();
   const value = cookieStorage.get(name);

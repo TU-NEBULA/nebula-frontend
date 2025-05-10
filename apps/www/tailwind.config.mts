@@ -11,6 +11,12 @@ export default {
   theme: {
     extend: {
       ...baseConfig.theme?.extend,
+      colors: {
+        ...baseConfig.theme?.extend?.colors,
+        blue1: "#336cec",
+        blue2: "#2C66E7",
+        blue3: "#1E59DC",
+      },
       height: {
         graph: "442px",
       },

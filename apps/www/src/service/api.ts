@@ -9,6 +9,7 @@ const customFetch = async (
   options?: RequestInit,
   isRetry?: boolean
 ) => {
+const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
   let body: BodyInit | undefined;
   if (_body) {
     body = _body instanceof FormData ? _body : JSON.stringify(_body);
@@ -41,6 +42,19 @@ const customFetch = async (
         console.log("refresh response", res);
       }
     }
+    // if (res.status === 401 && !isRetry) {
+    //   const refreshResponse = await fetch(`${baseUrl}/auth/refresh`, {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     credentials: "include",
+    //   });
+    //   if (refreshResponse.ok) {
+    //     const res = await refreshResponse.json();
+    //     console.log("refresh response", res);
+    //   }
+    // }
 
     if (!res.ok) {
       const errorText = await res.text();

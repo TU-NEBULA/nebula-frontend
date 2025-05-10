@@ -54,8 +54,8 @@ export default function SampleGraph() {
     dirLight.position.set(20, 30, 20);
     scene.add(dirLight);
 
-    const stars = data.starListDto.map((s) => s.starId);
-    const links = data.linkListDto.map((l) => l.linkedNodeIdList as [string, string]);
+    const stars = data?.starListDto.map((s) => s.starId) || [];
+    const links = data?.linkListDto.map((l) => l.linkedNodeIdList as [string, string]) || [];
     const parent: Record<string, string> = {};
     const find = (x: string): string => (parent[x] === x ? x : (parent[x] = find(parent[x])));
     const union = (a: string, b: string) => {

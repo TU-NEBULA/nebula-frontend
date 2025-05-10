@@ -34,7 +34,7 @@ const Graph = ({ onOpen, data }: GraphProps) => {
         directionalLight.position.set(50, 50, 50);
         graph.scene().add(directionalLight);
 
-        const nodes = data.starListDto.map((star) => ({
+        const nodes = data?.starListDto.map((star) => ({
           id: star.starId,
           name: star.title,
           color: selectedColor,

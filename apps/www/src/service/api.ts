@@ -9,7 +9,6 @@ const customFetch = async (
   options?: RequestInit,
   isRetry?: boolean
 ) => {
-const customFetch = async (url: string, method: Method, _body?: unknown, options?: RequestInit) => {
   let body: BodyInit | undefined;
   if (_body) {
     body = _body instanceof FormData ? _body : JSON.stringify(_body);

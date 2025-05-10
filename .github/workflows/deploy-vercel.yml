@@ -24,8 +24,8 @@ jobs:
 
       - name: Link Vercel Project
         run: |
-          npx vercel link --yes \
-            --token "$VERCEL_TOKEN" \        # ← 토큰 플래그 추가
+          npx vercel link --cwd . --yes \
+            --token "$VERCEL_TOKEN" \
             --scope "$VERCEL_ORG_ID" \
             --project "$VERCEL_PROJECT_ID"
 

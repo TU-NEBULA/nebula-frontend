@@ -59,17 +59,18 @@ function placeKeywords(keywords: Keyword[], width: number, height: number): Plac
   const placed: PlacedKeyword[] = [];
   const maxTries = 100;
   for (const k of keywords) {
-    const displayText = `${k.rank}. ${k.word}`;
     const fontSize = getFontSize(k.rank);
     const color = getColor(k.rank);
-    const { width: textWidth, height: textHeight } = measureText(displayText, fontSize);
+    const { width: textWidth, height: textHeight } = measureText(k.word, fontSize);
     let left = 0,
       top = 0,
       tries = 0;
     let overlap = false;
     do {
-      left = Math.random() * (width - textWidth);
-      top = Math.random() * (height - textHeight);
+      const maxLeft = Math.max(width - textWidth, 0);
+      const maxTop = Math.max(height - textHeight, 0);
+      left = Math.random() * maxLeft;
+      top = Math.random() * maxTop;
       overlap = placed.some((p) =>
         isOverlap(
           {

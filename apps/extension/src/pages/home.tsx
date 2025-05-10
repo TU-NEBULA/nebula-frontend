@@ -33,7 +33,7 @@ const Home = () => {
             <Logo />
           </div>
         </div>
-        <p className="text-black2">크롬 익스텐션 실행을 위해 로그인 해주세요.</p>
+        <p className="text-black3">크롬 익스텐션 실행을 위해 로그인 해주세요.</p>
       </section>
       <section className="space-y-7">
         <div className="flex flex-col gap-2">

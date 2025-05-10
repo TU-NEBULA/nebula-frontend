@@ -16,7 +16,8 @@ const Header = async () => {
         <p className="text-xl font-semibold">Nebula</p>
       </Link>
       <div className="flex items-center gap-6">
-        <Link href="/history">History List</Link>
+        <Link href="/trending">Trending</Link>
+        <Link href="/history">History</Link>
         <LoginButton token={token?.value || ""} />
       </div>
     </header>

@@ -18,7 +18,7 @@ interface HistoryListProps {
 export default function HistoryList({ q, page }: HistoryListProps) {
   const router = useRouter();
 
-  const { data, isLoading, error } = useGetHistories(page);
+  const { data, isLoading, error } = useGetHistories({ page, keyword: q });
 
   const grouped = useMemo(
     () =>

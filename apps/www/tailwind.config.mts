@@ -32,6 +32,9 @@ export default {
         ...baseConfig.theme?.extend?.maxWidth,
         "with-header": "90rem",
       },
+      screens: {
+        "semi-md": "49.375rem",
+      },
     },
   },
 } satisfies Config;

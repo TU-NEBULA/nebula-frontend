@@ -132,6 +132,9 @@ importers:
       three:
         specifier: ^0.175.0
         version: 0.175.0
+      wordcloud:
+        specifier: ^1.2.3
+        version: 1.2.3
       zustand:
         specifier: ^5.0.1
         version: 5.0.3(@types/react@18.3.18)(react@19.0.0-rc-66855b96-20241106)
@@ -154,6 +157,9 @@ importers:
       '@types/three':
         specifier: ^0.175.0
         version: 0.175.0
+      '@types/wordcloud':
+        specifier: ^1.2.2
+        version: 1.2.2
 
   packages/types: {}
 
@@ -1720,6 +1726,10 @@ packages:
 
   /@types/webxr@0.5.21:
     resolution: {integrity: sha512-geZIAtLzjGmgY2JUi6VxXdCrTb99A7yP49lxLr2Nm/uIK0PkkxcEi4OGhoGDO4pxCf3JwGz2GiJL2Ej4K2bKaA==}
+    dev: true
+
+  /@types/wordcloud@1.2.2:
+    resolution: {integrity: sha512-UMKd/doXE3karDUd5l+2LqFKUU4SmuPWOT/VA22OrPOUGMlb8/qQvSf+DBLQf/sd8UphuBGxOK/jB/1BB5oQRw==}
     dev: true
 
   /@typescript-eslint/eslint-plugin@8.20.0(@typescript-eslint/parser@8.20.0)(eslint@9.18.0)(typescript@5.5.4):
@@ -5462,6 +5472,10 @@ packages:
     resolution: {integrity: sha512-BN22B5eaMMI9UMtjrGd5g5eCYPpCPDUy0FJXbYsaT5zYxjFOckS53SQDE3pWkVoWpHXVb3BrYcEN4Twa55B5cA==}
     engines: {node: '>=0.10.0'}
     dev: true
+
+  /wordcloud@1.2.3:
+    resolution: {integrity: sha512-9by77b7Sd9e1K75kSmVeAD+JnGpiLR1Z4EX1mYQL91jKrU1/4bHw4h4DExQ+dzfT+PvihDcH7OS7V4Y5UkbF2w==}
+    dev: false
 
   /wrap-ansi@7.0.0:
     resolution: {integrity: sha512-YVGIj2kamLSTxw6NsZjoBxfSwsn0ycdesmc4p+Q21c5zPuZ1pl+NfxVdxPtdHvmNVOQ6XSYG4AUtyt/Fi7D16Q==}

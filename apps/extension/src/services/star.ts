@@ -1,6 +1,8 @@
+import { apiV1 } from "@/apis/api-v1";
 import { BaseResponseDTO } from "@/models";
 import { CompleteSummarizeStarDTO, SummarizeStarDTO } from "@/models/star";
 import { CompleteSummarizeStarProps, SummarizeStarProps } from "@/types/star";
+import { AllStarDTO } from "@repo/types";
 
 import { apiV2 } from "../apis/api-v2";
 
@@ -16,4 +18,8 @@ export const completeCreateStar = async (
   body: CompleteSummarizeStarProps
 ): Promise<BaseResponseDTO<CompleteSummarizeStarDTO>> => {
   return (await apiV2.post("/stars/save", body)).data;
+};
+
+export const getStars = async (): Promise<BaseResponseDTO<AllStarDTO>> => {
+  return (await apiV1.get("/stars")).data;
 };

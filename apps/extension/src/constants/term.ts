@@ -1,3 +1,3 @@
 export enum TERM {
-  CONTENT = "term-content",
+  CONTENT = "TERM_CONTENT",
 }

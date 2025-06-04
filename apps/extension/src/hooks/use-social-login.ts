@@ -1,8 +1,11 @@
+import { useUserStore } from "@/state/zustand/user";
+
 import { useNavigate } from "react-router-dom";
 
 const url = import.meta.env.VITE_BASE_URL;
 
 export const useSocialLogin = (setIsLoading: (isLoading: boolean) => void) => {
+  const { setIsLoggedIn } = useUserStore();
   const navigate = useNavigate();
   const baseUrl = import.meta.env.VITE_BASE_URL + "/oauth";
   const kakaoLoginPage = baseUrl + "/kakao?redirectType=extension";
@@ -41,6 +44,7 @@ export const useSocialLogin = (setIsLoading: (isLoading: boolean) => void) => {
             path: "/",
             secure: false,
           });
+          setIsLoggedIn(true);
           return navigate("/bookmark", { replace: true });
         }
         navigate("/agreement", { state: { accessToken, refreshToken }, replace: true });

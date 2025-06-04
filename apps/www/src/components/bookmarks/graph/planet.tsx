@@ -4,8 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { GRAPH_TYPE } from "@/constants/bookmark";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
-import { AllStarDTO } from "@/models/star";
-import { LinkProps, StarProps } from "@/types/graph";
+import { AllStarDTO, LinkProps, StarProps } from "@repo/types";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";

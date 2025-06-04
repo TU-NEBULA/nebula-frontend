@@ -2,13 +2,8 @@ import Image from "next/image";
 import Link from "next/link";
 
 import logo from "@/assets/icons/logo.svg";
-import { getCookie } from "@/utils/cookies";
-
-import LoginButton from "./login-button";
 
 const Header = async () => {
-  const token = await getCookie("accessToken");
-
   return (
     <header className="flex justify-between px-10 py-6 text-white">
       <Link href="/" className="flex items-center gap-2">
@@ -18,7 +13,6 @@ const Header = async () => {
       <div className="flex items-center gap-6">
         <Link href="/trending">Trending</Link>
         <Link href="/history">History</Link>
-        <LoginButton token={token?.value || ""} />
       </div>
     </header>
   );

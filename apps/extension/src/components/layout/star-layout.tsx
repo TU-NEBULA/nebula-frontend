@@ -18,7 +18,6 @@ const StarLayout = () => {
           url: import.meta.env.VITE_BASE_URL,
           name: "accessToken",
         });
-        console.log("Initial token check:", token);
         if (token) {
           setIsLoggedIn(true);
           refetch();

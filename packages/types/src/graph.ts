@@ -8,7 +8,7 @@ export interface StarProps {
   userMemo: string;
   views: number;
   keywordList: string[];
-  faviconUrl: string | null;
+  faviconUrl: string;
 }
 
 export interface LinkProps {

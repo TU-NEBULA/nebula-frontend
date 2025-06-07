@@ -7,7 +7,7 @@ import { updateCurrentTab } from "@/utils/chrome";
 import { useReplaceNavigate } from "./use-replace-navigate";
 
 export function useDetectPath() {
-  const { currentTab, setCurrentTab } = useTabStore();
+  const { currentTab, setCurrentTab, setIsFindingExistPath } = useTabStore();
 
   const stars = useStarStore((state) => state.stars);
 
@@ -16,9 +16,11 @@ export function useDetectPath() {
   useEffect(() => {
     updateCurrentTab(setCurrentTab);
     chrome.tabs.onActivated.addListener(() => {
+      setIsFindingExistPath(true);
       updateCurrentTab(setCurrentTab);
     });
     chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+      setIsFindingExistPath(true);
       if (changeInfo.status === "complete") {
         updateCurrentTab(setCurrentTab);
       }
@@ -32,6 +34,7 @@ export function useDetectPath() {
       navigate(`/create-bookmark?id=${findStar.starId}`);
     } else {
       navigate("/bookmark");
+      setIsFindingExistPath(false);
     }
   }, [stars, currentTab]);
 

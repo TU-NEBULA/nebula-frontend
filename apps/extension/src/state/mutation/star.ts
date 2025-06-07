@@ -1,3 +1,5 @@
+import { queryClient } from "@/components/layout";
+import { STAR } from "@/constants/star";
 import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { completeCreateStar, createStar, updateStar } from "@/services/star";
 import { useLoadingStore } from "@/state/zustand/loading";
@@ -56,7 +58,8 @@ export const useUpdateStar = () => {
     onMutate: () => {
       setIsLoading(true);
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [STAR.GET_BY_ID, data?.result?.starId] });
       navigate("/bookmark");
     },
     onError: (error) => {

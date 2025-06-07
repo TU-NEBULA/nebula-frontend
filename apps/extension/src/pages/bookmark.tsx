@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 const url = import.meta.env.VITE_BASE_URL;
 
 const Bookmark = () => {
-  const { currentTab } = useTabStore();
+  const { currentTab, isFindingExistPath } = useTabStore();
 
   const navigate = useNavigate();
   const { mutateAsync } = useCreateStar();
@@ -58,7 +58,9 @@ const Bookmark = () => {
           </div>
         </section>
         <div className="flex flex-col gap-2">
-          <RectangleButton onClick={onClickAdd}>북마크에 추가하기</RectangleButton>
+          <RectangleButton onClick={onClickAdd} disabled={isFindingExistPath}>
+            {isFindingExistPath ? "기존 북마크(추가 불가)" : "북마크에 추가하기"}
+          </RectangleButton>
           <RectangleButton variation="outline" onClick={onClickLogout}>
             로그아웃
           </RectangleButton>

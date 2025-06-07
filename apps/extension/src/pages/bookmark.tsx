@@ -1,8 +1,7 @@
-import { useEffect, useState } from "react";
-
 import Loading from "@/components/loading";
 import { useCreateStar } from "@/state/mutation/star";
-import { getHtmlText, updateCurrentTab } from "@/utils/chrome";
+import { useTabStore } from "@/state/zustand/tab";
+import { getHtmlText } from "@/utils/chrome";
 import { RectangleButton } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
@@ -10,10 +9,7 @@ import { useNavigate } from "react-router-dom";
 const url = import.meta.env.VITE_BASE_URL;
 
 const Bookmark = () => {
-  const [currentTab, setCurrentTab] = useState({
-    url: "사이트 url",
-    title: "사이트 title",
-  });
+  const { currentTab } = useTabStore();
 
   const navigate = useNavigate();
   const { mutateAsync } = useCreateStar();
@@ -46,18 +42,6 @@ const Bookmark = () => {
       htmlFile: formData,
     });
   };
-
-  useEffect(() => {
-    updateCurrentTab(setCurrentTab);
-    chrome.tabs.onActivated.addListener(() => {
-      updateCurrentTab(setCurrentTab);
-    });
-    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
-      if (changeInfo.status === "complete") {
-        updateCurrentTab(setCurrentTab);
-      }
-    });
-  }, []);
 
   return (
     <Loading title="페이지를 요약하고 있어요!">

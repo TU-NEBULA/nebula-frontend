@@ -30,7 +30,7 @@ const StarLayout = () => {
 
   useEffect(() => {
     if (isLoggedIn && !isPending) {
-      setStars(data?.result?.starListDto ?? []);
+      setStars(data?.result ?? null);
     }
   }, [isLoggedIn, isPending, data]);
 

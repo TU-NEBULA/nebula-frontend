@@ -28,7 +28,7 @@ export function useDetectPath() {
   }, []);
 
   useEffect(() => {
-    const findStar = stars.find((star) => encodeURI(star.siteUrl) === currentTab.url);
+    const findStar = stars?.starListDto.find((star) => encodeURI(star.siteUrl) === currentTab.url);
 
     if (findStar) {
       navigate(`/create-bookmark?id=${findStar.starId}`);

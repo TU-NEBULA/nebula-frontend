@@ -1,13 +1,13 @@
-import { StarProps } from "@repo/types";
+import { AllStarDTO } from "@repo/types";
 
 import { create } from "zustand";
 
 interface StarStoreprops {
-  stars: StarProps[];
-  setStars: (stars: StarProps[]) => void;
+  stars: AllStarDTO | null;
+  setStars: (stars: AllStarDTO | null) => void;
 }
 
 export const useStarStore = create<StarStoreprops>((set) => ({
-  stars: [],
+  stars: null,
   setStars: (stars) => set({ stars }),
 }));

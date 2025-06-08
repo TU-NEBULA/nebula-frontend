@@ -1,13 +1,15 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
 import CardWrapper from "@/components/create-bookmark/card-wrapper";
+import ForceGraph from "@/components/force-graph";
 import Loading from "@/components/loading";
 import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar, useUpdateStar } from "@/state/mutation/star";
 import { useGetKeywords } from "@/state/query/keyword";
 import { useGetStarById } from "@/state/query/star";
+import { useStarStore } from "@/state/zustand/star";
 import { CategoryListProps } from "@/types/category";
 import { CompleteSummarizeStarProps } from "@/types/star";
 import { Keyword, RectangleButton, Spinner, Textarea } from "@repo/ui";
@@ -39,6 +41,7 @@ const CreateBookmark = () => {
   const id = searchParams.get("id");
 
   const [bookmark, setBookmark] = useState<StateProps>(Object.assign(DEFAULT_BOOKMARK, state));
+  const stars = useStarStore((state) => state.stars);
 
   const { mutateAsync: mutateAsyncCompleteCreateStar } = useCompleteCreateStar();
   const { mutateAsync: mutateAsyncUpdateStar } = useUpdateStar();
@@ -56,6 +59,35 @@ const CreateBookmark = () => {
       }));
     }
   }, [isLoadingGetStar, star]);
+
+  const graphData = useMemo(() => {
+    if (!stars?.starListDto || !stars?.linkListDto || !id) return { nodes: [], links: [] };
+
+    // 현재 북마크와 연결된 링크만 필터링
+    const relatedLinks = stars.linkListDto.filter((link) => link.linkedNodeIdList.includes(id));
+
+    // 관련된 노드 ID 수집
+    const relatedNodeIds = new Set<string>();
+    relatedLinks.forEach((link) => {
+      link.linkedNodeIdList.forEach((nodeId) => relatedNodeIds.add(nodeId));
+    });
+
+    // 관련된 노드만 필터링
+    const relatedNodes = stars.starListDto.filter((star) => relatedNodeIds.has(star.starId));
+
+    return {
+      nodes: relatedNodes.map((star) => ({
+        id: star.starId,
+        name: star.title,
+        val: Math.min(star.views, 10),
+        url: star.siteUrl,
+      })),
+      links: relatedLinks.map((link) => ({
+        source: link.linkedNodeIdList[0],
+        target: link.linkedNodeIdList[1],
+      })),
+    };
+  }, [stars, id]);
 
   /**
    * state가 있으면 북마크 생성한 경우
@@ -153,6 +185,9 @@ const CreateBookmark = () => {
             <p className="text-xs font-semibold">Nebula AI</p>
           </button>
         </header>
+        <section>
+          <ForceGraph graphData={graphData} />
+        </section>
         <CardWrapper
           thumbnailUrl={bookmark.thumbnailUrl}
           siteUrl={bookmark.siteUrl}

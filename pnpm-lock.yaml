@@ -87,6 +87,9 @@ importers:
       '@repo/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@stagewise/toolbar-react':
+        specifier: ^0.4.4
+        version: 0.4.4(@types/react@18.3.18)(react@18.3.1)
       '@types/react':
         specifier: ^18.3.12
         version: 18.3.18
@@ -1391,6 +1394,21 @@ packages:
 
   /@rushstack/eslint-patch@1.10.5:
     resolution: {integrity: sha512-kkKUDVlII2DQiKy7UstOR1ErJP8kUKAQ4oa+SQtM0K+lPdmmjj0YnnxBgtTVYH7mUKtbsxeFC9y0AmK7Yb78/A==}
+    dev: true
+
+  /@stagewise/toolbar-react@0.4.4(@types/react@18.3.18)(react@18.3.1):
+    resolution: {integrity: sha512-IRihvvQZ+dsoXge+fJWHp4S+4k9Vt5/1U+ryOUwy8Fsrxe4pASnLWm3fj1V9RZ4wrPzNKbDEISlEZtl8yk3+FA==}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      react: '>=18.0.0'
+    dependencies:
+      '@stagewise/toolbar': 0.4.4
+      '@types/react': 18.3.18
+      react: 18.3.1
+    dev: true
+
+  /@stagewise/toolbar@0.4.4:
+    resolution: {integrity: sha512-hVxGqeYFx780m9SIv+YqhHx4o/fq94pMwr8OoemOCyOKozCGkvSIjpqkONvUyY5yWR+AVcop2p79LsSTdA6Etw==}
     dev: true
 
   /@svgr/babel-plugin-add-jsx-attribute@8.0.0(@babel/core@7.26.0):
@@ -4470,7 +4488,6 @@ packages:
     engines: {node: '>=0.10.0'}
     dependencies:
       loose-envify: 1.4.0
-    dev: false
 
   /react@19.0.0-rc-66855b96-20241106:
     resolution: {integrity: sha512-klH7xkT71SxRCx4hb1hly5FJB21Hz0ACyxbXYAECEqssUjtJeFUAaI2U1DgJAzkGEnvEm3DkxuBchMC/9K4ipg==}

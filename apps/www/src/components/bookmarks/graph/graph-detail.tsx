@@ -327,7 +327,9 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
       ) : (
         <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-2">
           <p>북마크를 찾을 수 없습니다.</p>
-          <RectangleButton onClick={onCloseDetail}>상세 창 닫기</RectangleButton>
+          <RectangleButton onClick={onCloseDetail} className="w-full flex-none">
+            상세 창 닫기
+          </RectangleButton>
         </div>
       )}
     </div>

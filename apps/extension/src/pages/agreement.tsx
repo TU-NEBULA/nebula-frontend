@@ -16,7 +16,7 @@ const Agreement = () => {
 
   const navigate = useReplaceNavigate();
 
-  const { data, isLoading } = useGetTerm(state.accessToken);
+  const { data, isLoading, isError } = useGetTerm(state.accessToken);
 
   const onCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(e.target.checked);
@@ -65,16 +65,18 @@ const Agreement = () => {
           <p className="text-body">
             북마크정보 수집 및 이용 동의 <span className="text-highlight">*</span>
           </p>
-          <p className="rounded-sm border border-gray5 p-2 font-light">
-            {isLoading ? "로딩중..." : data?.result?.map((term) => term.content).join("\n")}
-          </p>
+          <div className="whitespace-pre-line rounded-sm border border-gray5 p-2 font-light">
+            {isLoading && "로딩중..."}
+            {isError && "약관을 불러오는데 실패했습니다."}
+            {!isLoading && !isError && data?.result?.map((t) => t.content).join("\n")}
+          </div>
           <div className="flex items-center gap-1 text-description font-normal">
             <input id="agreement" type="checkbox" checked={checked} onChange={onCheck} />
             <label htmlFor="agreement">(필수) 북마크 정보 수집 및 이용에 동의합니다.</label>
           </div>
         </div>
       </section>
-      <RectangleButton onClick={onClickGetBookmarks} disabled={!checked}>
+      <RectangleButton onClick={onClickGetBookmarks} disabled={!checked} className="flex-none">
         불러오기
       </RectangleButton>
     </main>

@@ -1,9 +1,9 @@
 import { CATEGORY } from "@/constants/category";
 import { getCategories } from "@/services/category";
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 
 export const useGetCategory = () => {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: [CATEGORY.GET],
     queryFn: getCategories,
   });

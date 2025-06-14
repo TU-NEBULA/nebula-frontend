@@ -1,7 +1,7 @@
 import { STAR } from "@/constants/star";
 import { BaseResponseDTO } from "@/models";
-import { AllStarDTO, DeleteStarDTO } from "@/models/star";
-import { StarProps } from "@/types/graph";
+import { DeleteStarDTO } from "@/models/star";
+import { AllStarDTO, StarProps } from "@repo/types";
 
 import api from "./api";
 

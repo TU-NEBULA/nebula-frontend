@@ -1,17 +1,21 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
 import CardWrapper from "@/components/create-bookmark/card-wrapper";
+import ForceGraph from "@/components/force-graph";
 import Loading from "@/components/loading";
 import { useCreateCategory } from "@/state/mutation/category";
-import { useCompleteCreateStar } from "@/state/mutation/star";
+import { useCompleteCreateStar, useUpdateStar } from "@/state/mutation/star";
 import { useGetKeywords } from "@/state/query/keyword";
+import { useGetStarById } from "@/state/query/star";
+import { useStarStore } from "@/state/zustand/star";
+import { useTabStore } from "@/state/zustand/tab";
 import { CategoryListProps } from "@/types/category";
 import { CompleteSummarizeStarProps } from "@/types/star";
-import { Keyword, RectangleButton, Textarea } from "@repo/ui";
+import { Keyword, RectangleButton, Spinner, Textarea } from "@repo/ui";
 
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate, useLocation, useSearchParams } from "react-router-dom";
 
 const DEFAULT_BOOKMARK = {
   categoryName: "",
@@ -19,10 +23,14 @@ const DEFAULT_BOOKMARK = {
   summaryAI: "",
   userMemo: "",
   keyword: "",
+  keywords: [],
+  title: "",
+  siteUrl: "",
+  thumbnailUrl: "",
+  faviconUrl: "",
 };
 
 interface StateProps extends CompleteSummarizeStarProps {
-  categoryName: string;
   categories: CategoryListProps[];
   keyword: string;
   keywords: string[];
@@ -30,15 +38,65 @@ interface StateProps extends CompleteSummarizeStarProps {
 
 const CreateBookmark = () => {
   const { state } = useLocation();
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
 
   const [bookmark, setBookmark] = useState<StateProps>(Object.assign(DEFAULT_BOOKMARK, state));
+  const stars = useStarStore((state) => state.stars);
+  const setIsFindingExistPath = useTabStore((state) => state.setIsFindingExistPath);
 
-  const { mutateAsync } = useCompleteCreateStar();
-  const { mutateAsync: mutateAsyncCategory, isPending } = useCreateCategory();
+  const { mutateAsync: mutateAsyncCompleteCreateStar } = useCompleteCreateStar();
+  const { mutateAsync: mutateAsyncUpdateStar } = useUpdateStar();
+  const { mutateAsync: mutateAsyncCategory, isPending: isPendingCategory } = useCreateCategory();
 
   const { data: keywords } = useGetKeywords();
+  const { data: star, isLoading: isLoadingGetStar } = useGetStarById(id);
 
-  if (!state) {
+  useEffect(() => {
+    if (!isLoadingGetStar && star?.result) {
+      setBookmark((prev) => ({
+        ...prev,
+        ...star.result,
+        keywords: star.result?.keywordList || [],
+      }));
+    }
+  }, [isLoadingGetStar, star]);
+
+  const graphData = useMemo(() => {
+    if (!stars?.starListDto || !stars?.linkListDto || !id) return { nodes: [], links: [] };
+
+    // 현재 북마크와 연결된 링크만 필터링
+    const relatedLinks = stars.linkListDto.filter((link) => link.linkedNodeIdList.includes(id));
+
+    // 관련된 노드 ID 수집
+    const relatedNodeIds = new Set<string>();
+    relatedLinks.forEach((link) => {
+      link.linkedNodeIdList.forEach((nodeId) => relatedNodeIds.add(nodeId));
+    });
+
+    // 관련된 노드만 필터링
+    const relatedNodes = stars.starListDto.filter((star) => relatedNodeIds.has(star.starId));
+
+    return {
+      nodes: relatedNodes.map((star) => ({
+        id: star.starId,
+        name: star.title,
+        val: Math.min(star.views, 10),
+        url: star.siteUrl,
+      })),
+      links: relatedLinks.map((link) => ({
+        source: link.linkedNodeIdList[0],
+        target: link.linkedNodeIdList[1],
+      })),
+    };
+  }, [stars, id]);
+
+  /**
+   * state가 있으면 북마크 생성한 경우
+   * state가 없고 id가 있으면 북마크 수정하는 경우
+   * 둘 다 없으면 잘못된 접근
+   */
+  if (!state && !id) {
     return <Navigate to="/bad-request" replace />;
   }
 
@@ -86,6 +144,7 @@ const CreateBookmark = () => {
   };
 
   const onClickSave = async () => {
+    // id가 있으면 수정하기 API 요청
     const categoryName = bookmark.categories.find(
       (category) => category.name === bookmark.categoryName
     )?.name;
@@ -99,8 +158,32 @@ const CreateBookmark = () => {
       keywordList: bookmark.keywords,
     };
 
-    await mutateAsync(body);
+    if (id) {
+      await mutateAsyncUpdateStar(
+        { id, body },
+        {
+          onSuccess: () => {
+            setIsFindingExistPath(true);
+          },
+        }
+      );
+    } else {
+      await mutateAsyncCompleteCreateStar(body, {
+        onSuccess: () => {
+          setIsFindingExistPath(true);
+        },
+      });
+    }
   };
+
+  if (isLoadingGetStar) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-10 text-notification">
+        북마크를 가져오고 있어요!
+        <Spinner />
+      </div>
+    );
+  }
 
   return (
     <Loading title="북마크를 저장하고 있어요!">
@@ -115,6 +198,9 @@ const CreateBookmark = () => {
             <p className="text-xs font-semibold">Nebula AI</p>
           </button>
         </header>
+        <section>
+          <ForceGraph graphData={graphData} />
+        </section>
         <CardWrapper
           thumbnailUrl={bookmark.thumbnailUrl}
           siteUrl={bookmark.siteUrl}
@@ -123,7 +209,7 @@ const CreateBookmark = () => {
           onUpdateCategory={onUpdateCategory}
           onSelectCategory={onSelectCategory}
           onAddCategory={onAddCategory}
-          isLoading={isPending}
+          isLoading={isPendingCategory}
         />
         <section>
           <Textarea

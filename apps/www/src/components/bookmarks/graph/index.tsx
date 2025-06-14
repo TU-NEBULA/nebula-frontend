@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 
 import { GRAPH_TYPE } from "@/constants/bookmark";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
-import { AllStarDTO } from "@/models/star";
 import { Coords, LinkObject, NodeObject } from "@/types/graph";
+import { AllStarDTO } from "@repo/types";
 
 import * as THREE from "three";
 

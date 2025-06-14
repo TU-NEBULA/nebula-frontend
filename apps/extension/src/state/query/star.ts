@@ -14,5 +14,6 @@ export const useGetStarById = (id: string | null) => {
   return useQuery({
     queryKey: [STAR.GET_BY_ID, id],
     queryFn: () => getStarById(id!),
+    enabled: !!id,
   });
 };

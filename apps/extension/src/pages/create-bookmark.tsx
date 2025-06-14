@@ -10,6 +10,7 @@ import { useCompleteCreateStar, useUpdateStar } from "@/state/mutation/star";
 import { useGetKeywords } from "@/state/query/keyword";
 import { useGetStarById } from "@/state/query/star";
 import { useStarStore } from "@/state/zustand/star";
+import { useTabStore } from "@/state/zustand/tab";
 import { CategoryListProps } from "@/types/category";
 import { CompleteSummarizeStarProps } from "@/types/star";
 import { Keyword, RectangleButton, Spinner, Textarea } from "@repo/ui";
@@ -42,6 +43,7 @@ const CreateBookmark = () => {
 
   const [bookmark, setBookmark] = useState<StateProps>(Object.assign(DEFAULT_BOOKMARK, state));
   const stars = useStarStore((state) => state.stars);
+  const setIsFindingExistPath = useTabStore((state) => state.setIsFindingExistPath);
 
   const { mutateAsync: mutateAsyncCompleteCreateStar } = useCompleteCreateStar();
   const { mutateAsync: mutateAsyncUpdateStar } = useUpdateStar();
@@ -157,9 +159,20 @@ const CreateBookmark = () => {
     };
 
     if (id) {
-      await mutateAsyncUpdateStar({ id, body });
+      await mutateAsyncUpdateStar(
+        { id, body },
+        {
+          onSuccess: () => {
+            setIsFindingExistPath(true);
+          },
+        }
+      );
     } else {
-      await mutateAsyncCompleteCreateStar(body);
+      await mutateAsyncCompleteCreateStar(body, {
+        onSuccess: () => {
+          setIsFindingExistPath(true);
+        },
+      });
     }
   };
 

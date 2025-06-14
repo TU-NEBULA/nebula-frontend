@@ -6,6 +6,20 @@ import { updateCurrentTab } from "@/utils/chrome";
 
 import { useReplaceNavigate } from "./use-replace-navigate";
 
+interface TabChangeInfoProps {
+  status?: chrome.tabs.TabStatus;
+  url?: string;
+  groupId?: number;
+  pinned?: boolean;
+  audible?: boolean;
+  frozen?: boolean;
+  discarded?: boolean;
+  autoDiscardable?: boolean;
+  mutedInfo?: chrome.tabs.MutedInfo;
+  favIconUrl?: string;
+  title?: string;
+}
+
 export function useDetectPath() {
   const { currentTab, setCurrentTab, setIsFindingExistPath } = useTabStore();
 
@@ -15,16 +29,26 @@ export function useDetectPath() {
 
   useEffect(() => {
     updateCurrentTab(setCurrentTab);
-    chrome.tabs.onActivated.addListener(() => {
+
+    const onTabActived = () => {
       setIsFindingExistPath(true);
       updateCurrentTab(setCurrentTab);
-    });
-    chrome.tabs.onUpdated.addListener((_, changeInfo) => {
+    };
+
+    const onTabUpdated = (_: number, changeInfo: TabChangeInfoProps) => {
       setIsFindingExistPath(true);
       if (changeInfo.status === "complete") {
         updateCurrentTab(setCurrentTab);
       }
-    });
+    };
+
+    chrome.tabs.onActivated.addListener(onTabActived);
+    chrome.tabs.onUpdated.addListener(onTabUpdated);
+
+    return () => {
+      chrome.tabs.onActivated.removeListener(onTabActived);
+      chrome.tabs.onUpdated.removeListener(onTabUpdated);
+    };
   }, []);
 
   useEffect(() => {
@@ -34,8 +58,8 @@ export function useDetectPath() {
       navigate(`/create-bookmark?id=${findStar.starId}`);
     } else {
       navigate("/bookmark");
-      setIsFindingExistPath(false);
     }
+    setIsFindingExistPath(false);
   }, [stars, currentTab]);
 
   return { currentTab };

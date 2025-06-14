@@ -15,7 +15,6 @@ function App() {
         <Route element={<Layout />}>
           <Route element={<StarLayout />}>
             <Route path="/" element={<Home />} />
-            <Route path="/" element={<Home />} />
             <Route path="/agreement" element={<Agreement />} />
             <Route path="/bookmark" element={<Bookmark />} />
             <Route path="/create-bookmark" element={<CreateBookmark />} />

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 
-import WordCloud2, { ListEntry } from "wordcloud";
+import WordCloud2, { type ListEntry } from "wordcloud";
 
 export interface Keyword {
   word: string;
@@ -16,7 +16,7 @@ const colors = ["#6366F1", "#818CF8", "#A5B4FC", "#fff"];
 export default function WordCloud({ keywords }: { keywords: Keyword[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [width, setWidth] = useState(
-    Math.min(Math.max(360, window ? window.innerWidth - 620 : 360), 700)
+    Math.min(Math.max(360, typeof window !== "undefined" ? window.innerWidth - 620 : 360), 700)
   );
 
   const height = 420;

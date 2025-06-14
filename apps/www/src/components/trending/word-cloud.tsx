@@ -15,7 +15,9 @@ const colors = ["#6366F1", "#818CF8", "#A5B4FC", "#fff"];
 
 export default function WordCloud({ keywords }: { keywords: Keyword[] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [width, setWidth] = useState(Math.min(Math.max(360, window.innerWidth - 620), 700));
+  const [width, setWidth] = useState(
+    Math.min(Math.max(360, window ? window.innerWidth - 620 : 360), 700)
+  );
 
   const height = 420;
 

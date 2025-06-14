@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { lazy, Suspense, useEffect, useRef } from "react";
 
-const ForceGraph2D = lazy(() => import("react-force-graph-2d"));
+const ReactForceGraph2D = lazy(() => import("react-force-graph-2d"));
 
 interface NodeType {
   id: string;
@@ -17,7 +17,7 @@ interface LinkType {
   target: string;
 }
 
-interface ForceGraphProps {
+interface Graph2DProps {
   graphData: {
     nodes: NodeType[];
     links: LinkType[];
@@ -26,7 +26,7 @@ interface ForceGraphProps {
   height?: number;
 }
 
-const ForceGraph = ({ graphData, width = 500, height = 300 }: ForceGraphProps) => {
+const Graph2D = ({ graphData, width = 500, height = 300 }: Graph2DProps) => {
   const fgRef = useRef<any>(null);
 
   useEffect(() => {
@@ -49,7 +49,7 @@ const ForceGraph = ({ graphData, width = 500, height = 300 }: ForceGraphProps) =
           <div className="flex h-full items-center justify-center">그래프를 불러오는 중...</div>
         }
       >
-        <ForceGraph2D
+        <ReactForceGraph2D
           ref={fgRef}
           graphData={graphData}
           nodeLabel="name"
@@ -116,4 +116,4 @@ const ForceGraph = ({ graphData, width = 500, height = 300 }: ForceGraphProps) =
   );
 };
 
-export default ForceGraph;
+export default Graph2D;

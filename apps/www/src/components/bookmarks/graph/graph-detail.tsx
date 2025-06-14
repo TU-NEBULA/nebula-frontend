@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -11,7 +11,8 @@ import trash from "@/assets/icons/trash.svg";
 import { useCreateCategory } from "@/lib/tanstack/mutation/category";
 import { useDeleteStar, useUpdateStar } from "@/lib/tanstack/mutation/star";
 import { useGetGraphDetail } from "@/lib/tanstack/query/graph";
-import { Card, cn, Keyword, Modal, RectangleButton, Spinner, Textarea } from "@repo/ui";
+import { useBookmarkStore } from "@/lib/zustand/bookmark";
+import { Card, cn, Graph2D, Keyword, Modal, RectangleButton, Spinner, Textarea } from "@repo/ui";
 
 interface GraphDetailProps {
   open: boolean;
@@ -29,10 +30,40 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
     useGetGraphDetail(id);
 
   const [edit, setEdit] = useState({ activated: false, keyword: "", ...(starData?.result || {}) });
+  const stars = useBookmarkStore((state) => state.stars);
 
   const { mutateAsync: createCategory, isPending: createCategoryLoading } = useCreateCategory();
   const { mutateAsync: updateStar, isPending: updateStarLoading } = useUpdateStar();
   const { mutateAsync: deleteStar, isPending: deleteStarLoading } = useDeleteStar(onClose);
+
+  const graphData = useMemo(() => {
+    if (!stars?.starListDto || !stars?.linkListDto || !id) return { nodes: [], links: [] };
+
+    // 현재 북마크와 연결된 링크만 필터링
+    const relatedLinks = stars.linkListDto.filter((link) => link.linkedNodeIdList.includes(id));
+
+    // 관련된 노드 ID 수집
+    const relatedNodeIds = new Set<string>();
+    relatedLinks.forEach((link) => {
+      link.linkedNodeIdList.forEach((nodeId) => relatedNodeIds.add(nodeId));
+    });
+
+    // 관련된 노드만 필터링
+    const relatedNodes = stars.starListDto.filter((star) => relatedNodeIds.has(star.starId));
+
+    return {
+      nodes: relatedNodes.map((star) => ({
+        id: star.starId,
+        name: star.title,
+        val: Math.min(star.views, 10),
+        url: star.siteUrl,
+      })),
+      links: relatedLinks.map((link) => ({
+        source: link.linkedNodeIdList[0],
+        target: link.linkedNodeIdList[1],
+      })),
+    };
+  }, [stars, id]);
 
   const onSelectCategory = (categoryName: string) => {
     setEdit((prev) => ({ ...prev, categoryName }));
@@ -235,6 +266,19 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 )}
               </div>
             </div>
+            <Graph2D
+              graphData={{
+                nodes: graphData.nodes.map((star) => ({
+                  id: star.id,
+                  name: star.name,
+                  val: 1,
+                })),
+                links: graphData.links.map((link) => ({
+                  source: link.source,
+                  target: link.target,
+                })),
+              }}
+            />
             <Card
               Thumbnail={
                 starData?.result?.thumbnailUrl ? (

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import Graph from "@/components/bookmarks/graph";
 import GraphDetail from "@/components/bookmarks/graph/graph-detail";
@@ -33,6 +33,12 @@ const BookmarkPage = () => {
       id: "",
     });
   };
+
+  useEffect(() => {
+    if (data) {
+      bookmarkStore.setStars(data.result);
+    }
+  }, [data]);
 
   if (isPending || !data) {
     return (

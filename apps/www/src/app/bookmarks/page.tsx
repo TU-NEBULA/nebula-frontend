@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Graph from "@/components/bookmarks/graph";
 import GraphDetail from "@/components/bookmarks/graph/graph-detail";
 import Planet from "@/components/bookmarks/graph/planet";
+import Tree from "@/components/bookmarks/tree";
 import { GRAPH_THEME } from "@/constants/bookmark";
 import { useGetAllStars } from "@/lib/tanstack/query/star";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
@@ -34,6 +35,17 @@ const BookmarkPage = () => {
     });
   };
 
+  const renderTheme = () => {
+    switch (bookmarkStore.selectedTheme) {
+      case GRAPH_THEME.GRAPH:
+        return <Graph onOpen={onOpen} data={data!.result} />;
+      case GRAPH_THEME.PLANET:
+        return <Planet onOpen={onOpen} data={data!.result} />;
+      case GRAPH_THEME.TREE:
+        return <Tree onOpen={onOpen} />;
+    }
+  };
+
   useEffect(() => {
     if (data) {
       bookmarkStore.setStars(data.result);
@@ -50,11 +62,7 @@ const BookmarkPage = () => {
 
   return (
     <>
-      {bookmarkStore.selectedTheme === GRAPH_THEME.GRAPH ? (
-        <Graph onOpen={onOpen} data={data!.result} />
-      ) : (
-        <Planet onOpen={onOpen} data={data!.result} />
-      )}
+      {renderTheme()}
       <GraphDetail open={detail.open} id={detail.id} onClose={onClose} />
     </>
   );

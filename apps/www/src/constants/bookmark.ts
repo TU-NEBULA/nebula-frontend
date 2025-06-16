@@ -6,6 +6,7 @@ export enum LINK_TYPE {
 export enum GRAPH_THEME {
   GRAPH = "GRAPH",
   PLANET = "PLANET",
+  TREE = "TREE",
 }
 
 export enum GRAPH_TYPE {

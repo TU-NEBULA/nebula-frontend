@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 
-import ForceGraph from "@/components/force-graph";
 import Loading from "@/components/loading";
 import { useCreateStar } from "@/state/mutation/star";
 import { useStarStore } from "@/state/zustand/star";
 import { useTabStore } from "@/state/zustand/tab";
 import { getHtmlText } from "@/utils/chrome";
+import { Graph2D } from "@repo/ui";
 import { RectangleButton } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
@@ -69,7 +69,7 @@ const Bookmark = () => {
     <Loading title="페이지를 요약하고 있어요!">
       <main className="flex h-full flex-col justify-center gap-28 overflow-x-hidden">
         <section>
-          <ForceGraph graphData={graphData} />
+          <Graph2D graphData={graphData} />
           <h1 className="text-notification">현재 페이지 정보</h1>
         </section>
         <section className="space-y-4">

@@ -1,7 +1,10 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 import { onClickOauth } from "@/utils/login";
-import { SocialLoginButton } from "@repo/ui";
+
+const SocialLoginButton = dynamic(() => import("@repo/ui").then((mod) => mod.SocialLoginButton));
 
 const SocialLogin = () => {
   return (

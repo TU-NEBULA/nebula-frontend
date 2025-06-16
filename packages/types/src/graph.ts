@@ -9,6 +9,7 @@ export interface StarProps {
   views: number;
   keywordList: string[];
   faviconUrl: string;
+  lastAccessedAt: string;
 }
 
 export interface LinkProps {

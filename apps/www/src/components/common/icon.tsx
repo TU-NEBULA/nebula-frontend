@@ -33,6 +33,38 @@ const Icon = {
       />
     </svg>
   ),
+  arrowUp: ({ size = 24, fill = "#111" }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M19 15.1108L13.4519 9.48876C12.663 8.68937 11.3369 8.68937 10.5481 9.48876L5 15.1108"
+        stroke={fill}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
+  arrowDown: ({ size = 24, fill = "#111" }: IconProps) => (
+    <svg
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <path
+        d="M4.99998 8.88916L10.5481 14.5112C11.337 15.3106 12.6631 15.3106 13.4519 14.5112L19 8.88916"
+        stroke={fill}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+    </svg>
+  ),
   arrowRight: ({ size = 24, fill = "#111" }: IconProps) => (
     <svg
       width={size}

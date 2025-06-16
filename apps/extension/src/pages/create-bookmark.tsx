@@ -3,7 +3,6 @@ import { useEffect, useMemo, useState } from "react";
 import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
 import CardWrapper from "@/components/create-bookmark/card-wrapper";
-import ForceGraph from "@/components/force-graph";
 import Loading from "@/components/loading";
 import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar, useUpdateStar } from "@/state/mutation/star";
@@ -13,6 +12,7 @@ import { useStarStore } from "@/state/zustand/star";
 import { useTabStore } from "@/state/zustand/tab";
 import { CategoryListProps } from "@/types/category";
 import { CompleteSummarizeStarProps } from "@/types/star";
+import { Graph2D } from "@repo/ui";
 import { Keyword, RectangleButton, Spinner, Textarea } from "@repo/ui";
 
 import { Navigate, useLocation, useSearchParams } from "react-router-dom";
@@ -199,7 +199,7 @@ const CreateBookmark = () => {
           </button>
         </header>
         <section>
-          <ForceGraph graphData={graphData} />
+          <Graph2D graphData={graphData} />
         </section>
         <CardWrapper
           thumbnailUrl={bookmark.thumbnailUrl}

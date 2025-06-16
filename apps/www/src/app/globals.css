@@ -58,3 +58,24 @@ input[type="checkbox"] {
     border-radius: 50%;
   }
 }
+
+.node__root,
+.node__branch,
+.node__leaf {
+  text {
+    fill: #fff;
+  }
+}
+
+.node__leaf {
+  stroke: #fff !important;
+  fill: #111 !important;
+}
+
+.rd3t-link {
+  stroke: #fff !important;
+}
+
+.rd3t-label__attributes tspan:nth-of-type(n + 2) {
+  display: none;
+}

@@ -1,3 +1,3 @@
 export enum CATEGORY {
-  GET = "get-categories",
+  GET = "GET_CATEGORIES",
 }

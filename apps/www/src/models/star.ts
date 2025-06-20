@@ -1,14 +1,11 @@
-import { LinkProps, StarProps } from "@/types/graph";
-
-export interface AllStarDTO {
-  type: string;
-  totalStarCnt: number;
-  totalLinkCnt: number;
-  starListDto: StarProps[];
-  linkListDto: LinkProps[];
-}
+import { Star2DNodeProps } from "@/types/star";
 
 export interface DeleteStarDTO {
   starId: string;
   deleteStatus: string;
+}
+
+export interface Star2DDTO {
+  category: string;
+  keywordList: Star2DNodeProps[];
 }

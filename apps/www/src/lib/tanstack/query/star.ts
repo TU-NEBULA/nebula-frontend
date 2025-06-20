@@ -1,5 +1,5 @@
 import { STAR } from "@/constants/star";
-import { getAllStars, getStarByCategory, getStarByKeyword } from "@/service/star";
+import { get2DStars, getAllStars, getStarByCategory, getStarByKeyword } from "@/service/star";
 import { useQuery, useSuspenseQuery } from "@tanstack/react-query";
 
 export const useGetStarByCategory = (categoryId: string) => {
@@ -20,5 +20,12 @@ export const useGetAllStars = () => {
   return useQuery({
     queryKey: [STAR.GET_ALL],
     queryFn: getAllStars,
+  });
+};
+
+export const useGet2DStars = () => {
+  return useQuery({
+    queryKey: [STAR.GET_2D],
+    queryFn: get2DStars,
   });
 };

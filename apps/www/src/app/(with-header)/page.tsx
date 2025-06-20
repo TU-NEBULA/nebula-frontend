@@ -1,4 +1,5 @@
-import GetStart from "@/components/landing/get-start";
+import Link from "next/link";
+
 import SampleGraph from "@/components/landing/sample-graph";
 
 export default function LandingPage() {
@@ -16,7 +17,26 @@ export default function LandingPage() {
             </p>
           </div>
         </div>
-        <GetStart />
+        <div className="hidden flex-1 space-y-7 md:block">
+          <div className="space-y-2 text-end">
+            <Link href="/bookmarks" className="text-2xl">
+              시작페이지
+            </Link>
+            <p className="text-sm text-gray7">
+              북마크 정보와 관리된 노드들을 볼 수 있는 페이지 입니다
+            </p>
+          </div>
+          <div className="space-y-2 text-end">
+            <Link
+              className="text-2xl"
+              href="https://chromewebstore.google.com/detail/react-developer-tools/fmkadmapgofadopljbjfkapdkoienihi?hl=ko"
+              target="_blank"
+            >
+              크롬 익스텐션 다운로드
+            </Link>
+            <p className="text-sm text-gray7">크롬 익스텐션을 다운 받을 수 있는 곳 입니다</p>
+          </div>
+        </div>
       </section>
       <SampleGraph />
     </main>

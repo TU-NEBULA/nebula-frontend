@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useOutsideClick } from "../../hooks/use-outside-click";
 import { cn } from "../../utils/cn";
@@ -43,7 +43,7 @@ const Card = ({
 
   const onStartEdit = (e: React.MouseEvent<HTMLInputElement>) => {
     e.stopPropagation();
-    setEdit({ start: true, content: "", title: "" });
+    setEdit({ start: true, content: "", title: edit.title });
   };
 
   const onCloseModal = () => {
@@ -74,6 +74,13 @@ const Card = ({
       await onCreateCategory();
     }
   };
+
+  useEffect(() => {
+    setEdit((prev) => ({
+      ...prev,
+      title,
+    }));
+  }, [title]);
 
   return (
     <>

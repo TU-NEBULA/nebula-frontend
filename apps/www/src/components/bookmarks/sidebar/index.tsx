@@ -17,7 +17,7 @@ import { removeAuth } from "@/utils/cookies";
 import Dropdown from "./dropdown";
 
 const filters = [LINK_TYPE.SIMILARITY, LINK_TYPE.KEYWORD];
-const themes = [GRAPH_THEME.PLANET, GRAPH_THEME.GRAPH];
+const themes = [GRAPH_THEME.PLANET, GRAPH_THEME.GRAPH, GRAPH_THEME.TREE];
 const types = [GRAPH_TYPE.COLOR, GRAPH_TYPE.LOGO];
 
 const Sidebar = () => {

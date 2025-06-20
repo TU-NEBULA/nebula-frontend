@@ -5,6 +5,7 @@ export { default as Card } from "./card";
 export { default as Textarea } from "./textarea";
 export { default as Keyword } from "./keyword";
 export { default as Modal } from "./modal";
+export { default as Graph2D } from "./graph-2d";
 
 export { cn } from "../utils/cn";
 

@@ -4,8 +4,7 @@ import { useEffect, useRef } from "react";
 
 import { GRAPH_TYPE } from "@/constants/bookmark";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
-import { AllStarDTO } from "@/models/star";
-import { LinkProps, StarProps } from "@/types/graph";
+import { AllStarDTO, LinkProps, StarProps } from "@repo/types";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -15,7 +14,13 @@ interface GraphProps {
   data: AllStarDTO;
 }
 
-type Body = { mesh: THREE.Mesh; angle: number; center: THREE.Vector3; star: StarProps };
+interface Body {
+  mesh: THREE.Mesh;
+  angle: number;
+  center: THREE.Vector3;
+  star: StarProps;
+  distance: number;
+}
 
 export default function Planet({ onOpen, data }: GraphProps) {
   const { selectedType, selectedColor } = useBookmarkStore();
@@ -113,26 +118,29 @@ export default function Planet({ onOpen, data }: GraphProps) {
     });
 
     const orbitRadius = 5;
-    const orbitSpeed = 0.005;
-    const loader = new THREE.TextureLoader();
+    const maxDistance = 8; // 최대 거리
+    const minDistance = 4; // 최소 거리
     const placementRange = 40;
-    const centerRadius = 3;
+    const centerRadius = 1.5;
     const minCenterDist = orbitRadius * 2 + centerRadius * 2;
     const centers: THREE.Vector3[] = [];
 
     const bodies: Body[] = [];
 
     function makeLabel(text: string): THREE.Sprite {
+      // 최대 15자, 초과 시 ...
+      const maxLabelLength = 15;
+      const label = text.length > maxLabelLength ? text.slice(0, maxLabelLength) + "..." : text;
       const canvas = document.createElement("canvas");
       const ctx = canvas.getContext("2d")!;
-      const fontSize = 48;
+      const fontSize = 24;
       ctx.font = `${fontSize}px Arial`;
-      const widthText = ctx.measureText(text).width;
+      const widthText = ctx.measureText(label).width;
       canvas.width = widthText;
       canvas.height = fontSize;
       ctx.font = `${fontSize}px Arial`;
       ctx.fillStyle = "#ccc";
-      ctx.fillText(text, 0, fontSize * 0.8);
+      ctx.fillText(label, 0, fontSize * 0.8);
       const texture = new THREE.CanvasTexture(canvas);
       texture.needsUpdate = true;
       const material = new THREE.SpriteMaterial({
@@ -163,9 +171,9 @@ export default function Planet({ onOpen, data }: GraphProps) {
 
       const cgeo = new THREE.SphereGeometry(centerRadius, 32, 32);
       const cmat = new THREE.MeshStandardMaterial({
-        emissive: 0xffaa00,
+        emissive: 0xd7bdce,
         emissiveIntensity: 0.7,
-        color: 0xffaa00,
+        color: 0xd7bdce,
       });
       const centerMesh = new THREE.Mesh(cgeo, cmat);
       centerMesh.position.copy(center);
@@ -173,30 +181,20 @@ export default function Planet({ onOpen, data }: GraphProps) {
       centerMesh.receiveShadow = true;
       scene.add(centerMesh);
 
+      // shared keyword 라벨을 센터 구체 위에 표시
       const kwText = (groupKeywords[root] || []).join(", ");
       if (kwText) {
         const label = makeLabel(kwText);
-        label.position.copy(center);
+        label.position.set(center.x, center.y + centerRadius + 0.5, center.z);
         scene.add(label);
       }
-
-      const ring = new THREE.RingGeometry(orbitRadius - 0.5, orbitRadius + 0.5, 64);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0x888888,
-        side: THREE.DoubleSide,
-        transparent: true,
-        opacity: 0.3,
-      });
-      const ringMesh = new THREE.Mesh(ring, ringMat);
-      ringMesh.rotation.x = Math.PI / 2;
-      ringMesh.position.copy(center);
-      scene.add(ringMesh);
 
       members.forEach((starId, j) => {
         const star = stars.find((s) => s.starId === starId)!;
         const size = 0.5 + (star.views / Math.max(...stars.map((s) => s.views))) * 0.5;
         const geo = new THREE.SphereGeometry(size, 32, 32);
 
+        // 각 star는 selectedColor로 표시
         const mat = new THREE.MeshStandardMaterial({ color: selectedColor });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.userData = {
@@ -204,14 +202,41 @@ export default function Planet({ onOpen, data }: GraphProps) {
           title: star.title,
           faviconUrl: star.faviconUrl || "/velog.png",
         };
-        const angle = (j / members.length) * Math.PI * 2;
-        mesh.position.set(
-          cx + orbitRadius * Math.cos(angle),
-          0,
-          cz + orbitRadius * Math.sin(angle)
-        );
+
+        // lastAccessedAt을 기준으로 거리 계산
+        const lastAccessed = new Date(star.lastAccessedAt).getTime();
+        const now = new Date().getTime();
+        const timeDiff = now - lastAccessed;
+        const maxTimeDiff = 30 * 24 * 60 * 60 * 1000; // 30일
+        const distance = minDistance + (maxDistance - minDistance) * (timeDiff / maxTimeDiff);
+
+        // 랜덤한 각도로 배치 및 공전 각도 부여
+        const angle = Math.random() * Math.PI * 2;
+        mesh.position.set(cx + distance * Math.cos(angle), 0, cz + distance * Math.sin(angle));
         scene.add(mesh);
-        bodies.push({ mesh, angle, center: center.clone(), star });
+        bodies.push({ mesh, angle, center: center.clone(), star, distance });
+
+        // ★ 행성 위에 title 라벨 추가
+        const label = makeLabel(star.title);
+        label.position.set(
+          mesh.position.x,
+          mesh.position.y + size + 0.5, // 구체 위에 띄우기
+          mesh.position.z
+        );
+        scene.add(label);
+
+        // ★ 각 행성의 궤도 반지름에 맞는 얇은 띠 추가
+        const orbitRingGeo = new THREE.RingGeometry(distance - 0.05, distance + 0.05, 64);
+        const orbitRingMat = new THREE.MeshBasicMaterial({
+          color: 0xcccccc,
+          side: THREE.DoubleSide,
+          transparent: true,
+          opacity: 0.2,
+        });
+        const orbitRingMesh = new THREE.Mesh(orbitRingGeo, orbitRingMat);
+        orbitRingMesh.rotation.x = Math.PI / 2;
+        orbitRingMesh.position.copy(center);
+        scene.add(orbitRingMesh);
       });
     });
 
@@ -258,13 +283,6 @@ export default function Planet({ onOpen, data }: GraphProps) {
 
     const animate = () => {
       requestAnimationFrame(animate);
-      bodies.forEach((b) => {
-        if (hovered !== b) {
-          b.angle += orbitSpeed;
-          b.mesh.position.x = b.center.x + orbitRadius * Math.cos(b.angle);
-          b.mesh.position.z = b.center.z + orbitRadius * Math.sin(b.angle);
-        }
-      });
       controls.update();
       renderer.render(scene, camera);
     };

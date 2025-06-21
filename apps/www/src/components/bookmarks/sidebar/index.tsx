@@ -9,8 +9,8 @@ import logo from "@/assets/icons/logo.svg";
 import logout from "@/assets/icons/logout.svg";
 import Icon from "@/components/common/icon";
 import { GRAPH_THEME, GRAPH_TYPE, LINK_TYPE } from "@/constants/bookmark";
+import { useUserInfo } from "@/hooks/use-user-info";
 import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
-import { useGetUserInfo } from "@/lib/tanstack/query/user";
 import { useBookmarkStore } from "@/lib/zustand/bookmark";
 import { removeAuth } from "@/utils/cookies";
 
@@ -28,7 +28,7 @@ const Sidebar = () => {
     profileOpen: false,
   });
 
-  const { data } = useGetUserInfo();
+  const { userInfo } = useUserInfo();
 
   const router = useRouter();
 
@@ -141,7 +141,7 @@ const Sidebar = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <div className="relative flex items-center gap-2">
             <button onClick={onToggleProfile} className="min-h-8 min-w-8 rounded-lg bg-gray5" />
-            <p className="truncate">{data?.result?.email || "example@example.com"}</p>
+            <p className="truncate">{userInfo?.email || "example@example.com"}</p>
             {sidebar.profileOpen && (
               <button
                 onClick={onLogout}

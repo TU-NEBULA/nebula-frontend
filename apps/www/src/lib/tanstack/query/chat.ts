@@ -6,12 +6,13 @@ export const useGetChatMessages = (sessionId: string) => {
   return useQuery({
     queryKey: [CHAT.GET_CHAT_MESSAGES, sessionId],
     queryFn: () => getChatMessages(sessionId),
+    enabled: !!sessionId,
   });
 };
 
 export const useGetAllChatSessions = () => {
   return useQuery({
     queryKey: [CHAT.GET_ALL_CHAT_SESSIONS],
-    queryFn: () => getAllChatSessions({ limit: 10, offset: 0 }),
+    queryFn: () => getAllChatSessions({ limit: 20, offset: 0 }),
   });
 };

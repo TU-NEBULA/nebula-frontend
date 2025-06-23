@@ -5,6 +5,7 @@ import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Icon from "@/components/common/icon";
 import { useUserInfo } from "@/hooks/use-user-info";
 import { useCreateChatSession } from "@/lib/tanstack/mutation/chat";
+import { useGetChatMessages } from "@/lib/tanstack/query/chat";
 import { cn } from "@repo/ui";
 
 import DOMPurify from "dompurify";
@@ -35,12 +36,24 @@ AssistantMessage.displayName = "AssistantMessage";
 
 export default function Chat({ sessionId, onSessionCreated }: ChatProps) {
   const { userInfo, isLoading: isUserLoading } = useUserInfo();
+  const { data: chatHistory, isLoading: isHistoryLoading } = useGetChatMessages(sessionId);
   const { mutateAsync: createChatSession } = useCreateChatSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [streamingContent, setStreamingContent] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    setMessages([]);
+    setStreamingContent(null);
+  }, [sessionId]);
+
+  useEffect(() => {
+    if (chatHistory?.result && chatHistory.result.length > 0 && messages.length === 0) {
+      setMessages(chatHistory.result[0].messages);
+    }
+  }, [chatHistory, messages.length]);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -177,6 +190,14 @@ export default function Chat({ sessionId, onSessionCreated }: ChatProps) {
             {isLoading ? "생각 중..." : "질문하고 대화 시작"}
           </button>
         </form>
+      </div>
+    );
+  }
+
+  if (isHistoryLoading) {
+    return (
+      <div className="flex h-full w-80 max-w-lg flex-col items-center justify-center rounded-lg border bg-white">
+        <p className="animate-pulse">대화 기록을 불러오는 중...</p>
       </div>
     );
   }

@@ -6,7 +6,7 @@ export default {
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
-    "../../packages/ui/src/**/*.tsx",
+    "../../packages/ui/src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
@@ -35,6 +35,15 @@ export default {
       screens: {
         "semi-md": "49.375rem",
       },
+      typography: ({ theme }) => ({
+        DEFAULT: {
+          css: {
+            "--tw-prose-bullets": theme("colors.gray.500"),
+            "--tw-prose-counters": theme("colors.gray.500"),
+          },
+        },
+      }),
     },
   },
+  plugins: [require("@tailwindcss/typography")],
 } satisfies Config;

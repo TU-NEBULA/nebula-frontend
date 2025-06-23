@@ -198,9 +198,11 @@ const CreateBookmark = () => {
             <p className="text-xs font-semibold">Nebula AI</p>
           </button>
         </header>
-        <section>
-          <Graph2D graphData={graphData} />
-        </section>
+        {id && (
+          <section>
+            <Graph2D graphData={graphData} />
+          </section>
+        )}
         <CardWrapper
           thumbnailUrl={bookmark.thumbnailUrl}
           siteUrl={bookmark.siteUrl}

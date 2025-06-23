@@ -16,12 +16,12 @@ export interface ChatMessageDTO {
   messages: {
     id: string;
     content: string;
-    role: string;
+    role: "user" | "assistant";
     createdAt: string;
-    metadata: {
-      additionalProp1: string;
-      additionalProp2: string;
-      additionalProp3: string;
-    };
+    metadata: Partial<{
+      token_count: string;
+      model: string;
+      response_time_ms: string;
+    }>;
   }[];
 }

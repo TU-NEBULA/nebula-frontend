@@ -9,15 +9,6 @@ export const createChatSession = async (body: {
   return api.post("/chat/sessions", body);
 };
 
-export const sendMessage = async (props: {
-  sessionId: string;
-  message: string;
-  userId: number;
-}) => {
-  const { userId, ...body } = props;
-  return api.post(`/chat/stream?userId=${userId}`, body);
-};
-
 export const getChatMessages = async (
   sessionId: string
 ): Promise<BaseResponseDTO<ChatMessageDTO[]>> => {

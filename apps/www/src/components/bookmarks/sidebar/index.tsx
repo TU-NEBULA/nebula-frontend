@@ -209,7 +209,7 @@ const Sidebar = () => {
             type="color"
             value={bookmarkStore.selectedColor}
             onChange={(e) => bookmarkStore.setSelectedColor(e.target.value)}
-            className="h-8 w-full cursor-pointer rounded"
+            className="h-8 cursor-pointer rounded"
           />
         </fieldset>
       </section>

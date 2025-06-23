@@ -1,16 +1,20 @@
+import { useEffect } from "react";
+
 import { useGetUserInfo } from "@/lib/tanstack/query/user";
 import { useUserStore } from "@/lib/zustand/user";
 
 export const useUserInfo = () => {
   const { userInfo, setUserInfo } = useUserStore();
-  const { data } = useGetUserInfo(userInfo);
+  const { data, isLoading } = useGetUserInfo();
 
-  if (data?.result && !userInfo) {
-    setUserInfo(data.result);
-  }
+  useEffect(() => {
+    if (data?.result && !isLoading && !userInfo) {
+      setUserInfo(data.result);
+    }
+  }, [data, isLoading]);
 
   return {
     userInfo: userInfo || data?.result,
-    isLoading: !data && !userInfo,
+    isLoading,
   };
 };

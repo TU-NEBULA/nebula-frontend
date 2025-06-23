@@ -1,26 +1,14 @@
-import { useUserStore } from "@/lib/zustand/user";
-import { createChatSession, sendMessage } from "@/service/chat";
+import { CHAT } from "@/constants/chat";
+import { createChatSession } from "@/service/chat";
 import { useMutation } from "@tanstack/react-query";
+
+import { queryClient } from "..";
 
 export const useCreateChatSession = () => {
   return useMutation({
     mutationFn: createChatSession,
-    onSuccess: (data) => {
-      console.log("onSuccess", data);
-    },
-    onError: (error) => {
-      console.error("onError", error);
-    },
-  });
-};
-
-export const useSendMessage = () => {
-  const userInfo = useUserStore((state) => state.userInfo);
-  return useMutation({
-    mutationFn: (props: { sessionId: string; message: string }) =>
-      sendMessage({ ...props, userId: userInfo?.id || 1 }),
-    onSuccess: (data) => {
-      console.log("onSuccess", data);
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [CHAT.GET_ALL_CHAT_SESSIONS] });
     },
     onError: (error) => {
       console.error("onError", error);

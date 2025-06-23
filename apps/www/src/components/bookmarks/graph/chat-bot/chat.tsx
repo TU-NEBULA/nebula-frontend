@@ -182,7 +182,7 @@ export default function Chat({ sessionId, onSessionCreated }: ChatProps) {
   }
 
   return (
-    <div className="flex h-full w-full max-w-lg flex-col justify-between rounded-lg border bg-white">
+    <div className="flex h-full w-80 max-w-lg flex-col justify-between rounded-lg border bg-white">
       <div className="flex-1 space-y-4 overflow-y-auto p-4">
         {messages.map((message, index) => (
           <div
@@ -206,19 +206,21 @@ export default function Chat({ sessionId, onSessionCreated }: ChatProps) {
             </div>
           </div>
         ))}
-        {streamingContent !== null && (
+        {streamingContent && streamingContent.length > 0 && (
           <div className="flex items-start justify-start gap-2 text-sm">
             <div className="max-w-[80%] rounded-lg bg-gray-200 p-2 text-black">
               <AssistantMessage content={streamingContent} />
             </div>
           </div>
         )}
-        {isLoading && streamingContent === null && (
-          <div className="animate-pulse p-2">생각 중...</div>
-        )}
+        {isLoading && !streamingContent && <div className="animate-pulse p-2">생각 중...</div>}
         <div ref={messagesEndRef} />
       </div>
-      <form ref={formRef} onSubmit={onSubmitQuestion} className="flex items-end gap-2 border-t p-2">
+      <form
+        ref={formRef}
+        onSubmit={onSubmitQuestion}
+        className="flex items-center gap-2 border-t p-2"
+      >
         <textarea
           name="question"
           rows={1}

@@ -21,10 +21,8 @@ export default function ChatBot() {
       </button>
       {isOpen && (
         <div className="absolute bottom-0 right-full mr-2 flex h-96 gap-5 rounded-lg bg-white p-2 text-black">
-          {/* <ul 
-          TODO: chatSessions 데이터 활용 데모 이후 보여주기
-          className="flex flex-col gap-2">
-            {CHAT_SESSIONS.map((session) => (
+          <ul className="flex flex-col gap-2">
+            {chatSessions?.result.map((session) => (
               <li key={session.sessionId}>
                 <button
                   className={cn(
@@ -37,7 +35,7 @@ export default function ChatBot() {
                 </button>
               </li>
             ))}
-          </ul> */}
+          </ul>
           <Chat sessionId={currentSession} onSessionCreated={setCurrentSession} />
         </div>
       )}

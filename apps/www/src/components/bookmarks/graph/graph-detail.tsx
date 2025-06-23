@@ -213,7 +213,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
 
   return (
     <>
-      <div className="fixed bottom-2 text-white" style={{ right: open ? "23rem" : "0.5rem" }}>
+      <div className="fixed bottom-5 text-white" style={{ right: open ? "23.75rem" : "1.25rem" }}>
         <ChatBot />
       </div>
       <div

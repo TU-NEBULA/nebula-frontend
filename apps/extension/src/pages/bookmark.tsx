@@ -1,11 +1,7 @@
-import { useMemo } from "react";
-
 import Loading from "@/components/loading";
 import { useCreateStar } from "@/state/mutation/star";
-import { useStarStore } from "@/state/zustand/star";
 import { useTabStore } from "@/state/zustand/tab";
 import { getHtmlText } from "@/utils/chrome";
-import { Graph2D } from "@repo/ui";
 import { RectangleButton } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
@@ -17,24 +13,6 @@ const Bookmark = () => {
 
   const navigate = useNavigate();
   const { mutateAsync } = useCreateStar();
-  const stars = useStarStore((state) => state.stars);
-
-  const graphData = useMemo(() => {
-    if (!stars?.starListDto || !stars?.linkListDto) return { nodes: [], links: [] };
-
-    return {
-      nodes: stars.starListDto.map((star) => ({
-        id: star.starId,
-        name: star.title,
-        val: Math.min(star.views, 10),
-        url: star.siteUrl,
-      })),
-      links: stars.linkListDto.map((link) => ({
-        source: link.linkedNodeIdList[0],
-        target: link.linkedNodeIdList[1],
-      })),
-    };
-  }, [stars]);
 
   const onClickLogout = async () => {
     await chrome.cookies.remove({
@@ -68,10 +46,6 @@ const Bookmark = () => {
   return (
     <Loading title="페이지를 요약하고 있어요!">
       <main className="flex h-full flex-col justify-center gap-28 overflow-x-hidden">
-        <section>
-          <Graph2D graphData={graphData} />
-          <h1 className="text-notification">현재 페이지 정보</h1>
-        </section>
         <section className="space-y-4">
           <div className="text-body space-y-2">
             <h2>URL</h2>

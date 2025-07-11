@@ -12,7 +12,7 @@ import { useStarStore } from "@/state/zustand/star";
 import { useTabStore } from "@/state/zustand/tab";
 import { CategoryListProps } from "@/types/category";
 import { CompleteSummarizeStarProps } from "@/types/star";
-import { Graph2D } from "@repo/ui";
+import { cn, Graph2D } from "@repo/ui";
 import { Keyword, RectangleButton, Spinner, Textarea } from "@repo/ui";
 
 import { Navigate, useLocation, useSearchParams } from "react-router-dom";
@@ -41,6 +41,8 @@ const CreateBookmark = () => {
   const [searchParams] = useSearchParams();
   const id = searchParams.get("id");
 
+  // 추후 AI 요약 기능 추가 시 tanstack query의 isPending 사용
+  const [isAISummaryPending, setIsAISummaryPending] = useState(false);
   const [bookmark, setBookmark] = useState<StateProps>(Object.assign(DEFAULT_BOOKMARK, state));
   const stars = useStarStore((state) => state.stars);
   const setIsFindingExistPath = useTabStore((state) => state.setIsFindingExistPath);
@@ -188,15 +190,9 @@ const CreateBookmark = () => {
   return (
     <Loading title="북마크를 저장하고 있어요!">
       <main className="flex h-full flex-col gap-6">
-        <header className="flex items-center justify-between">
-          <div className="flex items-center gap-1">
-            <Logo />
-            <p className="text-description font-bold">Nebula</p>
-          </div>
-          <button className="flex items-center gap-1">
-            <AISummary />
-            <p className="text-xs font-semibold">Nebula AI</p>
-          </button>
+        <header className="flex items-center gap-1">
+          <Logo />
+          <p className="text-description font-bold">Nebula</p>
         </header>
         {id && (
           <section>
@@ -220,6 +216,17 @@ const CreateBookmark = () => {
             value={bookmark.summaryAI}
             onChange={onChangeText}
             placeholder="북마크에 대한 요약을 작성할 수 있어요."
+            rightElement={
+              <button
+                className={cn("flex items-center gap-1", isAISummaryPending && "animate-pulse")}
+                onClick={() => setIsAISummaryPending(true)}
+              >
+                <AISummary />
+                <p className="text-xs font-semibold">
+                  {isAISummaryPending ? "요약 중..." : "인공지능 요약"}
+                </p>
+              </button>
+            }
           />
           <Textarea
             id="userMemo"

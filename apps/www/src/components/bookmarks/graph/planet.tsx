@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-import { GRAPH_TYPE } from "@/constants/bookmark";
-import { useBookmarkStore } from "@/lib/zustand/bookmark";
 import { AllStarDTO, LinkProps, StarProps } from "@repo/types";
 
 import * as THREE from "three";
@@ -23,7 +21,6 @@ interface Body {
 }
 
 export default function Planet({ onOpen, data }: GraphProps) {
-  const { selectedType, selectedColor } = useBookmarkStore();
   const containerRef = useRef<HTMLDivElement>(null);
   const bodiesRef = useRef<Body[]>([]);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -195,7 +192,7 @@ export default function Planet({ onOpen, data }: GraphProps) {
         const geo = new THREE.SphereGeometry(size, 32, 32);
 
         // 각 star는 selectedColor로 표시
-        const mat = new THREE.MeshStandardMaterial({ color: selectedColor });
+        const mat = new THREE.MeshStandardMaterial({ color: "#2E40A9" });
         const mesh = new THREE.Mesh(geo, mat);
         mesh.userData = {
           starId: star.starId,
@@ -302,28 +299,6 @@ export default function Planet({ onOpen, data }: GraphProps) {
       window.removeEventListener("resize", () => {});
     };
   }, [data]);
-
-  // 타입과 색상 변경 시 재질만 업데이트
-  useEffect(() => {
-    if (!bodiesRef.current) return;
-
-    bodiesRef.current.forEach((body) => {
-      const material = body.mesh.material as THREE.MeshStandardMaterial;
-
-      if (selectedType === GRAPH_TYPE.COLOR) {
-        material.color.set(selectedColor);
-        material.map = null;
-      } else {
-        material.color.set("#ffffff");
-        const loader = new THREE.TextureLoader();
-        loader.load(body.mesh.userData.faviconUrl, (texture) => {
-          material.map = texture;
-          material.needsUpdate = true;
-        });
-      }
-      material.needsUpdate = true;
-    });
-  }, [selectedType, selectedColor]);
 
   return <div ref={containerRef} style={{ width: "100vw", height: "100vh" }} />;
 }

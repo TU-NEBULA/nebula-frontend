@@ -38,6 +38,7 @@ export const useCompleteCreateStar = () => {
       setIsLoading(true);
     },
     onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [STAR.GET_ALL] });
       navigate(`/create-bookmark?id=${data?.result?.starId}`);
     },
     onError: (error) => {

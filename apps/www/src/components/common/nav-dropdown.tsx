@@ -9,10 +9,6 @@ import Icon from "./icon";
 
 const NAVS = [
   {
-    label: "Introduce",
-    href: "/",
-  },
-  {
     label: "View History",
     href: "/history",
   },
@@ -26,12 +22,28 @@ const NAVS = [
   },
 ];
 
+const BOOKMARK_THEMES = [
+  {
+    label: "Graph",
+    href: "/bookmarks?theme=graph",
+  },
+  {
+    label: "Planet",
+    href: "/bookmarks?theme=planet",
+  },
+  {
+    label: "Tree",
+    href: "/bookmarks?theme=tree",
+  },
+];
+
 const getCurrentPath = (pathname: string) => {
-  return NAVS.find((nav) => nav.href === pathname)?.label;
+  return NAVS.find((nav) => nav.href === pathname)?.label || "Introduce";
 };
 
 export default function NavDropdown() {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isNavOpen, setIsNavOpen] = useState(false);
+  const [isBookmarkThemeOpen, setIsBookmarkThemeOpen] = useState(false);
   const pathname = usePathname();
 
   const router = useRouter();
@@ -40,18 +52,18 @@ export default function NavDropdown() {
 
   const onClickNav = (href: string) => {
     router.push(href);
-    setIsOpen(false);
+    setIsNavOpen(false);
   };
 
   return (
     <section className="relative text-white">
-      <button onClick={() => setIsOpen(!isOpen)} className="mx-auto flex items-center gap-2">
+      <button onClick={() => setIsNavOpen(!isNavOpen)} className="mx-auto flex items-center gap-2">
         <p>{currentPath}</p>
-        <div className={cn("transition-transform", isOpen && "rotate-180")}>
+        <div className={cn("transition-transform", isNavOpen && "rotate-180")}>
           <Icon.arrowDown fill="#fff" size={16} />
         </div>
       </button>
-      {isOpen && (
+      {isNavOpen && (
         <nav className="absolute left-1/2 top-full mt-2 flex w-max -translate-x-1/2 flex-col items-center gap-2">
           {NAVS.map(
             (nav) =>
@@ -61,6 +73,26 @@ export default function NavDropdown() {
                 </button>
               )
           )}
+          <div className="relative">
+            <button
+              className="flex items-center gap-2"
+              onClick={() => setIsBookmarkThemeOpen(!isBookmarkThemeOpen)}
+            >
+              <p>Bookmark View</p>
+              <div className={cn("transition-transform", isBookmarkThemeOpen && "rotate-180")}>
+                <Icon.arrowDown fill="#fff" size={16} />
+              </div>
+            </button>
+            {isBookmarkThemeOpen && (
+              <div className="absolute left-1/2 top-full mt-2 flex -translate-x-1/2 flex-col gap-2">
+                {BOOKMARK_THEMES.map((theme) => (
+                  <button key={theme.label} onClick={() => onClickNav(theme.href)}>
+                    {theme.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </nav>
       )}
     </section>

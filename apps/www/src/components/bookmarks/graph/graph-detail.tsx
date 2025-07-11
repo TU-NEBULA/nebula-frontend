@@ -11,7 +11,7 @@ import trash from "@/assets/icons/trash.svg";
 import { useCreateCategory } from "@/lib/tanstack/mutation/category";
 import { useDeleteStar, useUpdateStar } from "@/lib/tanstack/mutation/star";
 import { useGetGraphDetail } from "@/lib/tanstack/query/graph";
-import { useBookmarkStore } from "@/lib/zustand/bookmark";
+import { AllStarDTO } from "@repo/types";
 import { Card, cn, Graph2D, Keyword, Modal, RectangleButton, Spinner, Textarea } from "@repo/ui";
 
 import ChatBot from "./chat-bot";
@@ -19,10 +19,11 @@ import ChatBot from "./chat-bot";
 interface GraphDetailProps {
   open: boolean;
   id: string;
+  stars: AllStarDTO;
   onClose: () => void;
 }
 
-const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
+const GraphDetail = ({ open, id, stars, onClose }: GraphDetailProps) => {
   const [width, setWidth] = useState(360);
   const [saveWidth, setSaveWidth] = useState(-1);
   const [holdX, setHoldX] = useState(-1);
@@ -32,7 +33,6 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
     useGetGraphDetail(id);
 
   const [edit, setEdit] = useState({ activated: false, keyword: "", ...(starData?.result || {}) });
-  const stars = useBookmarkStore((state) => state.stars);
 
   const { mutateAsync: createCategory, isPending: createCategoryLoading } = useCreateCategory();
   const { mutateAsync: updateStar, isPending: updateStarLoading } = useUpdateStar();

@@ -79,13 +79,31 @@ const CreateBookmark = () => {
     // 관련된 노드만 필터링
     const relatedNodes = stars.starListDto.filter((star) => relatedNodeIds.has(star.starId));
 
+    // 현재 북마크 정보 가져오기
+    const currentStar = stars.starListDto.find((star) => star.starId === id);
+
+    // 연관된 노드가 없으면 현재 북마크만 포함
+    const nodes =
+      relatedNodes.length > 0
+        ? relatedNodes.map((star) => ({
+            id: star.starId,
+            name: star.title,
+            val: Math.min(star.views, 10),
+            url: star.siteUrl,
+          }))
+        : currentStar
+          ? [
+              {
+                id: currentStar.starId,
+                name: currentStar.title,
+                val: 10,
+                url: currentStar.siteUrl,
+              },
+            ]
+          : [];
+
     return {
-      nodes: relatedNodes.map((star) => ({
-        id: star.starId,
-        name: star.title,
-        val: Math.min(star.views, 10),
-        url: star.siteUrl,
-      })),
+      nodes,
       links: relatedLinks.map((link) => ({
         source: link.linkedNodeIdList[0],
         target: link.linkedNodeIdList[1],

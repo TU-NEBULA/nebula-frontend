@@ -59,6 +59,14 @@ const Dropdown = ({ open, type, icon, items, onClick, onClickItem }: DropdownPro
         </button>
         {open && (
           <ul className="my-2 ml-8 border-l border-gray2 text-xs">
+            {isCategory && (
+              <button className="flex items-center gap-2 p-2" onClick={() => setIsModalOpen(true)}>
+                <div className="rounded-full bg-black p-1">
+                  <Icon.plus size={12} fill="#fff" />
+                </div>
+                <span className="text-nowrap">카테고리 추가</span>
+              </button>
+            )}
             {items.length ? (
               items.map((item) => (
                 <li key={typeof item === "string" ? item : item.id}>
@@ -71,20 +79,7 @@ const Dropdown = ({ open, type, icon, items, onClick, onClickItem }: DropdownPro
                 </li>
               ))
             ) : (
-              <>
-                {isCategory && (
-                  <button
-                    className="flex items-center gap-2 p-2"
-                    onClick={() => setIsModalOpen(true)}
-                  >
-                    <div className="rounded-full bg-black p-1">
-                      <Icon.plus size={12} fill="#fff" />
-                    </div>
-                    <span>카테고리 추가</span>
-                  </button>
-                )}
-                <li className="p-2">아직 데이터가 없어요.</li>
-              </>
+              <li className="p-2">아직 데이터가 없어요.</li>
             )}
           </ul>
         )}

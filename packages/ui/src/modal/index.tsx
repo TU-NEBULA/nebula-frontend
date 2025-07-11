@@ -1,3 +1,5 @@
+import { createPortal } from "react-dom";
+
 import { useOutsideClick } from "../../hooks/use-outside-click";
 
 interface ModalProps {
@@ -10,7 +12,7 @@ interface ModalProps {
 const Modal = ({ children, title, subTitle, callback }: ModalProps) => {
   const [modalRef] = useOutsideClick<HTMLDivElement>(callback);
 
-  return (
+  return createPortal(
     <div className="fixed left-0 top-0 z-10 flex h-full w-full items-center justify-center bg-black3 bg-opacity-50">
       <div
         ref={modalRef}
@@ -22,7 +24,8 @@ const Modal = ({ children, title, subTitle, callback }: ModalProps) => {
         </div>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };
 

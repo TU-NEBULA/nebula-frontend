@@ -9,7 +9,6 @@ import { useCompleteCreateStar, useUpdateStar } from "@/state/mutation/star";
 import { useGetKeywords } from "@/state/query/keyword";
 import { useGetStarById } from "@/state/query/star";
 import { useStarStore } from "@/state/zustand/star";
-import { useTabStore } from "@/state/zustand/tab";
 import { CategoryListProps } from "@/types/category";
 import { CompleteSummarizeStarProps } from "@/types/star";
 import { cn, Graph2D } from "@repo/ui";
@@ -45,7 +44,6 @@ const CreateBookmark = () => {
   const [isAISummaryPending, setIsAISummaryPending] = useState(false);
   const [bookmark, setBookmark] = useState<StateProps>(Object.assign(DEFAULT_BOOKMARK, state));
   const stars = useStarStore((state) => state.stars);
-  const setIsFindingExistPath = useTabStore((state) => state.setIsFindingExistPath);
 
   const { mutateAsync: mutateAsyncCompleteCreateStar } = useCompleteCreateStar();
   const { mutateAsync: mutateAsyncUpdateStar } = useUpdateStar();
@@ -120,8 +118,6 @@ const CreateBookmark = () => {
     return <Navigate to="/bad-request" replace />;
   }
 
-  const saveDisabled = bookmark.categoryName.trim() === "";
-
   const onSelectCategory = (category: string) => {
     setBookmark((prev) => ({ ...prev, categoryName: category }));
   };
@@ -164,35 +160,15 @@ const CreateBookmark = () => {
   };
 
   const onClickSave = async () => {
-    // id가 있으면 수정하기 API 요청
-    const categoryName = bookmark.categories.find(
-      (category) => category.name === bookmark.categoryName
-    )?.name;
-
-    if (!categoryName) {
-      return;
-    }
-
     const body = {
       ...bookmark,
       keywordList: bookmark.keywords,
     };
 
     if (id) {
-      await mutateAsyncUpdateStar(
-        { id, body },
-        {
-          onSuccess: () => {
-            setIsFindingExistPath(true);
-          },
-        }
-      );
+      await mutateAsyncUpdateStar({ id, body });
     } else {
-      await mutateAsyncCompleteCreateStar(body, {
-        onSuccess: () => {
-          setIsFindingExistPath(true);
-        },
-      });
+      await mutateAsyncCompleteCreateStar(body);
     }
   };
 
@@ -264,11 +240,9 @@ const CreateBookmark = () => {
             onUpdateKeyword={onUpdateKeyword}
           />
         </section>
-        <section className="flex gap-3">
+        <section className="mb-5 flex gap-3">
           <RectangleButton variation="outline">취소</RectangleButton>
-          <RectangleButton disabled={saveDisabled} onClick={onClickSave}>
-            저장
-          </RectangleButton>
+          <RectangleButton onClick={onClickSave}>저장</RectangleButton>
         </section>
       </main>
     </Loading>

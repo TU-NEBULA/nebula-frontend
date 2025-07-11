@@ -63,7 +63,7 @@ const Bookmark = () => {
   };
 
   return (
-    <Loading title="페이지를 요약하고 있어요!">
+    <Loading title="페이지를 요약하고 있어요!" description="페이지를 벗어나면 요약이 취소돼요.">
       <header className="flex items-center justify-between">
         <Logo />
         <div className="relative">

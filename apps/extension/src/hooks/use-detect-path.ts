@@ -38,8 +38,8 @@ export function useDetectPath() {
     };
 
     const onTabUpdated = (_: number, changeInfo: TabChangeInfoProps) => {
-      setIsFindingExistPath(true);
-      if (changeInfo.status === "complete") {
+      if (changeInfo.url && changeInfo.status === "loading") {
+        setIsFindingExistPath(true);
         updateCurrentTab(setCurrentTab);
       }
     };

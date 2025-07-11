@@ -4,6 +4,7 @@ import AISummary from "@/assets/ai-summary.svg?react";
 import Logo from "@/assets/logo.svg?react";
 import CardWrapper from "@/components/create-bookmark/card-wrapper";
 import Loading from "@/components/loading";
+import { useReplaceNavigate } from "@/hooks/use-replace-navigate";
 import { useCreateCategory } from "@/state/mutation/category";
 import { useCompleteCreateStar, useUpdateStar } from "@/state/mutation/star";
 import { useGetKeywords } from "@/state/query/keyword";
@@ -51,6 +52,8 @@ const CreateBookmark = () => {
 
   const { data: keywords } = useGetKeywords();
   const { data: star, isLoading: isLoadingGetStar } = useGetStarById(id);
+
+  const navigate = useReplaceNavigate();
 
   useEffect(() => {
     if (!isLoadingGetStar && star?.result) {
@@ -172,6 +175,10 @@ const CreateBookmark = () => {
     }
   };
 
+  const onClickCancel = () => {
+    navigate("/bookmark");
+  };
+
   if (isLoadingGetStar) {
     return (
       <div className="flex h-full flex-col items-center justify-center gap-10 text-notification">
@@ -240,8 +247,10 @@ const CreateBookmark = () => {
             onUpdateKeyword={onUpdateKeyword}
           />
         </section>
-        <section className="mb-5 flex gap-3">
-          <RectangleButton variation="outline">취소</RectangleButton>
+        <section className="flex gap-3 pb-5">
+          <RectangleButton variation="outline" onClick={onClickCancel}>
+            취소
+          </RectangleButton>
           <RectangleButton onClick={onClickSave}>저장</RectangleButton>
         </section>
       </main>

@@ -7,8 +7,6 @@ import { useMutation } from "@tanstack/react-query";
 
 import { useNavigate } from "react-router-dom";
 
-import { useTabStore } from "../zustand/tab";
-
 export const useCreateStar = () => {
   const navigate = useNavigate();
   const setIsLoading = useLoadingStore((state) => state.setIsLoading);
@@ -32,7 +30,6 @@ export const useCreateStar = () => {
 
 export const useCompleteCreateStar = () => {
   const navigate = useReplaceNavigate();
-  const setIsFindingExistPath = useTabStore((state) => state.setIsFindingExistPath);
   const setIsLoading = useLoadingStore((state) => state.setIsLoading);
 
   return useMutation({
@@ -40,9 +37,8 @@ export const useCompleteCreateStar = () => {
     onMutate: () => {
       setIsLoading(true);
     },
-    onSuccess: () => {
-      setIsFindingExistPath(true);
-      navigate("/bookmark");
+    onSuccess: (data) => {
+      navigate(`/create-bookmark?id=${data?.result?.starId}`);
     },
     onError: (error) => {
       console.error(error);
@@ -54,9 +50,7 @@ export const useCompleteCreateStar = () => {
 };
 
 export const useUpdateStar = () => {
-  const navigate = useReplaceNavigate();
   const setIsLoading = useLoadingStore((state) => state.setIsLoading);
-  const setIsFindingExistPath = useTabStore((state) => state.setIsFindingExistPath);
 
   return useMutation({
     mutationFn: updateStar,
@@ -65,8 +59,6 @@ export const useUpdateStar = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [STAR.GET_BY_ID, data?.result?.starId] });
-      setIsFindingExistPath(true);
-      navigate("/bookmark");
     },
     onError: (error) => {
       console.error(error);

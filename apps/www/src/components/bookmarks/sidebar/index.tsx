@@ -101,7 +101,7 @@ const Sidebar = () => {
         <Suspense fallback={<div>Loading...</div>}>
           <Dropdown
             open={sidebar.categoryOpen}
-            title="Category"
+            type="Category"
             icon={<Icon.folder />}
             items={category?.result?.categoryList || []}
             onClick={() => onToggleDropdown("category")}
@@ -109,7 +109,7 @@ const Sidebar = () => {
           />
           <Dropdown
             open={sidebar.keywordOpen}
-            title="Keyword"
+            type="Keyword"
             icon={<Icon.search />}
             items={keyword?.result || []}
             onClick={() => onToggleDropdown("keyword")}

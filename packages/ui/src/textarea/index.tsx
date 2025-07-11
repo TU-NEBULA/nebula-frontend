@@ -15,7 +15,7 @@ function Textarea({ id, label, className, rightElement, ...restProps }: Textarea
       <textarea
         id={id}
         className={cn(
-          "min-h-24 w-full resize-none rounded-sm bg-gray1 bg-opacity-50 p-2 text-xs read-only:cursor-default",
+          "min-h-24 w-full rounded-sm bg-gray1 bg-opacity-50 p-2 text-xs read-only:cursor-default",
           className
         )}
         {...restProps}

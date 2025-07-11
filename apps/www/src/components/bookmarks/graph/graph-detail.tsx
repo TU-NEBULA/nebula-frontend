@@ -53,13 +53,31 @@ const GraphDetail = ({ open, id, stars, onClose }: GraphDetailProps) => {
     // 관련된 노드만 필터링
     const relatedNodes = stars.starListDto.filter((star) => relatedNodeIds.has(star.starId));
 
+    // 현재 북마크 정보 가져오기
+    const currentStar = stars.starListDto.find((star) => star.starId === id);
+
+    // 연관된 노드가 없으면 현재 북마크만 포함
+    const nodes =
+      relatedNodes.length > 0
+        ? relatedNodes.map((star) => ({
+            id: star.starId,
+            name: star.title,
+            val: Math.min(star.views, 10),
+            url: star.siteUrl,
+          }))
+        : currentStar
+          ? [
+              {
+                id: currentStar.starId,
+                name: currentStar.title,
+                val: 10,
+                url: currentStar.siteUrl,
+              },
+            ]
+          : [];
+
     return {
-      nodes: relatedNodes.map((star) => ({
-        id: star.starId,
-        name: star.title,
-        val: Math.min(star.views, 10),
-        url: star.siteUrl,
-      })),
+      nodes,
       links: relatedLinks.map((link) => ({
         source: link.linkedNodeIdList[0],
         target: link.linkedNodeIdList[1],
@@ -216,7 +234,7 @@ const GraphDetail = ({ open, id, stars, onClose }: GraphDetailProps) => {
       <div className="fixed bottom-5 text-white" style={{ right: open ? "23.75rem" : "1.25rem" }}>
         <ChatBot />
       </div>
-      <div
+      {/* <div
         className={cn(
           "fixed right-0 z-10 flex h-full min-w-sidebar max-w-sidebar translate-x-full overflow-y-scroll bg-white transition-transform",
           open && "translate-x-0"
@@ -227,158 +245,149 @@ const GraphDetail = ({ open, id, stars, onClose }: GraphDetailProps) => {
           <div className="flex h-full w-full items-center justify-center">
             <Spinner />
           </div>
-        ) : starData?.isSuccess ? (
-          <>
-            <button className="cursor-col-resize" onMouseDown={onMouseDown}>
+        ) : starData?.isSuccess ? ( */}
+      <>
+        <button className="cursor-col-resize" onMouseDown={onMouseDown}>
+          <Image src={grab} alt="상세창 크기 조절 버튼" width={24} height={24} draggable={false} />
+        </button>
+        <div className="flex w-full flex-col gap-6 p-3">
+          <div className="flex items-center justify-between">
+            <button onClick={onCloseDetail} className="w-max active:opacity-80">
               <Image
-                src={grab}
-                alt="상세창 크기 조절 버튼"
+                src={doubleArrowRight}
+                alt="상세창 닫기 버튼"
                 width={24}
                 height={24}
                 draggable={false}
               />
             </button>
-            <div className="flex w-full flex-col gap-6 p-3">
-              <div className="flex items-center justify-between">
-                <button onClick={onCloseDetail} className="w-max active:opacity-80">
-                  <Image
-                    src={doubleArrowRight}
-                    alt="상세창 닫기 버튼"
-                    width={24}
-                    height={24}
-                    draggable={false}
-                  />
-                </button>
-                <div className="flex items-center gap-2">
-                  {updateStarLoading ? (
-                    <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
-                  ) : (
-                    <>
-                      {edit.activated && (
-                        <button onClick={onCancelEdit}>
-                          <Image
-                            src={close}
-                            alt="요약, 메모 수정 취소 버튼"
-                            width={24}
-                            height={24}
-                          />
-                        </button>
-                      )}
-                      <button onClick={onEdit}>
-                        <Image
-                          src={edit.activated ? check : pencil}
-                          alt="요약, 메모 수정 버튼"
-                          width={24}
-                          height={24}
-                        />
-                      </button>
-                    </>
+            <div className="flex items-center gap-2">
+              {updateStarLoading ? (
+                <div className="h-6 w-6 animate-spin rounded-full border-2 border-gray-300 border-t-gray-600" />
+              ) : (
+                <>
+                  {edit.activated && (
+                    <button onClick={onCancelEdit}>
+                      <Image src={close} alt="요약, 메모 수정 취소 버튼" width={24} height={24} />
+                    </button>
                   )}
-                </div>
-              </div>
-              <Graph2D
-                graphData={{
-                  nodes: graphData.nodes.map((star) => ({
-                    id: star.id,
-                    name: star.name,
-                    val: 1,
-                  })),
-                  links: graphData.links.map((link) => ({
-                    source: link.source,
-                    target: link.target,
-                  })),
-                }}
-              />
-              <Card
-                Thumbnail={
-                  starData?.result?.thumbnailUrl ? (
+                  <button onClick={onEdit}>
                     <Image
-                      src={starData?.result.thumbnailUrl}
-                      alt={`${starData?.result.siteUrl} thumbnail`}
-                      width={160}
-                      height={160}
-                      className="aspect-square max-h-24 max-w-24 rounded-md object-cover"
-                      draggable={false}
+                      src={edit.activated ? check : pencil}
+                      alt="요약, 메모 수정 버튼"
+                      width={24}
+                      height={24}
                     />
-                  ) : null
-                }
-                Link={
-                  <Link
-                    target="_blank"
-                    href={starData?.result.siteUrl || "https://www.nebula-ai.kr"}
-                    className="truncate text-xs text-gray7"
-                  >
-                    {starData?.result.siteUrl || "siteUrl"}
-                  </Link>
-                }
-                title={edit.activated ? edit.title || "" : starData?.result?.title}
-                categoryName={
-                  edit.activated ? (edit.categoryName as string) : starData?.result?.categoryName
-                }
-                categories={
-                  (categoryData?.result?.categoryList || []).map(
-                    (category) => category.name
-                  ) as string[]
-                }
-                onSelectCategory={onSelectCategory}
-                onAddCategory={onAddCategory}
-                isLoading={createCategoryLoading || updateStarLoading}
-                editEnabled={edit.activated}
-              />
-              <section className="space-y-1">
-                <Textarea
-                  id="summaryAI"
-                  label="요약"
-                  value={edit.activated ? edit.summaryAI : starData?.result?.summaryAI}
-                  onChange={onChangeText}
-                  placeholder="북마크에 대한 요약을 작성할 수 있어요."
-                  readOnly={!edit.activated}
-                />
-                <Textarea
-                  id="userMemo"
-                  label="메모"
-                  value={edit.activated ? edit.userMemo : starData?.result?.userMemo}
-                  onChange={onChangeText}
-                  placeholder="북마크에 대한 메모를 작성할 수 있어요."
-                  readOnly={!edit.activated}
-                />
-                <Keyword
-                  id="keyword"
-                  keywords={edit.activated ? edit.keywordList || [] : starData?.result?.keywordList}
-                  value={edit.activated ? edit.keyword : ""}
-                  readOnly={!edit.activated}
-                  keywordList={[]}
-                  onChange={onChangeText}
-                  onDeleteKeyword={onDeleteKeyword}
-                  onKeyDown={onEnterKeyword}
-                  onUpdateKeyword={onUpdateKeyword}
-                />
-              </section>
-              <button
-                className="absolute bottom-3 right-3 h-max w-max rounded-full bg-highlight p-2.5"
-                onClick={onOpenDeleteModal}
-              >
-                <Image src={trash} alt="북마크 삭제하기" width={20} height={20} draggable={false} />
-              </button>
+                  </button>
+                </>
+              )}
             </div>
-            {deleteModalOpen && (
-              <Modal
-                title="북마크 삭제"
-                subTitle={`삭제 후에는 복구가 불가능합니다.\n정말 삭제하시겠습니까?`}
-                callback={onCloseDeleteModal}
+          </div>
+          <Graph2D
+            graphData={{
+              nodes: graphData.nodes.map((star) => ({
+                id: star.id,
+                name: star.name,
+                val: 1,
+              })),
+              links: graphData.links.map((link) => ({
+                source: link.source,
+                target: link.target,
+              })),
+            }}
+          />
+          <Card
+            Thumbnail={
+              starData?.result?.thumbnailUrl ? (
+                <Image
+                  src={starData?.result.thumbnailUrl}
+                  alt={`${starData?.result.siteUrl} thumbnail`}
+                  width={160}
+                  height={160}
+                  className="aspect-square max-h-24 max-w-24 rounded-md object-cover"
+                  draggable={false}
+                />
+              ) : null
+            }
+            Link={
+              <Link
+                target="_blank"
+                href={starData?.result.siteUrl || "https://www.nebula-ai.kr"}
+                className="truncate text-xs text-gray7"
               >
-                <div className="flex w-full gap-3">
-                  <RectangleButton variation="outline" onClick={onCloseDeleteModal}>
-                    취소
-                  </RectangleButton>
-                  <RectangleButton variation="warning" onClick={onDeleteBookmark}>
-                    삭제
-                  </RectangleButton>
-                </div>
-              </Modal>
-            )}
-          </>
-        ) : (
+                {starData?.result.siteUrl || "siteUrl"}
+              </Link>
+            }
+            title={edit.activated ? edit.title || "" : starData?.result?.title || ""}
+            categoryName={
+              edit.activated ? (edit.categoryName as string) : starData?.result?.categoryName || ""
+            }
+            categories={
+              (categoryData?.result?.categoryList || []).map(
+                (category) => category.name
+              ) as string[]
+            }
+            onSelectCategory={onSelectCategory}
+            onAddCategory={onAddCategory}
+            isLoading={createCategoryLoading || updateStarLoading}
+            editEnabled={edit.activated}
+          />
+          <section className="space-y-1">
+            <Textarea
+              id="summaryAI"
+              label="요약"
+              value={edit.activated ? edit.summaryAI : starData?.result?.summaryAI}
+              onChange={onChangeText}
+              placeholder="북마크에 대한 요약을 작성할 수 있어요."
+              readOnly={!edit.activated}
+            />
+            <Textarea
+              id="userMemo"
+              label="메모"
+              value={edit.activated ? edit.userMemo : starData?.result?.userMemo}
+              onChange={onChangeText}
+              placeholder="북마크에 대한 메모를 작성할 수 있어요."
+              readOnly={!edit.activated}
+            />
+            <Keyword
+              id="keyword"
+              keywords={
+                edit.activated ? edit.keywordList || [] : starData?.result?.keywordList || []
+              }
+              value={edit.activated ? edit.keyword : ""}
+              readOnly={!edit.activated}
+              keywordList={[]}
+              onChange={onChangeText}
+              onDeleteKeyword={onDeleteKeyword}
+              onKeyDown={onEnterKeyword}
+              onUpdateKeyword={onUpdateKeyword}
+            />
+          </section>
+          <button
+            className="absolute bottom-3 right-3 h-max w-max rounded-full bg-highlight p-2.5"
+            onClick={onOpenDeleteModal}
+          >
+            <Image src={trash} alt="북마크 삭제하기" width={20} height={20} draggable={false} />
+          </button>
+        </div>
+        {deleteModalOpen && (
+          <Modal
+            title="북마크 삭제"
+            subTitle={`삭제 후에는 복구가 불가능합니다.\n정말 삭제하시겠습니까?`}
+            callback={onCloseDeleteModal}
+          >
+            <div className="flex w-full gap-3">
+              <RectangleButton variation="outline" onClick={onCloseDeleteModal}>
+                취소
+              </RectangleButton>
+              <RectangleButton variation="warning" onClick={onDeleteBookmark}>
+                삭제
+              </RectangleButton>
+            </div>
+          </Modal>
+        )}
+      </>
+      {/* ) : (
           <div className="flex h-full w-full flex-col items-center justify-center gap-4 px-2">
             <p>북마크를 찾을 수 없습니다.</p>
             <RectangleButton onClick={onCloseDetail} className="w-full flex-none">
@@ -386,7 +395,7 @@ const GraphDetail = ({ open, id, stars, onClose }: GraphDetailProps) => {
             </RectangleButton>
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

@@ -1,13 +1,8 @@
 import { BaseResponseDTO } from "@/models";
-import { ChatMessageDTO, ChatSessionDTO, ChatSessionListDTO } from "@/models/chat";
+import { ChatMessageDTO, ChatSessionListDTO } from "@/models/chat";
+import { getParams } from "@/utils/params";
 
 import api from "./api";
-
-export const createChatSession = async (body: {
-  title: string;
-}): Promise<BaseResponseDTO<ChatSessionDTO>> => {
-  return api.post("/chat/sessions", body);
-};
 
 export const getChatMessages = async (
   sessionId: string
@@ -15,9 +10,10 @@ export const getChatMessages = async (
   return api.get(`/chat/sessions/${sessionId}/messages`);
 };
 
-export const getAllChatSessions = async (params: {
+export const getAllChatSessions = async (props: {
   limit: number;
   offset: number;
 }): Promise<BaseResponseDTO<ChatSessionListDTO[]>> => {
-  return api.get(`/chat/sessions?limit=${params.limit}&offset=${params.offset}`);
+  const params = getParams(props);
+  return api.get(`/chat/sessions?${params}`);
 };

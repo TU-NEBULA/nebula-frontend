@@ -2,6 +2,7 @@ import { useEffect } from "react";
 
 import { useStarStore } from "@/state/zustand/star";
 import { useTabStore } from "@/state/zustand/tab";
+import { useUserStore } from "@/state/zustand/user";
 import { updateCurrentTab } from "@/utils/chrome";
 
 import { useReplaceNavigate } from "./use-replace-navigate";
@@ -24,6 +25,7 @@ export function useDetectPath() {
   const { currentTab, setCurrentTab, setIsFindingExistPath } = useTabStore();
 
   const stars = useStarStore((state) => state.stars);
+  const isLoggedIn = useUserStore((state) => state.isLoggedIn);
 
   const navigate = useReplaceNavigate();
 
@@ -36,8 +38,8 @@ export function useDetectPath() {
     };
 
     const onTabUpdated = (_: number, changeInfo: TabChangeInfoProps) => {
-      setIsFindingExistPath(true);
-      if (changeInfo.status === "complete") {
+      if (changeInfo.url && changeInfo.status === "loading") {
+        setIsFindingExistPath(true);
         updateCurrentTab(setCurrentTab);
       }
     };
@@ -52,6 +54,10 @@ export function useDetectPath() {
   }, []);
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      return navigate("/");
+    }
+
     const findStar = stars?.starListDto.find((star) => encodeURI(star.siteUrl) === currentTab.url);
 
     if (findStar) {
@@ -60,7 +66,7 @@ export function useDetectPath() {
       navigate("/bookmark");
     }
     setIsFindingExistPath(false);
-  }, [stars, currentTab]);
+  }, [stars, currentTab, isLoggedIn]);
 
   return { currentTab };
 }

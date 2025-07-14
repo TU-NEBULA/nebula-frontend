@@ -8,6 +8,7 @@ export { default as Modal } from "./modal";
 export { default as Graph2D } from "./graph-2d";
 
 export { cn } from "../utils/cn";
+export { searchFilter } from "../utils/search";
 
 export { useOutsideClick } from "../hooks/use-outside-click";
 export { useDebounce } from "../hooks/use-debounce";

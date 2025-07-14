@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useOutsideClick } from "../../hooks/use-outside-click";
+import { searchFilter } from "../../utils/search";
 import RectangleButton from "../button/rectangle-button";
 
 interface KeywordProps extends React.InputHTMLAttributes<HTMLInputElement> {
@@ -20,6 +21,11 @@ const Keyword = ({
   const [focus, setFocus] = useState(false);
 
   const [keywordContainerRef] = useOutsideClick<HTMLDivElement>(() => setFocus(false));
+
+  const filteredKeywordList = useMemo(() => {
+    if (!restProps.value) return keywordList;
+    return keywordList.filter((keyword) => searchFilter(restProps.value as string, keyword));
+  }, [keywordList, restProps.value]);
 
   const onSelectKeyword = (keyword: string) => {
     onUpdateKeyword(keyword);
@@ -49,9 +55,9 @@ const Keyword = ({
                 onFocus={() => setFocus(true)}
                 {...restProps}
               />
-              {focus && keywordList.length > 0 && (
+              {focus && filteredKeywordList.length > 0 && (
                 <ul className="absolute z-10 mt-2 max-h-32 w-full overflow-y-auto border bg-white">
-                  {keywordList.map((keyword) => (
+                  {filteredKeywordList.map((keyword) => (
                     <RectangleButton
                       key={keyword}
                       variation="outline"

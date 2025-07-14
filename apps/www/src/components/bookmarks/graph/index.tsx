@@ -2,8 +2,6 @@
 
 import { useEffect, useRef } from "react";
 
-import { GRAPH_TYPE } from "@/constants/bookmark";
-import { useBookmarkStore } from "@/lib/zustand/bookmark";
 import { Coords, LinkObject, NodeObject } from "@/types/graph";
 import { AllStarDTO } from "@repo/types";
 
@@ -18,8 +16,6 @@ const fixedPosition = (position: number) => (position > 0 ? 250 : -250);
 
 const Graph = ({ onOpen, data }: GraphProps) => {
   const graphRef = useRef<HTMLDivElement>(null);
-  const { selectedType, selectedColor } = useBookmarkStore();
-  const nodesRef = useRef<THREE.Mesh[]>([]);
 
   useEffect(() => {
     const loadGraph = async () => {
@@ -37,7 +33,7 @@ const Graph = ({ onOpen, data }: GraphProps) => {
         const nodes = data?.starListDto.map((star) => ({
           id: star.starId,
           name: star.title,
-          color: selectedColor,
+          color: "#2E40A9",
           icon: star.faviconUrl || "/velog.png",
         }));
 
@@ -57,29 +53,16 @@ const Graph = ({ onOpen, data }: GraphProps) => {
           .linkOpacity(1)
           .nodeLabel((node: NodeObject) => node.name || "")
           .nodeOpacity(1)
-          .nodeThreeObject((node: NodeObject) => {
-            const geometry = new THREE.SphereGeometry(10, 32, 32);
-            const material = new THREE.MeshPhongMaterial({
-              shininess: 10,
-              specular: new THREE.Color(0xffffff),
-            });
-
-            if (selectedType === GRAPH_TYPE.COLOR) {
-              material.color.set(selectedColor);
-            } else {
-              material.color.set("#ffffff");
-              const iconUrl = node.icon || "/velog.png";
-              const texture = new THREE.TextureLoader().load(iconUrl);
-              material.map = texture;
-            }
-
-            const sphere = new THREE.Mesh(geometry, material);
-            sphere.userData = { icon: node.icon || "/velog.png" };
-            nodesRef.current.push(sphere);
-            return sphere;
-          })
           .nodeThreeObjectExtend(false)
-          .onNodeClick((node: Required<NodeObject>) => {
+          .onNodeClick((node: NodeObject) => {
+            if (
+              !node ||
+              !node.id ||
+              node.x === undefined ||
+              node.y === undefined ||
+              node.z === undefined
+            )
+              return;
             onOpen(node.id);
             const { x, y, z } = graph.cameraPosition();
             const gaps = [node.x - x, node.y - y, node.z - z];
@@ -93,7 +76,11 @@ const Graph = ({ onOpen, data }: GraphProps) => {
               z: maxIndex === 2 ? fixedPosition(z) : node.z,
             };
 
-            graph.cameraPosition(targetPosition, node as Required<Coords>, 500);
+            graph.cameraPosition(
+              targetPosition,
+              node as NodeObject & { x: number; y: number; z: number },
+              500
+            );
           })
           .backgroundColor("#111")
           .showNavInfo(false)
@@ -107,35 +94,12 @@ const Graph = ({ onOpen, data }: GraphProps) => {
 
         return () => {
           window.removeEventListener("resize", function handleRemoveResize() {});
-          nodesRef.current = [];
         };
       }
     };
 
     loadGraph();
   }, [data]);
-
-  // 타입과 색상 변경 시 재질만 업데이트
-  useEffect(() => {
-    if (!nodesRef.current.length) return;
-
-    nodesRef.current.forEach((node) => {
-      const material = node.material as THREE.MeshPhongMaterial;
-
-      if (selectedType === GRAPH_TYPE.COLOR) {
-        material.color.set(selectedColor);
-        material.map = null;
-      } else {
-        material.color.set("#ffffff");
-        const loader = new THREE.TextureLoader();
-        loader.load(node.userData.icon, (texture) => {
-          material.map = texture;
-          material.needsUpdate = true;
-        });
-      }
-      material.needsUpdate = true;
-    });
-  }, [selectedType, selectedColor]);
 
   return <main ref={graphRef} className="h-full w-full" />;
 };

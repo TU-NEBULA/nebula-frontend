@@ -26,7 +26,7 @@ interface Graph2DProps {
   height?: number;
 }
 
-const Graph2D = ({ graphData, width = 500, height = 300 }: Graph2DProps) => {
+const Graph2D = ({ graphData, width = 500, height = 150 }: Graph2DProps) => {
   const fgRef = useRef<any>(null);
 
   useEffect(() => {
@@ -43,7 +43,7 @@ const Graph2D = ({ graphData, width = 500, height = 300 }: Graph2DProps) => {
   };
 
   return (
-    <div className="relative h-[300px] w-full overflow-hidden rounded-lg border border-gray3 bg-white">
+    <div className="relative h-[9.375rem] w-full overflow-hidden rounded-lg border border-gray3 bg-white">
       <Suspense
         fallback={
           <div className="flex h-full items-center justify-center">그래프를 불러오는 중...</div>

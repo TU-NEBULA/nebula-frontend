@@ -15,7 +15,11 @@ export default function ChatBot() {
   const [isNewChat, setIsNewChat] = useState(true);
   const [chatListWidth, setChatListWidth] = useState(160); // w-40 = 160px
   const [isDragging, setIsDragging] = useState(false);
-  const dragRef = useRef<HTMLDivElement>(null);
+  const [isResizingWidth, setIsResizingWidth] = useState(false);
+  const [isResizingHeight, setIsResizingHeight] = useState(false);
+  const [chatBoxWidth, setChatBoxWidth] = useState(() => Math.max(window.innerWidth * 0.5, 480));
+  const [chatBoxHeight, setChatBoxHeight] = useState(384);
+  const chatBoxRef = useRef<HTMLDivElement>(null);
 
   const { data: chatSessions, isLoading: isChatSessionsLoading } = useGetAllChatSessions();
 
@@ -29,13 +33,13 @@ export default function ChatBot() {
 
   const onMouseMove = useCallback(
     (e: MouseEvent) => {
-      if (!isDragging || !dragRef.current) return;
+      if (!isDragging || !chatBoxRef.current) return;
 
-      const containerRect = dragRef.current.getBoundingClientRect();
+      const containerRect = chatBoxRef.current.getBoundingClientRect();
       const newWidth = e.clientX - containerRect.left;
 
       // 최소 128px (w-32), 최대 160px (w-40)
-      const clampedWidth = Math.max(128, Math.min(160, newWidth));
+      const clampedWidth = Math.max(128, Math.min(containerRect.width / 3, newWidth));
       setChatListWidth(clampedWidth);
     },
     [isDragging]
@@ -43,6 +47,54 @@ export default function ChatBot() {
 
   const onMouseUp = useCallback(() => {
     setIsDragging(false);
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  }, []);
+
+  // Width resize handlers
+  const onResizeWidthMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizingWidth(true);
+    document.body.style.cursor = "ew-resize";
+    document.body.style.userSelect = "none";
+  };
+  const onResizeWidthMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizingWidth || !chatBoxRef.current) return;
+      const box = chatBoxRef.current.getBoundingClientRect();
+      const newWidth = box.right - e.clientX;
+      const minWidth = 480; // 30rem
+      const maxWidth = window.innerWidth * 0.5;
+      setChatBoxWidth(Math.max(minWidth, Math.min(maxWidth, newWidth)));
+    },
+    [isResizingWidth]
+  );
+  const onResizeWidthMouseUp = useCallback(() => {
+    setIsResizingWidth(false);
+    document.body.style.cursor = "";
+    document.body.style.userSelect = "";
+  }, []);
+
+  // Height resize handlers
+  const onResizeHeightMouseDown = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsResizingHeight(true);
+    document.body.style.cursor = "ns-resize";
+    document.body.style.userSelect = "none";
+  };
+  const onResizeHeightMouseMove = useCallback(
+    (e: MouseEvent) => {
+      if (!isResizingHeight || !chatBoxRef.current) return;
+      const box = chatBoxRef.current.getBoundingClientRect();
+      const newHeight = box.bottom - e.clientY;
+      const minHeight = 384; // 24rem
+      const maxHeight = window.innerHeight - 40;
+      setChatBoxHeight(Math.max(minHeight, Math.min(maxHeight, newHeight)));
+    },
+    [isResizingHeight]
+  );
+  const onResizeHeightMouseUp = useCallback(() => {
+    setIsResizingHeight(false);
     document.body.style.cursor = "";
     document.body.style.userSelect = "";
   }, []);
@@ -58,7 +110,23 @@ export default function ChatBot() {
         document.removeEventListener("mouseup", onMouseUp);
       };
     }
-  }, [isDragging, onMouseMove, onMouseUp]);
+    if (isResizingWidth) {
+      document.addEventListener("mousemove", onResizeWidthMouseMove);
+      document.addEventListener("mouseup", onResizeWidthMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", onResizeWidthMouseMove);
+        document.removeEventListener("mouseup", onResizeWidthMouseUp);
+      };
+    }
+    if (isResizingHeight) {
+      document.addEventListener("mousemove", onResizeHeightMouseMove);
+      document.addEventListener("mouseup", onResizeHeightMouseUp);
+      return () => {
+        document.removeEventListener("mousemove", onResizeHeightMouseMove);
+        document.removeEventListener("mouseup", onResizeHeightMouseUp);
+      };
+    }
+  }, [isDragging, isResizingWidth, isResizingHeight]);
 
   // 컴포넌트 언마운트 시 cleanup
   useEffect(() => {
@@ -75,12 +143,33 @@ export default function ChatBot() {
       </button>
       {isOpen && (
         <div
-          ref={dragRef}
-          className="absolute bottom-0 right-full mr-2 flex h-96 w-[42rem] gap-0 rounded-lg border border-blue-400 bg-white p-2 text-black"
+          ref={chatBoxRef}
+          className="absolute bottom-0 right-full mr-2 flex gap-0 rounded-lg border border-blue-400 bg-white p-2 text-black"
+          style={{
+            minWidth: "30rem",
+            maxWidth: "50vw",
+            minHeight: "24rem",
+            maxHeight: "calc(100vh - 2.5rem)",
+            width: chatBoxWidth,
+            height: chatBoxHeight,
+            overflow: "auto",
+          }}
         >
+          {/* Left edge resize handle */}
+          <div
+            className="absolute left-0 top-0 z-20 h-full w-2 cursor-ew-resize"
+            style={{ userSelect: "none" }}
+            onMouseDown={onResizeWidthMouseDown}
+          />
+          {/* Top edge resize handle */}
+          <div
+            className="absolute left-0 top-0 z-20 h-2 w-full cursor-ns-resize"
+            style={{ userSelect: "none" }}
+            onMouseDown={onResizeHeightMouseDown}
+          />
           <ul
             className="relative flex flex-col gap-2 overflow-y-auto"
-            style={{ width: `${chatListWidth}px` }}
+            style={{ width: `${chatListWidth}px`, minWidth: "10rem", maxWidth: "16rem" }}
           >
             {isChatSessionsLoading ? (
               <div className="mx-auto flex h-full items-center justify-center">
@@ -123,7 +212,7 @@ export default function ChatBot() {
             <div className="absolute left-1/2 top-1/2 h-12 w-1 -translate-x-1/2 -translate-y-1/2 rounded-full bg-gray-400 transition-colors hover:bg-blue-500" />
           </div>
 
-          <div className="min-w-0 flex-1">
+          <div className="h-full min-w-0 flex-1">
             <Chat
               sessionId={currentSession}
               onSessionCreated={setCurrentSession}

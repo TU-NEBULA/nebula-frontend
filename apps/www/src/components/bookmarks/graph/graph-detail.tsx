@@ -11,7 +11,8 @@ import trash from "@/assets/icons/trash.svg";
 import { useCreateCategory } from "@/lib/tanstack/mutation/category";
 import { useDeleteStar, useUpdateStar } from "@/lib/tanstack/mutation/star";
 import { useGetGraphDetail } from "@/lib/tanstack/query/graph";
-import { useBookmarkStore } from "@/lib/zustand/bookmark";
+import { infoToast } from "@/utils/toast";
+import { AllStarDTO } from "@repo/types";
 import { Card, cn, Graph2D, Keyword, Modal, RectangleButton, Spinner, Textarea } from "@repo/ui";
 
 import ChatBot from "./chat-bot";
@@ -19,10 +20,12 @@ import ChatBot from "./chat-bot";
 interface GraphDetailProps {
   open: boolean;
   id: string;
+  stars: AllStarDTO;
   onClose: () => void;
+  onDelete: (id: string) => void;
 }
 
-const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
+const GraphDetail = ({ open, id, stars, onClose, onDelete }: GraphDetailProps) => {
   const [width, setWidth] = useState(360);
   const [saveWidth, setSaveWidth] = useState(-1);
   const [holdX, setHoldX] = useState(-1);
@@ -32,7 +35,6 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
     useGetGraphDetail(id);
 
   const [edit, setEdit] = useState({ activated: false, keyword: "", ...(starData?.result || {}) });
-  const stars = useBookmarkStore((state) => state.stars);
 
   const { mutateAsync: createCategory, isPending: createCategoryLoading } = useCreateCategory();
   const { mutateAsync: updateStar, isPending: updateStarLoading } = useUpdateStar();
@@ -53,13 +55,31 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
     // 관련된 노드만 필터링
     const relatedNodes = stars.starListDto.filter((star) => relatedNodeIds.has(star.starId));
 
+    // 현재 북마크 정보 가져오기
+    const currentStar = stars.starListDto.find((star) => star.starId === id);
+
+    // 연관된 노드가 없으면 현재 북마크만 포함
+    const nodes =
+      relatedNodes.length > 0
+        ? relatedNodes.map((star) => ({
+            id: star.starId,
+            name: star.title,
+            val: Math.min(star.views, 10),
+            url: star.siteUrl,
+          }))
+        : currentStar
+          ? [
+              {
+                id: currentStar.starId,
+                name: currentStar.title,
+                val: 10,
+                url: currentStar.siteUrl,
+              },
+            ]
+          : [];
+
     return {
-      nodes: relatedNodes.map((star) => ({
-        id: star.starId,
-        name: star.title,
-        val: Math.min(star.views, 10),
-        url: star.siteUrl,
-      })),
+      nodes,
       links: relatedLinks.map((link) => ({
         source: link.linkedNodeIdList[0],
         target: link.linkedNodeIdList[1],
@@ -90,7 +110,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
       (c) => c.name === category.trim()
     );
     if (categoryExist) {
-      return alert("이미 존재하는 카테고리입니다.");
+      return infoToast("이미 존재하는 카테고리입니다.");
     }
     await createCategory(category);
   };
@@ -145,6 +165,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
   const onDeleteBookmark = async () => {
     await deleteStar(id);
     onCloseDeleteModal();
+    onDelete(id);
   };
 
   const onCancelEdit = () => {
@@ -311,9 +332,11 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                     {starData?.result.siteUrl || "siteUrl"}
                   </Link>
                 }
-                title={edit.activated ? edit.title || "" : starData?.result?.title}
+                title={edit.activated ? edit.title || "" : starData?.result?.title || ""}
                 categoryName={
-                  edit.activated ? (edit.categoryName as string) : starData?.result?.categoryName
+                  edit.activated
+                    ? (edit.categoryName as string)
+                    : starData?.result?.categoryName || ""
                 }
                 categories={
                   (categoryData?.result?.categoryList || []).map(
@@ -329,7 +352,7 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 <Textarea
                   id="summaryAI"
                   label="요약"
-                  value={edit.activated ? edit.summaryAI : starData?.result?.summaryAI}
+                  value={edit.activated ? edit.summaryAI : starData?.result?.summaryAI || ""}
                   onChange={onChangeText}
                   placeholder="북마크에 대한 요약을 작성할 수 있어요."
                   readOnly={!edit.activated}
@@ -337,14 +360,16 @@ const GraphDetail = ({ open, id, onClose }: GraphDetailProps) => {
                 <Textarea
                   id="userMemo"
                   label="메모"
-                  value={edit.activated ? edit.userMemo : starData?.result?.userMemo}
+                  value={edit.activated ? edit.userMemo : starData?.result?.userMemo || ""}
                   onChange={onChangeText}
                   placeholder="북마크에 대한 메모를 작성할 수 있어요."
                   readOnly={!edit.activated}
                 />
                 <Keyword
                   id="keyword"
-                  keywords={edit.activated ? edit.keywordList || [] : starData?.result?.keywordList}
+                  keywords={
+                    edit.activated ? edit.keywordList || [] : starData?.result?.keywordList || []
+                  }
                   value={edit.activated ? edit.keyword : ""}
                   readOnly={!edit.activated}
                   keywordList={[]}

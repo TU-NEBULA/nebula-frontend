@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export const useCreateStar = () => {
   const navigate = useNavigate();
-  const { setIsLoading } = useLoadingStore();
+  const setIsLoading = useLoadingStore((state) => state.setIsLoading);
 
   return useMutation({
     mutationFn: createStar,
@@ -30,15 +30,16 @@ export const useCreateStar = () => {
 
 export const useCompleteCreateStar = () => {
   const navigate = useReplaceNavigate();
-  const { setIsLoading } = useLoadingStore();
+  const setIsLoading = useLoadingStore((state) => state.setIsLoading);
 
   return useMutation({
     mutationFn: completeCreateStar,
     onMutate: () => {
       setIsLoading(true);
     },
-    onSuccess: () => {
-      navigate("/bookmark");
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: [STAR.GET_ALL] });
+      navigate(`/create-bookmark?id=${data?.result?.starId}`);
     },
     onError: (error) => {
       console.error(error);
@@ -50,8 +51,7 @@ export const useCompleteCreateStar = () => {
 };
 
 export const useUpdateStar = () => {
-  const navigate = useReplaceNavigate();
-  const { setIsLoading } = useLoadingStore();
+  const setIsLoading = useLoadingStore((state) => state.setIsLoading);
 
   return useMutation({
     mutationFn: updateStar,
@@ -60,7 +60,6 @@ export const useUpdateStar = () => {
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [STAR.GET_BY_ID, data?.result?.starId] });
-      navigate("/bookmark");
     },
     onError: (error) => {
       console.error(error);

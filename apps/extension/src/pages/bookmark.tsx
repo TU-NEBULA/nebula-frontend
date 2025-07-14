@@ -1,12 +1,12 @@
-import { useMemo } from "react";
+import { useState } from "react";
 
+import Logo from "@/assets/logo.svg?react";
+import Menu from "@/assets/menu.svg?react";
 import Loading from "@/components/loading";
 import { useCreateStar } from "@/state/mutation/star";
-import { useStarStore } from "@/state/zustand/star";
 import { useTabStore } from "@/state/zustand/tab";
 import { getHtmlText } from "@/utils/chrome";
-import { Graph2D } from "@repo/ui";
-import { RectangleButton } from "@repo/ui";
+import { Modal, RectangleButton, useOutsideClick } from "@repo/ui";
 
 import { useNavigate } from "react-router-dom";
 
@@ -14,27 +14,13 @@ const url = import.meta.env.VITE_BASE_URL;
 
 const Bookmark = () => {
   const { currentTab, isFindingExistPath } = useTabStore();
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
+
+  const [menuContainerRef] = useOutsideClick<HTMLDivElement>(() => setIsMenuOpen(false));
 
   const navigate = useNavigate();
   const { mutateAsync } = useCreateStar();
-  const stars = useStarStore((state) => state.stars);
-
-  const graphData = useMemo(() => {
-    if (!stars?.starListDto || !stars?.linkListDto) return { nodes: [], links: [] };
-
-    return {
-      nodes: stars.starListDto.map((star) => ({
-        id: star.starId,
-        name: star.title,
-        val: Math.min(star.views, 10),
-        url: star.siteUrl,
-      })),
-      links: stars.linkListDto.map((link) => ({
-        source: link.linkedNodeIdList[0],
-        target: link.linkedNodeIdList[1],
-      })),
-    };
-  }, [stars]);
 
   const onClickLogout = async () => {
     await chrome.cookies.remove({
@@ -65,13 +51,38 @@ const Bookmark = () => {
     });
   };
 
+  const onToggleMenu = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsMenuOpen((prev) => !prev);
+  };
+
+  const onOpenLogoutModal = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    setIsMenuOpen(false);
+    setIsLogoutModalOpen(true);
+  };
+
   return (
-    <Loading title="페이지를 요약하고 있어요!">
+    <Loading title="페이지를 요약하고 있어요!" description="페이지를 벗어나면 요약이 취소돼요.">
+      <header className="flex items-center justify-between">
+        <Logo />
+        <div className="relative">
+          <button onClick={onToggleMenu}>
+            <Menu />
+          </button>
+          {isMenuOpen && (
+            <div ref={menuContainerRef} className="absolute bottom-0 right-0 translate-y-full">
+              <button
+                onClick={onOpenLogoutModal}
+                className="w-max rounded-sm border border-black px-2.5 py-1"
+              >
+                로그아웃
+              </button>
+            </div>
+          )}
+        </div>
+      </header>
       <main className="flex h-full flex-col justify-center gap-28 overflow-x-hidden">
-        <section>
-          <Graph2D graphData={graphData} />
-          <h1 className="text-notification">현재 페이지 정보</h1>
-        </section>
         <section className="space-y-4">
           <div className="text-body space-y-2">
             <h2>URL</h2>
@@ -82,15 +93,24 @@ const Bookmark = () => {
             <p className="text-gray7">{currentTab.title}</p>
           </div>
         </section>
-        <div className="flex flex-col gap-2">
-          <RectangleButton onClick={onClickAdd} disabled={isFindingExistPath}>
-            {isFindingExistPath ? "기존 북마크(추가 불가)" : "북마크에 추가하기"}
-          </RectangleButton>
-          <RectangleButton variation="outline" onClick={onClickLogout}>
-            로그아웃
-          </RectangleButton>
-        </div>
+        <RectangleButton className="flex-none" onClick={onClickAdd} disabled={isFindingExistPath}>
+          {isFindingExistPath ? "기존 북마크(추가 불가)" : "북마크에 추가하기"}
+        </RectangleButton>
       </main>
+      {isLogoutModalOpen && (
+        <Modal
+          title="로그아웃"
+          subTitle="로그아웃 하시겠습니까?"
+          callback={() => setIsLogoutModalOpen(false)}
+        >
+          <div className="flex w-full gap-2">
+            <RectangleButton onClick={() => setIsLogoutModalOpen(false)} variation="outline">
+              취소
+            </RectangleButton>
+            <RectangleButton onClick={onClickLogout}>로그아웃</RectangleButton>
+          </div>
+        </Modal>
+      )}
     </Loading>
   );
 };

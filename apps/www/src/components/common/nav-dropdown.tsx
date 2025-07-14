@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
 
+import { GRAPH_THEME } from "@/constants/bookmark";
 import { cn } from "@repo/ui";
 
 import Icon from "./icon";
@@ -24,16 +25,16 @@ const NAVS = [
 
 const BOOKMARK_THEMES = [
   {
-    label: "Graph",
-    href: "/bookmarks?theme=graph",
+    label: "Planet",
+    href: `/bookmarks?theme=${GRAPH_THEME.PLANET}`,
   },
   {
-    label: "Planet",
-    href: "/bookmarks?theme=planet",
+    label: "Graph",
+    href: `/bookmarks?theme=${GRAPH_THEME.GRAPH}`,
   },
   {
     label: "Tree",
-    href: "/bookmarks?theme=tree",
+    href: `/bookmarks?theme=${GRAPH_THEME.TREE}`,
   },
 ];
 

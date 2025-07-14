@@ -54,7 +54,15 @@ const Graph = ({ onOpen, data }: GraphProps) => {
           .nodeLabel((node: NodeObject) => node.name || "")
           .nodeOpacity(1)
           .nodeThreeObjectExtend(false)
-          .onNodeClick((node: Required<NodeObject>) => {
+          .onNodeClick((node: NodeObject) => {
+            if (
+              !node ||
+              !node.id ||
+              node.x === undefined ||
+              node.y === undefined ||
+              node.z === undefined
+            )
+              return;
             onOpen(node.id);
             const { x, y, z } = graph.cameraPosition();
             const gaps = [node.x - x, node.y - y, node.z - z];
@@ -68,7 +76,11 @@ const Graph = ({ onOpen, data }: GraphProps) => {
               z: maxIndex === 2 ? fixedPosition(z) : node.z,
             };
 
-            graph.cameraPosition(targetPosition, node as Required<Coords>, 500);
+            graph.cameraPosition(
+              targetPosition,
+              node as NodeObject & { x: number; y: number; z: number },
+              500
+            );
           })
           .backgroundColor("#111")
           .showNavInfo(false)

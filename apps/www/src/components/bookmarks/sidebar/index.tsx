@@ -11,6 +11,7 @@ import Icon from "@/components/common/icon";
 import { useUserInfo } from "@/hooks/use-user-info";
 import { useGetKeywordCategory } from "@/lib/tanstack/query/sidebar";
 import { removeAuth } from "@/utils/cookies";
+import { successToast } from "@/utils/toast";
 
 import Dropdown from "./dropdown";
 
@@ -70,7 +71,7 @@ const Sidebar = () => {
 
   const onLogout = async () => {
     await removeAuth();
-    alert("로그아웃 되었습니다.");
+    successToast("로그아웃 되었습니다.");
     router.replace("/");
     router.refresh();
   };

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-import { AllStarDTO, LinkProps, StarProps } from "@repo/types";
+import { AllStarDTO, StarProps } from "@repo/types";
 
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
@@ -79,39 +79,26 @@ export default function Planet({ onOpen, data }: GraphProps) {
     scene.add(dirLight);
 
     const stars: StarProps[] = data?.starListDto || [];
-    const links: LinkProps[] = data?.linkListDto || [];
-    const parent: Record<string, string> = {};
-    const find = (x: string): string => (parent[x] === x ? x : (parent[x] = find(parent[x])));
-    const union = (a: string, b: string) => {
-      const pa = find(a),
-        pb = find(b);
-      if (pa !== pb) parent[pb] = pa;
-    };
-    stars.forEach((s) => (parent[s.starId] = s.starId));
-    links.forEach((l) => union(l.linkedNodeIdList[0], l.linkedNodeIdList[1]));
+
+    // categoryName을 기준으로 그룹 생성
     const groups: Record<string, string[]> = {};
-    stars.forEach((s) => {
-      const r = find(s.starId);
-      if (!groups[r]) groups[r] = [];
-      groups[r].push(s.starId);
+    const groupCategories: Record<string, string> = {};
+
+    stars.forEach((star) => {
+      const categoryName = star.categoryName || "Uncategorized";
+      if (!groups[categoryName]) {
+        groups[categoryName] = [];
+        groupCategories[categoryName] = categoryName;
+      }
+      groups[categoryName].push(star.starId);
     });
 
     const groupKeywords: Record<string, string[]> = {};
-    Object.keys(groups).forEach((root) => {
-      const shared = links
-        .filter(
-          (l) =>
-            groups[root].includes(l.linkedNodeIdList[0]) &&
-            groups[root].includes(l.linkedNodeIdList[1])
-        )
-        .flatMap((l) => l.sharedKeywords);
-      const uniqueShared = Array.from(new Set(shared));
-      if (uniqueShared.length > 0) {
-        groupKeywords[root] = uniqueShared;
-      } else {
-        const rep = stars.find((s) => s.starId === root);
-        groupKeywords[root] = rep && rep.keywordList.length > 0 ? [rep.keywordList[0]] : [];
-      }
+    Object.keys(groups).forEach((categoryName) => {
+      const categoryStars = stars.filter((s) => s.categoryName === categoryName);
+      const allKeywords = categoryStars.flatMap((s) => s.keywordList);
+      const uniqueKeywords = Array.from(new Set(allKeywords));
+      groupKeywords[categoryName] = uniqueKeywords.slice(0, 3); // 최대 3개 키워드만 표시
     });
 
     const orbitRadius = 5;
@@ -151,7 +138,7 @@ export default function Planet({ onOpen, data }: GraphProps) {
       return sprite;
     }
 
-    Object.entries(groups).forEach(([root, members]) => {
+    Object.entries(groups).forEach(([categoryName, members]) => {
       let cx: number,
         cz: number,
         attempts = 0;
@@ -178,13 +165,10 @@ export default function Planet({ onOpen, data }: GraphProps) {
       centerMesh.receiveShadow = true;
       scene.add(centerMesh);
 
-      // shared keyword 라벨을 센터 구체 위에 표시
-      const kwText = (groupKeywords[root] || []).join(", ");
-      if (kwText) {
-        const label = makeLabel(kwText);
-        label.position.set(center.x, center.y + centerRadius + 0.5, center.z);
-        scene.add(label);
-      }
+      // category name과 키워드를 센터 구체 위에 표시
+      const categoryLabel = makeLabel(categoryName);
+      categoryLabel.position.set(center.x, center.y + centerRadius + 1.2, center.z);
+      scene.add(categoryLabel);
 
       members.forEach((starId, j) => {
         const star = stars.find((s) => s.starId === starId)!;

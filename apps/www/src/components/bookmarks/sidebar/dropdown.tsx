@@ -5,6 +5,7 @@ import { memo, useState } from "react";
 import Icon from "@/components/common/icon";
 import { useCreateCategory } from "@/lib/tanstack/mutation/category";
 import { CategoryProps } from "@/types/category";
+import { infoToast } from "@/utils/toast";
 import { cn, Modal, RectangleButton } from "@repo/ui";
 
 interface DropdownProps {
@@ -29,10 +30,10 @@ const Dropdown = ({ open, type, icon, items, onClick, onClickItem }: DropdownPro
     const categoryName = formData.get("categoryName") as string;
 
     if (!categoryName) {
-      return alert("카테고리 이름을 입력해주세요.");
+      return infoToast("카테고리 이름을 입력해주세요.");
     }
     if (items.some((item) => item.name === categoryName)) {
-      return alert("이미 존재하는 카테고리입니다.");
+      return infoToast("이미 존재하는 카테고리입니다.");
     }
 
     await createCategory(categoryName, {

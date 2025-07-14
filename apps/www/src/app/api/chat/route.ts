@@ -7,16 +7,14 @@ export async function POST(req: NextRequest) {
     const body = await req.json();
     const { userId, message, session_id } = body;
 
+    const requestBody = session_id ? { userId, message, session_id } : { userId, message };
+
     const response = await fetch(`${baseUrl}/chat/stream`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({
-        userId,
-        message,
-        session_id,
-      }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {

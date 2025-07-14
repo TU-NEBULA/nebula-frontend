@@ -1,7 +1,3 @@
-export interface ChatSessionDTO {
-  sessionId: string;
-}
-
 export interface ChatSessionListDTO {
   sessionId: string;
   title: string;

@@ -82,7 +82,6 @@ export default function Tree({ onOpen }: TreeProps) {
           )}
           nodeSize={nodeSize}
           onNodeClick={(node) => onClickNode(node)}
-          onUpdate={(target) => console.log(target)}
         />
       ) : (
         <h1>북마크가 없습니다.</h1>

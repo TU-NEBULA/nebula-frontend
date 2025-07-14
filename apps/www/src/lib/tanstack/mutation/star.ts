@@ -1,6 +1,7 @@
 import { STAR } from "@/constants/star";
 import { deleteStar, updateStar } from "@/service/star";
 import { revalidateTags } from "@/utils/api";
+import { successToast } from "@/utils/toast";
 import { useMutation } from "@tanstack/react-query";
 
 import { queryClient } from "..";
@@ -23,7 +24,7 @@ export const useDeleteStar = (callback: () => void) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: [STAR.GET_BY_ID, data.result.starId] });
       revalidateTags([STAR.GET_ALL]);
-      alert("북마크가 삭제되었습니다.");
+      successToast("북마크가 삭제되었습니다.");
       callback();
     },
     onError: (error) => {

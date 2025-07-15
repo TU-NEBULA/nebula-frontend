@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import Icon from "@/components/common/icon";
 import { useGetAllChatSessions } from "@/lib/tanstack/query/chat";
-import { ChatSessionListDTO } from "@/models/chat";
+import { ChatSessionDTO } from "@/models/chat";
 import { cn, Spinner } from "@repo/ui";
 
 import Chat from "./chat";
@@ -176,7 +176,7 @@ export default function ChatBot() {
                 <Spinner small />
               </div>
             ) : (
-              chatSessions?.result?.map((session: ChatSessionListDTO) => (
+              chatSessions?.result?.sessions.map((session: ChatSessionDTO) => (
                 <li key={session.sessionId}>
                   <button
                     className={cn(

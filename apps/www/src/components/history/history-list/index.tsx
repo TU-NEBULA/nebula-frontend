@@ -74,7 +74,7 @@ export default function HistoryList({ q, page }: HistoryListProps) {
   if (!data?.result?.content?.length) {
     return (
       <div className="flex flex-1 items-center justify-center rounded-lg bg-white">
-        <p className="text-white">결과가 없습니다.</p>
+        <p className="text-black">결과가 없습니다.</p>
       </div>
     );
   }

@@ -1,10 +1,15 @@
-export interface ChatSessionListDTO {
+export interface ChatSessionDTO {
   sessionId: string;
   title: string;
   sessionType: string;
   createdAt: string;
   updatedAt: string;
   active: boolean;
+}
+
+export interface ChatSessionListDTO {
+  sessions: ChatSessionDTO[];
+  total: number;
 }
 
 export interface ChatMessageDTO {

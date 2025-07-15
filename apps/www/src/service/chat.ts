@@ -13,7 +13,7 @@ export const getChatMessages = async (
 export const getAllChatSessions = async (props: {
   limit: number;
   offset: number;
-}): Promise<BaseResponseDTO<ChatSessionListDTO[]>> => {
+}): Promise<BaseResponseDTO<ChatSessionListDTO>> => {
   const params = getParams(props);
   return api.get(`/chat/sessions?${params}`);
 };
